@@ -1,0 +1,20 @@
+--- a/src/core/client/ClientSocket.cpp
++++ b/src/core/client/ClientSocket.cpp
+@@ -20,6 +20,7 @@
+ #include <netinet/in.h>
+ 
+ #include <filesystem>
++#include <cstring>
+ #include <hyprutils/utils/ScopeGuard.hpp>
+ 
+ using namespace Hyprwire;
+--- a/src/core/server/ServerSocket.cpp
++++ b/src/core/server/ServerSocket.cpp
+@@ -10,6 +10,7 @@
+ #include <netinet/in.h>
+ 
+ #include <filesystem>
++#include <cstring>
+ #include <hyprutils/utils/ScopeGuard.hpp>
+ 
+ using namespace Hyprwire;
