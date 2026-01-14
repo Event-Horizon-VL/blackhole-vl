@@ -1,0 +1,15 @@
+# Template file for 'hyprland-protocols'
+pkgname=hyprland-protocols
+version=0.7.0
+revision=1
+build_style=meson
+short_desc="Wayland protocol extensions for Hyprland"
+maintainer="Encoded14 <linusken@tuta.io>"
+license="BSD-3-Clause"
+homepage="https://github.com/hyprwm/hyprland-protocols"
+distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+checksum=ee419006d7cd20927b9b7c8b5fc430571c151b0385d600508de1a7957294498c
+
+post_install() {
+	vlicense LICENSE
+}

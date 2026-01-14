@@ -1,0 +1,11 @@
+--- a/hyprctl/src/main.cpp	2026-01-02 19:02:34.939054405 -0500
++++ b/hyprctl/src/main.cpp	2026-01-02 19:02:45.791849036 -0500
+@@ -271,7 +271,7 @@
+     sockaddr_un serverAddress = {0};
+     serverAddress.sun_family  = AF_UNIX;
+ 
+-    std::string socketPath = getRuntimeDir() + "/" + instanceSignature + "/" + filename;
++    std::string socketPath = getRuntimeDir() + "/" + instanceSignature + "/" + std::string(filename);
+ 
+     strncpy(serverAddress.sun_path, socketPath.c_str(), sizeof(serverAddress.sun_path) - 1);
+ 
