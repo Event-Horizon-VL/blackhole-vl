@@ -1,0 +1,164 @@
+name: pr-build
+
+on:
+    pull_request:
+        branches:
+            - master
+        paths:
+            - 'srcpkgs/**'
+
+jobs:
+    build:
+        name: Test build changed packages
+        runs-on: ubuntu-latest
+        container:
+            image: ghcr.io/void-linux/void-${{ matrix.config.libc }}-full:20250616R1
+            options: --platform ${{ matrix.config.platform }} --privileged
+            volumes:
+                - /dev:/dev
+            env:
+                ARCH: '${{ matrix.config.arch }}'
+                BOOTSTRAP: '${{ matrix.config.host }}'
+                TEST: '${{ matrix.config.test }}'
+        strategy:
+            fail-fast: false
+            matrix:
+                config:
+                    - { arch: x86_64,       host: x86_64,      libc: glibc, platform: linux/amd64, test: 1 }
+                    - { arch: aarch64,      host: x86_64,      libc: glibc, platform: linux/amd64, test: 0 }
+                    - { arch: x86_64-musl,  host: x86_64-musl, libc: musl,  platform: linux/amd64, test: 1 }
+                    - { arch: aarch64-musl, host: x86_64-musl, libc: musl,  platform: linux/amd64, test: 0 }
+
+        steps:
+            - name: Prepare container
+              run: |
+                  mkdir -p /etc/xbps.d && cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/
+                  sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+                  xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo bash curl git
+                  useradd -G xbuilder -M builder
+
+            - name: Checkout repo (PR head)
+              run: |
+                  git clone --depth 1 "https://github.com/${{ github.repository }}.git" extra
+                  cd extra
+                  git fetch --no-tags origin "${{ github.event.pull_request.head.sha }}" --depth 1
+                  git checkout --detach "${{ github.event.pull_request.head.sha }}"
+
+            - name: Determine changed templates
+              id: changed
+              run: |
+                  cd extra
+                  base="${{ github.event.pull_request.base.sha }}"
+                  tip="${{ github.event.pull_request.head.sha }}"
+
+                  changed_pkgs=$(git diff --name-only "$base" "$tip" -- 'srcpkgs/*/template' \
+                      | cut -d/ -f2 \
+                      | sort -u \
+                      | tr '\n' ' ')
+                  removed_pkgs=$(git diff --name-status "$base" "$tip" -- 'srcpkgs/*/template' \
+                      | awk '$1=="D"{print $2}' \
+                      | cut -d/ -f2 \
+                      | sort -u \
+                      | tr '\n' ' ')
+
+                  changed_pkgs="${changed_pkgs%% }"
+                  removed_pkgs="${removed_pkgs%% }"
+
+                  echo "Changed templates: ${changed_pkgs:-<none>}"
+                  echo "Removed templates: ${removed_pkgs:-<none>}"
+
+                  echo "pkgs=$changed_pkgs" >> "$GITHUB_OUTPUT"
+                  echo "removed=$removed_pkgs" >> "$GITHUB_OUTPUT"
+
+            - name: Checkout void-packages
+              run: |
+                  git clone https://github.com/void-linux/void-packages.git void-packages
+                  cd void-packages
+                  git checkout --detach master
+
+            - name: Merge templates and edit shlibs
+              run: |
+                  echo "==> copying templates (all from PR)..."
+                  cp -rv extra/srcpkgs/* void-packages/srcpkgs/
+
+                  SHLIBS_FILE="void-packages/common/shlibs"
+                  APPEND_FILE="extra/shlibs_append"
+                  REMOVE_FILE="extra/shlibs_remove"
+
+                  echo "==> updating common/shlibs..."
+                  if [ -f "$REMOVE_FILE" ]; then
+                      while IFS= read -r line; do
+                          [ -z "$line" ] && continue
+                          grep -vF "$line" "$SHLIBS_FILE" > "$SHLIBS_FILE.tmp" && mv "$SHLIBS_FILE.tmp" "$SHLIBS_FILE"
+                          echo "   - removed: $line"
+                      done < "$REMOVE_FILE"
+                  fi
+
+                  if [ -f "$APPEND_FILE" ]; then
+                      while IFS= read -r line; do
+                          [ -z "$line" ] && continue
+                          if ! grep -qF "$line" "$SHLIBS_FILE"; then
+                              echo "$line" >> "$SHLIBS_FILE"
+                              echo "   + added: $line"
+                          fi
+                      done < "$APPEND_FILE"
+                  fi
+
+                  echo "=> applying inline edits..."
+                  if [ -d "void-packages/srcpkgs/hyprutils/patches" ]; then
+                      echo "   - removing void-packages/srcpkgs/hyprutils/patches"
+                      rm -rf void-packages/srcpkgs/hyprutils/patches
+                  fi
+
+            - name: Prepare masterdir
+              run: |
+                  cd void-packages
+                  chown -R builder:builder .
+                  sudo -Eu builder common/travis/set_mirror.sh
+                  sudo -Eu builder common/travis/prepare.sh
+                  common/travis/fetch-xtools.sh
+
+            - name: Build changed packages
+              run: |
+                  export PATH="/opt/xbps/usr/bin/:$PATH"
+                  cd void-packages
+
+                  changed="${{ steps.changed.outputs.pkgs }}"
+                  removed="${{ steps.changed.outputs.removed }}"
+
+                  if [ -z "$changed" ] && [ -z "$removed" ]; then
+                      echo "No template changes in this PR. Nothing to build."
+                      exit 0
+                  fi
+
+                  if [ "$BOOTSTRAP" != "$ARCH" ]; then
+                      arch="-a $ARCH"
+                  fi
+
+                  if [ "$TEST" = 1 ]; then
+                      test="-Q"
+                  fi
+
+                  if [ -n "$changed" ]; then
+                      PKGS=$(sudo -Eu builder ./xbps-src $test sort-dependencies $changed)
+                  else
+                      PKGS=""
+                  fi
+
+                  failed=""
+
+                  for pkg in ${PKGS}; do
+                      if ! sudo -Eu builder ./xbps-src -j"$(nproc)" -s $arch $test pkg "${pkg}"; then
+                          echo "!! build failed for ${pkg}"
+                          failed="${failed} ${pkg}"
+                      fi
+                  done
+
+                  if [ -n "${failed}" ]; then
+                      echo
+                      echo "These packages failed to build (PR):"
+                      for f in ${failed}; do
+                          echo "  - ${f}"
+                      done
+                      exit 1
+                  fi

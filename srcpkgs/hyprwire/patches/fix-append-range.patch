@@ -1,0 +1,149 @@
+diff '--color=auto' -ruN a/src/core/client/ClientSocket.cpp b/src/core/client/ClientSocket.cpp
+--- a/src/core/client/ClientSocket.cpp	2026-01-02 18:44:05.566892723 -0500
++++ b/src/core/client/ClientSocket.cpp	2026-01-02 18:44:14.375794767 -0500
+@@ -106,14 +106,16 @@
+     if (sizeWritten <= 0)
+         return false;
+ 
+-    data.append_range(std::span<uint8_t>(buffer, sizeWritten));
++    auto span1 = std::span<uint8_t>(buffer, sizeWritten);
++    data.insert(data.end(), span1.begin(), span1.end());
+ 
+     while (sizeWritten == BUFFER_SIZE) {
+         sizeWritten = read(m_fd.get(), buffer, BUFFER_SIZE);
+         if (sizeWritten < 0)
+             return false;
+ 
+-        data.append_range(std::span<uint8_t>(buffer, sizeWritten));
++        auto span2 = std::span<uint8_t>(buffer, sizeWritten);
++        data.insert(data.end(), span2.begin(), span2.end());
+     }
+ 
+     g_messageParser->handleMessage(data, m_self.lock());
+diff '--color=auto' -ruN a/src/core/message/messages/BindProtocol.cpp b/src/core/message/messages/BindProtocol.cpp
+--- a/src/core/message/messages/BindProtocol.cpp	2026-01-02 18:44:05.566985097 -0500
++++ b/src/core/message/messages/BindProtocol.cpp	2026-01-02 18:44:21.280795104 -0500
+@@ -65,10 +65,12 @@
+ 
+     m_data.emplace_back(HW_MESSAGE_MAGIC_TYPE_VARCHAR);
+ 
+-    m_data.append_range(g_messageParser->encodeVarInt(protocol.length()));
+-    m_data.append_range(protocol);
++    auto varInt1 = g_messageParser->encodeVarInt(protocol.length());
++    m_data.insert(m_data.end(), varInt1.begin(), varInt1.end());
++    m_data.insert(m_data.end(), protocol.begin(), protocol.end());
+ 
+-    m_data.append_range(std::vector<uint8_t>{HW_MESSAGE_MAGIC_TYPE_UINT, 0, 0, 0, 0});
++    std::vector<uint8_t> uintMagic{HW_MESSAGE_MAGIC_TYPE_UINT, 0, 0, 0, 0};
++    m_data.insert(m_data.end(), uintMagic.begin(), uintMagic.end());
+ 
+     *rc<uint32_t*>(&m_data[m_data.size() - 4]) = version;
+ 
+diff '--color=auto' -ruN a/src/core/message/messages/FatalProtocolError.cpp b/src/core/message/messages/FatalProtocolError.cpp
+--- a/src/core/message/messages/FatalProtocolError.cpp	2026-01-02 18:44:05.567003142 -0500
++++ b/src/core/message/messages/FatalProtocolError.cpp	2026-01-02 18:44:27.292795398 -0500
+@@ -58,7 +58,8 @@
+     *rc<uint32_t*>(&m_data[2]) = obj->m_id;
+     *rc<uint32_t*>(&m_data[7]) = errorId;
+ 
+-    m_data.append_range(g_messageParser->encodeVarInt(msg.size()));
+-    m_data.append_range(msg);
++    auto varInt1 = g_messageParser->encodeVarInt(msg.size());
++    m_data.insert(m_data.end(), varInt1.begin(), varInt1.end());
++    m_data.insert(m_data.end(), msg.begin(), msg.end());
+     m_data.emplace_back(HW_MESSAGE_MAGIC_END);
+ }
+diff '--color=auto' -ruN a/src/core/message/messages/HandshakeBegin.cpp b/src/core/message/messages/HandshakeBegin.cpp
+--- a/src/core/message/messages/HandshakeBegin.cpp	2026-01-02 18:44:05.567054171 -0500
++++ b/src/core/message/messages/HandshakeBegin.cpp	2026-01-02 18:44:33.945795723 -0500
+@@ -57,7 +57,8 @@
+         HW_MESSAGE_MAGIC_TYPE_UINT,
+     };
+ 
+-    m_data.append_range(g_messageParser->encodeVarInt(versions.size()));
++    auto varInt1 = g_messageParser->encodeVarInt(versions.size());
++    m_data.insert(m_data.end(), varInt1.begin(), varInt1.end());
+ 
+     const size_t HEAD_SIZE = m_data.size();
+ 
+diff '--color=auto' -ruN a/src/core/message/messages/HandshakeProtocols.cpp b/src/core/message/messages/HandshakeProtocols.cpp
+--- a/src/core/message/messages/HandshakeProtocols.cpp	2026-01-02 18:44:05.567069024 -0500
++++ b/src/core/message/messages/HandshakeProtocols.cpp	2026-01-02 18:44:40.873796061 -0500
+@@ -56,11 +56,13 @@
+         HW_MESSAGE_MAGIC_TYPE_VARCHAR,
+     };
+ 
+-    m_data.append_range(g_messageParser->encodeVarInt(protocols.size()));
++    auto varInt1 = g_messageParser->encodeVarInt(protocols.size());
++    m_data.insert(m_data.end(), varInt1.begin(), varInt1.end());
+ 
+     for (const auto& p : protocols) {
+-        m_data.append_range(g_messageParser->encodeVarInt(p.size()));
+-        m_data.append_range(p);
++        auto pVarInt = g_messageParser->encodeVarInt(p.size());
++        m_data.insert(m_data.end(), pVarInt.begin(), pVarInt.end());
++        m_data.insert(m_data.end(), p.begin(), p.end());
+     }
+ 
+     m_data.emplace_back(HW_MESSAGE_MAGIC_END);
+diff '--color=auto' -ruN a/src/core/server/ServerSocket.cpp b/src/core/server/ServerSocket.cpp
+--- a/src/core/server/ServerSocket.cpp	2026-01-02 18:44:05.567166722 -0500
++++ b/src/core/server/ServerSocket.cpp	2026-01-02 18:44:48.434796430 -0500
+@@ -227,14 +227,16 @@
+     if (sizeWritten <= 0)
+         return;
+ 
+-    data.append_range(std::span<uint8_t>(buffer, sizeWritten));
++    auto span1 = std::span<uint8_t>(buffer, sizeWritten);
++    data.insert(data.end(), span1.begin(), span1.end());
+ 
+     while (sizeWritten == BUFFER_SIZE) {
+         sizeWritten = read(client->m_fd.get(), buffer, BUFFER_SIZE);
+         if (sizeWritten < 0)
+             return;
+ 
+-        data.append_range(std::span<uint8_t>(buffer, sizeWritten));
++        auto span2 = std::span<uint8_t>(buffer, sizeWritten);
++        data.insert(data.end(), span2.begin(), span2.end());
+     }
+ 
+     g_messageParser->handleMessage(data, client);
+diff '--color=auto' -ruN a/src/core/wireObject/IWireObject.cpp b/src/core/wireObject/IWireObject.cpp
+--- a/src/core/wireObject/IWireObject.cpp	2026-01-02 18:44:05.567189114 -0500
++++ b/src/core/wireObject/IWireObject.cpp	2026-01-02 18:45:09.515797460 -0500
+@@ -101,8 +101,10 @@
+             case HW_MESSAGE_MAGIC_TYPE_VARCHAR: {
+                 data.emplace_back(HW_MESSAGE_MAGIC_TYPE_VARCHAR);
+                 auto str = va_arg(va, const char*);
+-                data.append_range(g_messageParser->encodeVarInt(std::string_view(str).size()));
+-                data.append_range(std::string_view(str));
++                auto varInt1 = g_messageParser->encodeVarInt(std::string_view(str).size());
++                data.insert(data.end(), varInt1.begin(), varInt1.end());
++                auto sv = std::string_view(str);
++                data.insert(data.end(), sv.begin(), sv.end());
+                 break;
+             }
+ 
+@@ -113,7 +115,8 @@
+ 
+                 auto arrayData = va_arg(va, void*);
+                 auto arrayLen  = va_arg(va, uint32_t);
+-                data.append_range(g_messageParser->encodeVarInt(arrayLen));
++                auto varInt2 = g_messageParser->encodeVarInt(arrayLen);
++                data.insert(data.end(), varInt2.begin(), varInt2.end());
+ 
+                 switch (arrType) {
+                     case HW_MESSAGE_MAGIC_TYPE_UINT:
+@@ -129,8 +132,10 @@
+                     case HW_MESSAGE_MAGIC_TYPE_VARCHAR: {
+                         for (size_t i = 0; i < arrayLen; ++i) {
+                             const char* element = rc<const char**>(arrayData)[i];
+-                            data.append_range(g_messageParser->encodeVarInt(std::string_view(element).size()));
+-                            data.append_range(std::string_view(element));
++                            auto elemVarInt = g_messageParser->encodeVarInt(std::string_view(element).size());
++                            data.insert(data.end(), elemVarInt.begin(), elemVarInt.end());
++                            auto elemSv = std::string_view(element);
++                            data.insert(data.end(), elemSv.begin(), elemSv.end());
+                         }
+                         break;
+                     }

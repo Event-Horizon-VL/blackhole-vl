@@ -1,0 +1,10 @@
+--- a/src/ipc/HyprlandSocket.cpp
++++ b/src/ipc/HyprlandSocket.cpp
+@@ -10,6 +10,7 @@
+ #include <format>
+ 
+ #include <hyprutils/memory/Casts.hpp>
++#include <cstring>
+ 
+ using namespace Hyprutils::Memory;
+ 
