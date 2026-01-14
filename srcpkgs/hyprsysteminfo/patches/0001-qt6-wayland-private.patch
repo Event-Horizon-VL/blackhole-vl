@@ -1,0 +1,19 @@
+From fe81610278676d26ff47f62770ac238220285d3a Mon Sep 17 00:00:00 2001
+From: VuaTech <vuatech@proton.me>
+Date: Fri, 3 Oct 2025 18:32:24 -0400
+Subject: [PATCH] cmake: Added fing_pkg for WaylandClientPrivate (#21)
+
+---
+ src/CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 925308d..0bac937 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,3 +1,5 @@
++find_package(Qt6 REQUIRED COMPONENTS WaylandClientPrivate)
++
+ qt_add_executable(hyprsysteminfo
+     main.cpp
+     util/Utils.cpp

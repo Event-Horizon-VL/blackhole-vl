@@ -1,0 +1,19 @@
+# Template file for 'hyprland-qt-support'
+pkgname=hyprland-qt-support
+version=0.1.0
+revision=1
+build_style=cmake
+configure_args=" --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
+ -DCMAKE_INSTALL_PREFIX:PATH=/usr -DINSTALL_QML_PREFIX=/lib/qt6/qml"
+hostmakedepends="cmake pkgconf qt6-base qt6-declarative-devel"
+makedepends="hyprlang qt6-base-devel qt6-declarative-devel"
+short_desc="QML style provider for Hypr* QT apps"
+maintainer="Encoded14 <linusken@tuta.io>"
+license="BSD-3-Clause"
+homepage="https://github.com/hyprwm/hyprland-qt-support"
+distfiles="https://github.com/hyprwm/hyprland-qt-support/archive/refs/tags/v${version}.tar.gz"
+checksum=cac1f980bd088b890097f3f999cfdf03e73ee94c53f3c92d0b3bc23baa9e7b2c
+
+post_install() {
+	vlicense LICENSE
+}
