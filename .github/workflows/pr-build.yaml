@@ -3,7 +3,7 @@ name: pr-build
 on:
     pull_request:
         branches:
-            - main
+            - experimental
         paths:
             - 'srcpkgs/**'
 
