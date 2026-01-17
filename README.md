@@ -147,3 +147,6 @@ This repository follows the same general rules and guidelines as
 
 ### Special thanks
 - Encoded14
+
+## 💖 Support My Work
+[Boosty](https://boosty.to/niarjh) • [BuyMeaCoffee](https://buymeacoffee.com/nizarjh)
