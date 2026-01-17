@@ -8,5 +8,5 @@ StartupWMClass=vesktop
 GenericName=Internet Messenger
 Categories=Network;
 Keywords=discord;vencord;electron;chat;
-Comment=Vesktop is a custom Discord App aiming to give you better performance and improve linux support. Vencord comes pre-installed
+Comment=Vesktop is a custom Discord App aiming to give you better performance and improve Linux support. Vencord comes pre-installed.
 MimeType=x-scheme-handler/discord;
