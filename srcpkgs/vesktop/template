@@ -1,0 +1,26 @@
+# Template file for 'vesktop'
+pkgname=vesktop
+version=1.6.3
+revision=1
+archs="x86_64 aarch64"
+hostmakedepends="nodejs pnpm"
+depends="alsa-lib gtk+3 nss"
+short_desc="Electron-based Discord app with Vencord & improved Linux support"
+maintainer="Nizarjh <chel773@tutamail.com>"
+license="GPL-3.0-only"
+homepage="https://github.com/Vencord/Vesktop"
+distfiles="https://github.com/Vencord/Vesktop/archive/v${version}.tar.gz"
+checksum=19f131dcfaa48df02268bbda538389c7e1ce63c80420fa617089a83253dba702
+
+do_build() {
+	pnpm i --frozen-lockfile
+	pnpm package:dir
+}
+
+do_install() {
+	vmkdir usr/lib/${pkgname}
+	vcopy dist/linux-unpacked/* usr/lib/${pkgname}
+	vinstall ${FILESDIR}/vesktop.desktop 644 usr/share/applications vesktop.desktop
+	vinstall build/icon.svg 644 usr/share/icons/hicolor/scalable/apps ${pkgname}.svg
+	vbin ${FILESDIR}/vesktop.sh ${pkgname}
+}
