@@ -1,0 +1,21 @@
+# Template file for 'hypridle'
+pkgname=hypridle
+version=0.1.7
+revision=4
+build_style=cmake
+configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
+ -DNO_SYSTEMD:BOOL=true"
+hostmakedepends="cmake hyprwayland-scanner pkgconf"
+makedepends="elogind-devel hyprlang hyprland-protocols sdbus-cpp wayland-devel 
+ wayland-protocols"
+short_desc="Hyprland's idle daemon"
+maintainer="Encoded14 <linusken@tuta.io>"
+license="BSD-3-Clause"
+homepage="https://github.com/hyprwm/hypridle"
+changelog="https://github.com/hyprwm/${pkgname}/releases"
+distfiles="https://github.com/hyprwm/hypridle/archive/refs/tags/v${version}.tar.gz"
+checksum=c4ef2e2894fc2082cfdabe7db086b1f246e3f0de571f7f2c6b26d7c0d9a5f8f3
+
+post_install() {
+	vlicense LICENSE
+}

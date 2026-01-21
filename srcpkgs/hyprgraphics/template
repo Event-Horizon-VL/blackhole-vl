@@ -1,0 +1,21 @@
+# Template file for 'hyprgraphics'
+pkgname=hyprgraphics
+version=0.5.0
+revision=1
+build_style=cmake
+configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
+hostmakedepends="cmake pkgconf"
+makedepends="cairo-devel pango-devel file-devel hyprutils
+ libjpeg-turbo-devel libjxl-devel libspng librsvg-devel
+ libwebp-devel pixman-devel"
+short_desc="Hyprland graphics resources and utilities"
+maintainer="Encoded14 <linusken@tuta.io>"
+license="BSD-3-Clause"
+homepage="https://github.com/hyprwm/hyprgraphics"
+distfiles="https://github.com/hyprwm/hyprgraphics/archive/refs/tags/v${version}.tar.gz"
+checksum=bb37f611c1f50e58dcc0aa97ec1b39c186b78160807f109c5dd8833d58f8bc04
+make_check=no # cant run in sandbox
+
+post_install() {
+	vlicense LICENSE
+}
