@@ -1,0 +1,34 @@
+# Template file for 'vscodium-bin'
+pkgname=vscodium-bin
+version=1.107.18627
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+depends="libXtst libxkbfile xdg-utils libXScrnSaver libXext nss dejavu-fonts-ttf fontconfig gtk+3 python cairo alsa-lib libnotify"
+short_desc="Binary releases of VS Code without MS branding/telemetry/licensing"
+maintainer="Nizarjh <chel773@tutamail.com>"
+license="MIT"
+homepage="https://github.com/VSCodium/vscodium"
+distfiles="https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-linux-x64-${version}.tar.gz"
+nostrip_files="codium"
+nocross=yes
+changelog="https://raw.githubusercontent.com/VSCodium/vscodium/main/CHANGELOG.md"
+checksum=82a07175de96c359c85e8be2c60b2e222bcb5e7d4ba195cde4d84ae1b2e64a78
+do_install() {
+	sed -i 's,/usr/share/codium,/usr/lib/vscodium,g' bin/codium
+
+	vmkdir usr/lib/vscodium
+	vcopy * usr/lib/vscodium
+
+	vmkdir usr/bin
+	ln -sf /usr/lib/vscodium/bin/codium ${DESTDIR}/usr/bin/codium
+	ln -sf /usr/lib/vscodium/bin/codium ${DESTDIR}/usr/bin/vscodium
+
+	vmkdir usr/share/applications
+	vinstall ${FILESDIR}/vscodium.desktop 644 usr/share/applications
+
+	vmkdir usr/share/pixmaps
+	vinstall resources/app/resources/linux/code.png 644 usr/share/pixmaps vscodium.png
+
+	vlicense resources/app/LICENSE.txt
+}
