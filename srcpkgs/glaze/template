@@ -7,7 +7,7 @@ configure_args="-DBUILD_TESTING:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release \
  -Dglaze_ENABLE_FUZZING:BOOL=OFF"
 hostmakedepends="cmake pkgconf"
 short_desc="Extremely fast, in memory, JSON and interface library for modern C++"
-maintainer="Nizarjh <chel773@tutumail.com>"
+maintainer="Nizarjh <chel773@tutamail.com>"
 # original template by Encoded14, special thanks
 license="MIT"
 homepage="https://github.com/stephenberry/glaze"
