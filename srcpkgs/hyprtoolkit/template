@@ -1,6 +1,6 @@
 # Template file for 'hyprtoolkit'
 pkgname=hyprtoolkit
-version=0.5.2
+version=0.5.3
 revision=1
 build_style=cmake
 configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
@@ -14,7 +14,7 @@ maintainer="Nizarjh <chel773@tutamail.com>"
 license="BSD-3-Clause"
 homepage="https://github.com/hyprwm/hyprgraphics"
 distfiles="https://github.com/hyprwm/hyprtoolkit/archive/refs/tags/v${version}.tar.gz"
-checksum=8c67aee9b5cf949df4b60d581365fffac445de13a7f0ae615c49ec5bd0482b88
+checksum=7e6671fd4bf6f4b1eda0115aa187aa183db40d59049cca1d7546fb46fdb4cdc0
 make_check=no # cant run in sandbox
 
 post_install() {
