@@ -13,7 +13,7 @@ makedepends="aquamarine cairo-devel glaze hwids hyprcursor
  tomlplusplus wayland-devel wayland-protocols xcb-util-errors-devel
  xcb-util-renderutil-devel xcb-util-wm-devel xorg-server-xwayland tomlplusplus-devel"
 short_desc="Dynamic tiling Wayland compositor that doesn't sacrifice on its looks"
-maintainer="Encoded14 <linusken@tuta.io>"
+maintainer="Nizarjh <chel773@tutamail.com>"
 license="BSD-3-Clause"
 homepage="https://hyprland.org/"
 changelog="https://github.com/hyprwm/Hyprland/releases"
