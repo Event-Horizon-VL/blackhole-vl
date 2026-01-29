@@ -1,0 +1,14 @@
+# Template file for 'python3-telegram_send'
+pkgname=python3-telegram_send
+_base=telegram-send
+version=0.37
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-wheel python3-build python3-installer python3-setuptools"
+depends="python3-telegram_bot python3-colorama python3-appdirs"
+short_desc="Send messages and files over Telegram from the command-line"
+maintainer="Nizarjh <chel773@tutamail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/rahiel/telegram-send"
+distfiles="https://pypi.org/packages/source/${_base::1}/${_base}/${_base}-${version}.tar.gz"
+checksum=9f69abb331598e4b6ba8a173b15df7dfdec4eec17e3600a43d554c53b0150695
