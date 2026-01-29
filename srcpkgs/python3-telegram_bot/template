@@ -1,0 +1,14 @@
+# Template file for 'python3-telegram_bot'
+pkgname=python3-telegram_bot
+version=22.5
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-wheel python3-build python3-installer hatchling"
+depends="python3-httpx"
+checkdepends="python3-pytest $depends"
+short_desc="Python library providing an interface to the Telegram Bot API"
+maintainer="Nizarjh <chel773@tutamail.com>"
+license="LGPL-3.0-only"
+homepage="https://github.com/python-telegram-bot/python-telegram-bot"
+distfiles="${homepage}/releases/download/v${version}/python_telegram_bot-${version}.tar.gz"
+checksum=82d4efd891d04132f308f0369f5b5929e0b96957901f58bcef43911c5f6f92f8

@@ -1,0 +1,7 @@
+Optional dependencies:
+
+* `python3-h2` for HTTP/2 support
+* `python3-pytz` for job queue support
+* `python3-cryptography` for support cryptography library
+* `python3-socksio` for SOCKS proxy support
+* `python3-tornado` for webhooks support
