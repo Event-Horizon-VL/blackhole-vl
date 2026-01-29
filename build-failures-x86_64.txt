@@ -1,2 +1,2 @@
 
-vesktop
+python3-telegram_bot
