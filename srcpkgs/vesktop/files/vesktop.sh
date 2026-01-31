@@ -9,4 +9,4 @@ fi
 
 # Launch (each word in VESKTOP_USER_FLAGS must be split)
 # shellcheck disable=SC2086
-exec /usr/lib/vesktop/vesktop $VESKTOP_USER_FLAGS "$@"
+exec electron35 /usr/lib/vesktop/app.asar $VESKTOP_USER_FLAGS "$@"
