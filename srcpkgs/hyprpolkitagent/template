@@ -1,7 +1,7 @@
 # Template file for 'hyprpolkitagent'
 pkgname=hyprpolkitagent
 version=0.1.3
-revision=2
+revision=3
 build_style=cmake
 configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
  -DCMAKE_INSTALL_PREFIX:PATH=/usr"

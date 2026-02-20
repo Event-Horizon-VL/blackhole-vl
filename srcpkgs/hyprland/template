@@ -10,7 +10,7 @@ makedepends="aquamarine cairo-devel glaze hwids hyprcursor
  hyprgraphics hyprlang hyprutils hyprwire libdisplay-info-devel libdrm-devel
  libgbm-devel libglvnd-devel libinput-devel libliftoff-devel libseat-devel
  libxcb-devel libXcursor-devel libxkbcommon-devel muparser-devel pango-devel re2-devel
- tomlplusplus wayland-devel wayland-protocols xcb-util-errors-devel
+ tomlplusplus-devel wayland-devel wayland-protocols xcb-util-errors-devel
  xcb-util-renderutil-devel xcb-util-wm-devel xorg-server-xwayland tomlplusplus-devel"
 short_desc="Dynamic tiling Wayland compositor that doesn't sacrifice on its looks"
 maintainer="Nizarjh <chel773@tutamail.com>"
