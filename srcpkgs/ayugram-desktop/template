@@ -1,0 +1,192 @@
+# Template file for 'ayugram-desktop'
+pkgname=ayugram-desktop
+version=6.3.10
+revision=1
+_cld3_version=b48dc46512566f5a2d41118c8c1116c4f96dc661
+_lib_webrtc_version=553102f8c244609253720e7a03c2ea2d3c7fee8e
+_lib_rpl_version=c57cccffb01d85570decd7fccb88419c9a682e63
+_hunspell_version=22c3381e2066bed616250d373fc5c935598b564a
+_rlottie_version=8c69fc20cf2e150db304311f1233a4b55a8892d7
+_lib_lottie_version=99d8cc4d1820960fbcdafc574f1894073b14b75a
+_lib_ui_version=b1710a65b73a09937d4cfef3f84cb39b5848ad5d
+_swift_corelibs_libdispatch_version=swift-6.1-DEVELOPMENT-SNAPSHOT-2025-03-25-a
+_cmake_helpers_version=ba366ade3e70c64d1dd854382abd74f532ba41a1
+_cppgir_version=2a7d9cef68202a29d5e8a679ce9519c76eb26dc3
+_expected_lite_version=95b9cb015fa17baa749c2b396b335906e1596a9e
+_xxhash_version=0.8.2
+_lz4_version=1.9.4
+_gsl_version=4.1.0
+_expected_version=1.1.0
+_kimageformats_version=df82311a1081e576c4ac020204578bb8a81b21ec
+_lib_qr_version=6fdf60461444ba150e13ac36009c0ffce72c4c83
+_range_v3_version=0.12.0
+_lib_tl_version=6a1bf6bb45ba803d2a9be76db8aead45cb4732d5
+_lib_base_version=444ab33475734485dcc183a5fb86875c134fac8b
+_tgcalls_version=24876ebca7da10f92dc972225734337f9e793054
+_lib_icu_version=fd92c3184598c4e64c10c1961a3c767d43b10b5c
+_qr_code_generator_version=1.8.0
+_libprisma_version=23b0d70f9709da9b38561d5706891a134d18df76
+_kcoreaddons_version=5.116.0-rc1
+_hime_version=9b3e6f9ab59d1fe4d9de73d3bf0fed7789f921c5
+_nimf_version=1.3.5
+_lib_crl_version=a41edfcfa8c04057deb8a1a38fca145248a9421a
+_xdg_desktop_portal_version=1.20.3
+_lib_webview_version=55ea11759711d377216eae6c45dad0bc49b67398
+_lib_storage_version=ccdc72548a5065b5991b4e06e610d76bc4f6023e
+_codegen_version=1c919609d4573f2be91dafef923f8f9e2c08cdff
+_lib_spellcheck_version=476bb43025449ccbd815a14895e9321695a1a177
+_fcitx5_qt_version=5.1.6
+build_style=cmake
+build_helper="qemu gir"
+configure_args="-DTDESKTOP_API_ID=209235 -DTDESKTOP_API_HASH=169ee702e1df4b6e66d80311db36cc43 -DDESKTOP_APP_DISABLE_CRASH_REPORTS=ON -Dtde2e_DIR='/usr/lib/cmake/Td' -DWaylandScanner_EXECUTABLE=/usr/bin/wayland-scanner -DQT_HOST_PATH=/usr"
+hostmakedepends="pkg-config qt6-base python3 extra-cmake-modules qt6-declarative-host-tools wayland-devel protobuf glib-devel kf6-kcoreaddons git"
+makedepends="alsa-lib-devel boost-devel-minimal libboost_regex fmt-devel ffmpeg6-devel libglib-devel gobject-introspection libdbusmenu-glib-devel libopenal-devel minizip-devel opus-devel xxHash-devel pulseaudio-devel range-v3 qt6-svg-devel libva-devel rapidjson liblz4-devel liblzma-devel MesaLib-devel qt6-wayland-devel qt6-qt5compat-devel libtd-devel qt6-base-private-devel kf6-kcoreaddons-devel ada-devel xcb-util-keysyms-devel hunspell-devel protobuf-devel glibmm2.68-devel tg_owt rnnoise-devel jemalloc-devel qt6-declarative-devel libdispatch-devel zlib-devel"
+depends="qt6-imageformats ttf-opensans"
+short_desc="Telegram client with customization and Ghost mode"
+maintainer="Kirilla39 <kirill39.pesin@ya.ru>"
+license="GPL-3.0-only"
+homepage="https://github.com/AyuGram/AyuGramDesktop"
+distfiles="https://github.com/AyuGram/AyuGramDesktop/archive/refs/tags/v${version}.tar.gz
+https://github.com/google/cld3/archive/${_cld3_version}.tar.gz>cld3-${_cld3_version}.tar.gz
+https://github.com/desktop-app/lib_webrtc/archive/${_lib_webrtc_version}.tar.gz>lib_webrtc-${_lib_webrtc_version}.tar.gz
+https://github.com/desktop-app/lib_rpl/archive/${_lib_rpl_version}.tar.gz>lib_rpl-${_lib_rpl_version}.tar.gz
+https://github.com/hunspell/hunspell/archive/${_hunspell_version}.tar.gz>hunspell-${_hunspell_version}.tar.gz
+https://github.com/desktop-app/rlottie/archive/${_rlottie_version}.tar.gz>rlottie-${_rlottie_version}.tar.gz
+https://github.com/desktop-app/lib_lottie/archive/${_lib_lottie_version}.tar.gz>lib_lottie-${_lib_lottie_version}.tar.gz
+https://github.com/AyuGram/lib_ui/archive/${_lib_ui_version}.tar.gz>lib_ui-${_lib_ui_version}.tar.gz
+https://github.com/apple/swift-corelibs-libdispatch/archive/refs/tags/${_swift_corelibs_libdispatch_version}.tar.gz>swift-corelibs-libdispatch-${_swift_corelibs_libdispatch_version}.tar.gz
+https://github.com/desktop-app/cmake_helpers/archive/${_cmake_helpers_version}.tar.gz>cmake_helpers-${_cmake_helpers_version}.tar.gz
+https://gitlab.com/mnauw/cppgir/-/archive/${_cppgir_version}/cppgir-${_cppgir_version}.tar.gz>cppgir-${_cppgir_version}.tar.gz
+https://github.com/nonstd-lite/expected-lite/archive/${_expected_lite_version}.tar.gz>expected-lite-${_expected_lite_version}.tar.gz
+https://github.com/Cyan4973/xxHash/archive/refs/tags/v${_xxhash_version}.tar.gz>xxhash-${_xxhash_version}.tar.gz
+https://github.com/lz4/lz4/archive/refs/tags/v${_lz4_version}.tar.gz>lz4-${_lz4_version}.tar.gz
+https://github.com/Microsoft/GSL/archive/refs/tags/v${_gsl_version}.tar.gz>gsl-${_gsl_version}.tar.gz
+https://github.com/TartanLlama/expected/archive/refs/tags/v${_expected_version}.tar.gz>expected-${_expected_version}.tar.gz
+https://github.com/KDE/kimageformats/archive/${_kimageformats_version}.tar.gz>kimageformats-${_kimageformats_version}.tar.gz
+https://github.com/desktop-app/lib_qr/archive/${_lib_qr_version}.tar.gz>lib_qr-${_lib_qr_version}.tar.gz
+https://github.com/ericniebler/range-v3/archive/refs/tags/${_range_v3_version}.tar.gz>range-v3-${_range_v3_version}.tar.gz
+https://github.com/AyuGram/lib_tl/archive/${_lib_tl_version}.tar.gz>lib_tl-${_lib_tl_version}.tar.gz
+https://github.com/desktop-app/lib_base/archive/${_lib_base_version}.tar.gz>lib_base-${_lib_base_version}.tar.gz
+https://github.com/TelegramMessenger/tgcalls/archive/${_tgcalls_version}.tar.gz>tgcalls-${_tgcalls_version}.tar.gz
+https://github.com/AyuGram/lib_icu/archive/${_lib_icu_version}.tar.gz>lib_icu-${_lib_icu_version}.tar.gz
+https://github.com/nayuki/QR-Code-generator/archive/refs/tags/v${_qr_code_generator_version}.tar.gz>qr-code-generator-${_qr_code_generator_version}.tar.gz
+https://github.com/desktop-app/libprisma/archive/${_libprisma_version}.tar.gz>libprisma-${_libprisma_version}.tar.gz
+https://github.com/KDE/kcoreaddons/archive/refs/tags/v${_kcoreaddons_version}.tar.gz>kcoreaddons-${_kcoreaddons_version}.tar.gz
+https://github.com/hime-ime/hime/archive/${_hime_version}.tar.gz>hime-${_hime_version}.tar.gz
+https://github.com/hamonikr/nimf/archive/refs/tags/v${_nimf_version}.tar.gz>nimf-${_nimf_version}.tar.gz
+https://github.com/desktop-app/lib_crl/archive/${_lib_crl_version}.tar.gz>lib_crl-${_lib_crl_version}.tar.gz
+https://github.com/flatpak/xdg-desktop-portal/archive/refs/tags/${_xdg_desktop_portal_version}.tar.gz>xdg-desktop-portal-${_xdg_desktop_portal_version}.tar.gz
+https://github.com/desktop-app/lib_webview/archive/${_lib_webview_version}.tar.gz>lib_webview-${_lib_webview_version}.tar.gz
+https://github.com/desktop-app/lib_storage/archive/${_lib_storage_version}.tar.gz>lib_storage-${_lib_storage_version}.tar.gz
+https://github.com/AyuGram/codegen/archive/${_codegen_version}.tar.gz>codegen-${_codegen_version}.tar.gz
+https://github.com/desktop-app/lib_spellcheck/archive/${_lib_spellcheck_version}.tar.gz>lib_spellcheck-${_lib_spellcheck_version}.tar.gz
+https://github.com/fcitx/fcitx5-qt/archive/refs/tags/${_fcitx5_qt_version}.tar.gz>fcitx5-qt-${_fcitx5_qt_version}.tar.gz"
+checksum="ebeec29f6ad1adf1cfa1d5dc242f13dba48404b645d75e953e57148e533733f3
+d0d4ea2fddcbc7d10ace2c37309feb09da87e8ce7ced6ce73592da1359f4765f
+532228c09f448562244ef6d62f951504e0ce302e8f11a2edfd0cc9e18420dff6
+8e5187a8624cf780a5b0d0aad7852152d58b8de2e666d6c797674cbcd2e1172a
+3e7253b2cc31bdf68fa50d105715158e649812e5ad6b4f1f6e5fd1e89b3ffdfd
+cbc1f4bf8c28ffeb89852eda7056ff6aa80d49cb45736a583c931d5ceeccdcdd
+5639bab527e395cf57a2227763364ecc2ce8a7ba82aa6f16a377223a1bd14334
+90e233f16f56a55c73906947650f54e92fdf78e24801d8cfaab3a58681c6637c
+a7d1eb74667253c383c83d16423213161d18151d152058ec8505183e11fc22f6
+e2c04c132dc0289b6916e201050eced9f693bb2d5dc0cab0bd5d2a8489644519
+e2f2ed20b148a2c80c4002113cef093f92f6ede7af73c9b354d30733ac27df11
+7238a966ee6b93fdbf2669736ddd35a6103967eb9d5369af8b740bff2401615c
+baee0c6afd4f03165de7a4e67988d16f0f2b257b51d0e3cb91909302a26a79c4
+0b0e3aa07c8c063ddf40b082bdf7e37a1562bda40a0ff5272957f3e987e0e54b
+0a227fc9c8e0bf25115f401b9a46c2a68cd28f299d24ab195284eb3f1d7794bd
+1db357f46dd2b24447156aaf970c4c40a793ef12a8a9c2ad9e096d9801368df6
+eda5df4249051db521c32fb54a8e1864c4f1e50222e431028ba0cad169621ea9
+dd9b92f8bb26cf5eb543d4e9c5c1c62e17449588caa9eaf2500db09b5f3aed25
+015adb2300a98edfceaf0725beec3337f542af4915cec4d0b89fa0886f4ba9cb
+1548e2d35bf8de4cfeee5ae2f618b0194a12fb6c7d5d07fa9821d329aecda58b
+8ee41f70a64a6347cf2d391a80a503fd5b14950b1b986e286d54a423a0687ec3
+09cdc50332f1be12b51b22c686b00d9cb4063a4e58db74317106a47c68395720
+ead420df1d83cf9b0319c961fa1237184c0418f20978b974911275558eac50b1
+2ec0a4d33d6f521c942eeaf473d42d5fe139abcfa57d2beffe10c5cf7d34ae60
+aba69c97d466e82a13ae6c1d52628c7f7ec8f85c5224f8634fa26a313ebcc95f
+6c8bda4002d2c5310364277276db86a185771c2b394ad4bc28ba8c06c1de428e
+52a2e052beb67492225a38213108f1d7edd1940fd025cad3a4ae28c57d428419
+c52ed9a1cbc441c3026aa48346153b9a8711071765986269373143cd574cefca
+6b9b7d0cd3dce4e327b9376716a798269443be2566e0a411816f13dec1007a16
+01d2a8ceaab06fa1d0638abe541dbb415a0a19be271d9669a93ec1640f87ea4a
+f75e843a2b4a8a0e8e0e4547d3066b51a3fe39d33c9bbdeb65c2f1b51786ed0e
+2736d6f36f9f90323f2a0ed6fa59f52b8be71f50939708dffb0eb9f8155bbde1
+91a0344bdb5fe62b2dd284ddc8509356d431d987c0df19cc8247029da6d9b353
+c71bc9c584374f7f5dbe8bd71610b0cb9ab7862bc70a81bdd59c258d91e2e3ec
+f498c1dc26567fcc62d27aac3869b9e3e0f39ee8602f4aa5c2edc496a192227d"
+skip_extraction="
+	cld3-${_cld3_version}.tar.gz
+	lib_webrtc-${_lib_webrtc_version}.tar.gz
+	lib_rpl-${_lib_rpl_version}.tar.gz
+	hunspell-${_hunspell_version}.tar.gz
+	rlottie-${_rlottie_version}.tar.gz
+	lib_lottie-${_lib_lottie_version}.tar.gz
+	lib_ui-${_lib_ui_version}.tar.gz
+	swift-corelibs-libdispatch-${_swift_corelibs_libdispatch_version}.tar.gz
+	cmake_helpers-${_cmake_helpers_version}.tar.gz
+	cppgir-${_cppgir_version}.tar.gz
+	expected-lite-${_expected_lite_version}.tar.gz
+	xxhash-${_xxhash_version}.tar.gz
+	lz4-${_lz4_version}.tar.gz
+	gsl-${_gsl_version}.tar.gz
+	expected-${_expected_version}.tar.gz
+	kimageformats-${_kimageformats_version}.tar.gz
+	lib_qr-${_lib_qr_version}.tar.gz
+	range-v3-${_range_v3_version}.tar.gz
+	lib_tl-${_lib_tl_version}.tar.gz
+	lib_base-${_lib_base_version}.tar.gz
+	tgcalls-${_tgcalls_version}.tar.gz
+	lib_icu-${_lib_icu_version}.tar.gz
+	qr-code-generator-${_qr_code_generator_version}.tar.gz
+	libprisma-${_libprisma_version}.tar.gz
+	kcoreaddons-${_kcoreaddons_version}.tar.gz
+	hime-${_hime_version}.tar.gz
+	nimf-${_nimf_version}.tar.gz
+	lib_crl-${_lib_crl_version}.tar.gz
+	xdg-desktop-portal-${_xdg_desktop_portal_version}.tar.gz
+	lib_webview-${_lib_webview_version}.tar.gz
+	lib_storage-${_lib_storage_version}.tar.gz
+	codegen-${_codegen_version}.tar.gz
+	lib_spellcheck-${_lib_spellcheck_version}.tar.gz
+	fcitx5-qt-${_fcitx5_qt_version}.tar.gz
+"
+
+post_extract() {
+	vsrcextract -C Telegram/ThirdParty/cld3 "cld3-${_cld3_version}.tar.gz"
+	vsrcextract -C Telegram/lib_webrtc "lib_webrtc-${_lib_webrtc_version}.tar.gz"
+	vsrcextract -C Telegram/lib_rpl "lib_rpl-${_lib_rpl_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/hunspell "hunspell-${_hunspell_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/rlottie "rlottie-${_rlottie_version}.tar.gz"
+	vsrcextract -C Telegram/lib_lottie "lib_lottie-${_lib_lottie_version}.tar.gz"
+	vsrcextract -C Telegram/lib_ui "lib_ui-${_lib_ui_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/dispatch "swift-corelibs-libdispatch-${_swift_corelibs_libdispatch_version}.tar.gz"
+	vsrcextract -C cmake "cmake_helpers-${_cmake_helpers_version}.tar.gz"
+	vsrcextract -C cmake/external/glib/cppgir "cppgir-${_cppgir_version}.tar.gz"
+	vsrcextract -C cmake/external/glib/cppgir/expected-lite "expected-lite-${_expected_lite_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/xxHash "xxhash-${_xxhash_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/lz4 "lz4-${_lz4_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/GSL "gsl-${_gsl_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/expected "expected-${_expected_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/kimageformats "kimageformats-${_kimageformats_version}.tar.gz"
+	vsrcextract -C Telegram/lib_qr "lib_qr-${_lib_qr_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/range-v3 "range-v3-${_range_v3_version}.tar.gz"
+	vsrcextract -C Telegram/lib_tl "lib_tl-${_lib_tl_version}.tar.gz"
+	vsrcextract -C Telegram/lib_base "lib_base-${_lib_base_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/tgcalls "tgcalls-${_tgcalls_version}.tar.gz"
+	vsrcextract -C Telegram/lib_icu "lib_icu-${_lib_icu_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/QR "qr-code-generator-${_qr_code_generator_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/libprisma "libprisma-${_libprisma_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/kcoreaddons "kcoreaddons-${_kcoreaddons_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/hime "hime-${_hime_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/nimf "nimf-${_nimf_version}.tar.gz"
+	vsrcextract -C Telegram/lib_crl "lib_crl-${_lib_crl_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/xdg-desktop-portal "xdg-desktop-portal-${_xdg_desktop_portal_version}.tar.gz"
+	vsrcextract -C Telegram/lib_webview "lib_webview-${_lib_webview_version}.tar.gz"
+	vsrcextract -C Telegram/lib_storage "lib_storage-${_lib_storage_version}.tar.gz"
+	vsrcextract -C Telegram/codegen "codegen-${_codegen_version}.tar.gz"
+	vsrcextract -C Telegram/lib_spellcheck "lib_spellcheck-${_lib_spellcheck_version}.tar.gz"
+	vsrcextract -C Telegram/ThirdParty/fcitx5-qt "fcitx5-qt-${_fcitx5_qt_version}.tar.gz"
+}
+
