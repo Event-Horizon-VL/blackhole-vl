@@ -2,6 +2,7 @@
 pkgname=libresprite
 version=1.2
 revision=1
+archs="x86_64*"
 build_style=cmake
 configure_args="-DCMAKE_INSTALL_PREFIX=/usr/ -G Ninja -DCMAKE_EXE_LINKER_FLAGS='-lwebp'"
 hostmakedepends="pkgconf cmake ninja"
