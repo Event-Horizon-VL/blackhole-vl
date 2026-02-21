@@ -1,0 +1,33 @@
+# Template file for 'blockbench'
+pkgname=blockbench
+version=5.0.7
+revision=1
+hostmakedepends="nodejs"
+short_desc="Low poly 3D model editor"
+maintainer="Kirilla <kirill39.pesin@ya.ru>"
+license="GPL-3.0-only"
+homepage="https://github.com/JannisX11/blockbench"
+distfiles="https://github.com/JannisX11/blockbench/archive/v${version}.tar.gz"
+checksum=3605f7ea962cc56cd07e2badd0e06895b5df1ffd206f78ace72a77771460e4f8
+
+pre_build() {
+    npm install
+}
+
+do_build() {
+	local arch_flag
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64)   arch_flag="--x64" ;;
+		aarch64)  arch_flag="--arm64" ;;
+		*)        msg_error "Unsupported architecture: $XBPS_TARGET_MACHINE" ;;
+	esac
+	npm run publish-linux -- --linux $arch_flag --dir
+}
+
+do_install() {
+	vmkdir usr/lib/${pkgname}
+	vcopy dist-electron/linux-unpacked/* usr/lib/${pkgname}
+	vinstall ${FILESDIR}/blockbench.desktop 644 usr/share/applications blockbench.desktop
+	vinstall icon.png 644 usr/share/pixmaps blockbench.png
+	vbin ${FILESDIR}/blockbench.sh ${pkgname}
+}
