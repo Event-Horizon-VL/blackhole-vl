@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Blockbench
+Exec=/usr/bin/blockbench %U
+Terminal=false
+Type=Application
+Icon=blockbench
+StartupWMClass=blockbench
+GenericName=Model Editor
+Categories=Graphics;3DGraphics;
+Keywords=texturing;minecraft;modeling;electron;
+Comment=Blockbench is a free and open source model editor for low-poly models with pixel art textures.
