@@ -1,0 +1,62 @@
+name: Package Request
+description: Request a new package, update, or fix for the binary repository
+title: "[PKG] <package-name> - <new/update/fix>"
+labels: ["package-request"]
+assignees: []
+
+body:
+  - type: dropdown
+    id: request_type
+    attributes:
+      label: Request Type
+      description: What kind of request is this?
+      options:
+        - New Package
+        - Update Existing Package
+        - Fix / Rebuild
+    validations:
+      required: true
+
+  - type: input
+    id: package_name
+    attributes:
+      label: Package Name
+      description: Exact XBPS package name
+      placeholder: example-package
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Target version (if applicable)
+      placeholder: 1.2.3
+    validations:
+      required: false
+
+  - type: input
+    id: upstream_url
+    attributes:
+      label: Upstream URL
+      description: Link to upstream project or release page
+      placeholder: https://github.com/author/project
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: Additional Information
+      description: Anything else maintainers should know?
+      placeholder: Notes, build flags, special instructions, etc.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have checked that this package/request does not already exist.
+          required: true
