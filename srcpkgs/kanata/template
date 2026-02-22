@@ -2,8 +2,8 @@
 pkgname=kanata
 version=1.11.0
 revision=1
-depends="libevdev"
 build_style=cargo
+depends="libevdev"
 short_desc="Improve keyboard comfort and usability with advanced customization"
 maintainer="Yushi <git@yushi.one>"
 license="LGPL-3.0-only"
