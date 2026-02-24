@@ -52,7 +52,7 @@ Currently packages are tested on / crosscompiled for the following architectures
 1. Clone both this repository and [void-packages](https://github.com/void-linux/void-packages):
 
     ```
-    git clone https://github.com/Nizarjh/blackhole-vl.git
+    git clone https://github.com/Event-Horizon-VL/blackhole-vl.git
     git clone https://github.com/void-linux/void-packages.git
     ```
 
@@ -105,7 +105,7 @@ Currently packages are tested on / crosscompiled for the following architectures
    (replace the architecture as needed):
 
     ```
-    echo repository=https://raw.githubusercontent.com/Nizarjh/blackhole-vl/repository-x86_64 | sudo tee /etc/xbps.d/20-repository-extra.conf
+    echo repository=https://raw.githubusercontent.com/Event-Horizon-VL/blackhole-vl/repository-x86_64 | sudo tee /etc/xbps.d/20-repository-extra.conf
     ```
 
 2. Refresh repositories and accept the fingerprint:
