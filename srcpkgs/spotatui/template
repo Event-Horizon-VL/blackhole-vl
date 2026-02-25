@@ -1,0 +1,18 @@
+# Template file for 'spotatui'
+pkgname=spotatui
+version=0.36.2
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config cmake clang rust-bindgen"
+makedepends="openssl-devel alsa-lib-devel dbus-devel libxcb-devel"
+short_desc="A fully standalone Spotify client for the terminal."
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="MIT"
+homepage="https://github.com/aome510/spotify-player"
+changelog="https://github.com/LargeModGames/spotatui/releases/tag/v0.36.2"
+distfiles="https://github.com/LargeModGames/spotatui/archive/refs/tags/v${version}.tar.gz"
+checksum=58221fc75efd8926e8006b23a8ef916085298c1594015bc5eb94f0dc7223fa0a
+
+post_install() {
+	vlicense LICENSE
+}
