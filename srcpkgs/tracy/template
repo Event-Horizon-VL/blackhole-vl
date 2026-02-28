@@ -1,7 +1,7 @@
 # Template file for 'tracy'
 pkgname=tracy
 version=0.13.1
-revision=1
+revision=2
 build_style=cmake
 hostmakedepends="pkg-config git cmake"
 makedepends="pugixml-devel capstone-devel wayland-devel libglvnd-devel libxkbcommon-devel freetype-devel dbus-devel openssl-devel libcurl-devel libtidy5-devel libgomp-devel json-c++ libmd4c-devel"
