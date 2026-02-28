@@ -1,2 +1,2 @@
 
-tracy
+hyprland
