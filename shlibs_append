@@ -7,4 +7,4 @@ libhyprutils.so.10 hyprutils-0.11.0_1
 libsdbus-c++.so.2 sdbus-cpp-2.1.0_1
 libspng.so.0 libspng-0.7.4_1
 libtomlplusplus.so.3 tomlplusplus-3.4.0_1
-libhyprwire.so.2 hyprwire-0.2.1_1
+libhyprwire.so.3 hyprwire-0.3.0_1
