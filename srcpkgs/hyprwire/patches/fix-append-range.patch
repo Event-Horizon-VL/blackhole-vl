@@ -1,0 +1,134 @@
+diff --git a/src/core/message/messages/BindProtocol.cpp b/src/core/message/messages/BindProtocol.cpp
+index f4d509a..918aef6 100644
+--- a/src/core/message/messages/BindProtocol.cpp
++++ b/src/core/message/messages/BindProtocol.cpp
+@@ -67,10 +67,12 @@ CBindProtocolMessage::CBindProtocolMessage(const std::string& protocol, uint32_t
+ 
+     m_data.emplace_back(HW_MESSAGE_MAGIC_TYPE_VARCHAR);
+ 
+-    m_data.append_range(g_messageParser->encodeVarInt(protocol.length()));
+-    m_data.append_range(protocol);
++    auto varInt1 = g_messageParser->encodeVarInt(protocol.length());
++    m_data.insert(m_data.end(), varInt1.begin(), varInt1.end());
++    m_data.insert(m_data.end(), protocol.begin(), protocol.end());
+ 
+-    m_data.append_range(std::vector<uint8_t>{HW_MESSAGE_MAGIC_TYPE_UINT, 0, 0, 0, 0});
++    std::vector<uint8_t> uintMagic{HW_MESSAGE_MAGIC_TYPE_UINT, 0, 0, 0, 0};
++    m_data.insert(m_data.end(), uintMagic.begin(), uintMagic.end());
+ 
+     std::memcpy(&m_data[m_data.size() - 4], &version, sizeof(version));
+ 
+diff --git a/src/core/message/messages/FatalProtocolError.cpp b/src/core/message/messages/FatalProtocolError.cpp
+index e8976f5..942eb2d 100644
+--- a/src/core/message/messages/FatalProtocolError.cpp
++++ b/src/core/message/messages/FatalProtocolError.cpp
+@@ -61,7 +61,8 @@ CFatalErrorMessage::CFatalErrorMessage(SP<IWireObject> obj, uint32_t errorId, co
+         std::memcpy(&m_data[2], &obj->m_id, sizeof(obj->m_id));
+     std::memcpy(&m_data[7], &errorId, sizeof(errorId));
+ 
+-    m_data.append_range(g_messageParser->encodeVarInt(msg.size()));
+-    m_data.append_range(msg);
++    auto varInt1 = g_messageParser->encodeVarInt(msg.size());
++    m_data.insert(m_data.end(), varInt1.begin(), varInt1.end());
++    m_data.insert(m_data.end(), msg.begin(), msg.end());
+     m_data.emplace_back(HW_MESSAGE_MAGIC_END);
+ }
+diff --git a/src/core/message/messages/HandshakeBegin.cpp b/src/core/message/messages/HandshakeBegin.cpp
+index 96b7c57..8180b2b 100644
+--- a/src/core/message/messages/HandshakeBegin.cpp
++++ b/src/core/message/messages/HandshakeBegin.cpp
+@@ -58,7 +58,8 @@ CHandshakeBeginMessage::CHandshakeBeginMessage(const std::vector<uint32_t>& vers
+         HW_MESSAGE_MAGIC_TYPE_UINT,
+     };
+ 
+-    m_data.append_range(g_messageParser->encodeVarInt(versions.size()));
++    auto varInt1 = g_messageParser->encodeVarInt(versions.size());
++    m_data.insert(m_data.end(), varInt1.begin(), varInt1.end());
+ 
+     const size_t HEAD_SIZE = m_data.size();
+ 
+diff --git a/src/core/message/messages/HandshakeProtocols.cpp b/src/core/message/messages/HandshakeProtocols.cpp
+index 202d9bc..c60f1f1 100644
+--- a/src/core/message/messages/HandshakeProtocols.cpp
++++ b/src/core/message/messages/HandshakeProtocols.cpp
+@@ -57,11 +57,13 @@ CHandshakeProtocolsMessage::CHandshakeProtocolsMessage(const std::vector<std::st
+         HW_MESSAGE_MAGIC_TYPE_VARCHAR,
+     };
+ 
+-    m_data.append_range(g_messageParser->encodeVarInt(protocols.size()));
++    auto varInt1 = g_messageParser->encodeVarInt(protocols.size());
++    m_data.insert(m_data.end(), varInt1.begin(), varInt1.end());
+ 
+     for (const auto& p : protocols) {
+-        m_data.append_range(g_messageParser->encodeVarInt(p.size()));
+-        m_data.append_range(p);
++        auto pVarInt = g_messageParser->encodeVarInt(p.size());
++        m_data.insert(m_data.end(), pVarInt.begin(), pVarInt.end());
++        m_data.insert(m_data.end(), p.begin(), p.end());
+     }
+ 
+     m_data.emplace_back(HW_MESSAGE_MAGIC_END);
+diff --git a/src/core/socket/SocketHelpers.cpp b/src/core/socket/SocketHelpers.cpp
+index bf75385..be3ff69 100644
+--- a/src/core/socket/SocketHelpers.cpp
++++ b/src/core/socket/SocketHelpers.cpp
+@@ -42,7 +42,8 @@ SSocketRawParsedMessage Hyprwire::parseFromFd(const Hyprutils::OS::CFileDescript
+         if (sizeWritten < 0)
+             return {.bad = true};
+ 
+-        message.data.append_range(std::span<uint8_t>(buffer, sizeWritten));
++		auto span = std::span<uint8_t>(buffer, sizeWritten);
++		message.data.insert(message.data.end(), span.begin(), span.end());
+ 
+         // check for control
+         cmsghdr* recvdCmsg = CMSG_FIRSTHDR(&msg);
+diff --git a/src/core/wireObject/IWireObject.cpp b/src/core/wireObject/IWireObject.cpp
+index 0a638f8..efda06d 100644
+--- a/src/core/wireObject/IWireObject.cpp
++++ b/src/core/wireObject/IWireObject.cpp
+@@ -118,8 +118,10 @@ uint32_t IWireObject::call(uint32_t id, ...) {
+             case HW_MESSAGE_MAGIC_TYPE_VARCHAR: {
+                 data.emplace_back(HW_MESSAGE_MAGIC_TYPE_VARCHAR);
+                 auto str = va_arg(va, const char*);
+-                data.append_range(g_messageParser->encodeVarInt(std::string_view(str).size()));
+-                data.append_range(std::string_view(str));
++                auto varInt1 = g_messageParser->encodeVarInt(std::string_view(str).size());
++                data.insert(data.end(), varInt1.begin(), varInt1.end());
++                auto sv = std::string_view(str);
++                data.insert(data.end(), sv.begin(), sv.end());
+                 break;
+             }
+ 
+@@ -130,7 +132,8 @@ uint32_t IWireObject::call(uint32_t id, ...) {
+ 
+                 auto arrayData = va_arg(va, void*);
+                 auto arrayLen  = va_arg(va, uint32_t);
+-                data.append_range(g_messageParser->encodeVarInt(arrayLen));
++                auto varInt2 = g_messageParser->encodeVarInt(arrayLen);
++                data.insert(data.end(), varInt2.begin(), varInt2.end());
+ 
+                 switch (arrType) {
+                     case HW_MESSAGE_MAGIC_TYPE_UINT:
+@@ -153,8 +156,10 @@ uint32_t IWireObject::call(uint32_t id, ...) {
+                     case HW_MESSAGE_MAGIC_TYPE_VARCHAR: {
+                         for (size_t i = 0; i < arrayLen; ++i) {
+                             const char* element = rc<const char**>(arrayData)[i];
+-                            data.append_range(g_messageParser->encodeVarInt(std::string_view(element).size()));
+-                            data.append_range(std::string_view(element));
++                            auto elemVarInt = g_messageParser->encodeVarInt(std::string_view(element).size());
++                            data.insert(data.end(), elemVarInt.begin(), elemVarInt.end());
++                            auto elemSv = std::string_view(element);
++                            data.insert(data.end(), elemSv.begin(), elemSv.end());
+                         }
+                         break;
+                     }
+@@ -233,7 +238,7 @@ void IWireObject::called(uint32_t id, const std::span<const uint8_t>& data, cons
+     if (!method.returnsType.empty())
+         params.emplace_back(HW_MESSAGE_MAGIC_TYPE_SEQ);
+ 
+-    params.append_range(method.params);
++    params.insert(params.end(), method.params.begin(), method.params.end());
+ 
+     if (method.since > m_version) {
+         const auto MSG = std::format("method {} since {} but has {}", id, method.since, m_version);
+
