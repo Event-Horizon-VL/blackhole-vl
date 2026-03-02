@@ -1,6 +1,6 @@
 name: Package Request
 description: Request a new package, update, or fix for the binary repository
-title: "[PKG] <package-name> - <new/update/fix>"
+title: "[PKG] <package-name> - <new/update/fix> package"
 labels: ["package-request"]
 assignees: []
 
