@@ -1,0 +1,35 @@
+# Template file for 'simulide'
+pkgname=simulide
+version=1.1.0
+revision=1
+build_wrksrc=build_XX
+build_style=qmake
+nopie=yes
+nostrip=yes
+hostmakedepends="qt5-qmake qt5-tools"
+makedepends="qt5-devel qt5-svg-devel qt5-multimedia-devel qt5-serialport-devel"
+depends="qt5-core qt5-gui qt5-xml qt5-svg qt5-widgets qt5-concurrent
+	qt5-multimedia qt5-serialport"
+short_desc="Simple real-time electronic circuit simulator"
+maintainer="Octopus_L <daniyal.28.10.11@gmail.com>"
+license="AGPL-3.0-or-later"
+homepage="https://simulide.com/p/"
+distfiles="https://launchpad.net/${pkgname}/${version}/${version}-sr0/+download/SimulIDE_${version}-SR0_sources.zip"
+checksum=2414076b496175c60dfc6a29be84269edd4a347aec29a9aa73b176982b5280d5
+
+post_install() {
+	# data
+	vcopy ${wrksrc}/${build_wrksrc}/executables/SimulIDE_${version}-SR0 usr/lib/simulide
+
+	# binary
+	ln -s /usr/lib/simulide/simulide ${DESTDIR}/usr/bin
+
+	# icon
+	vinstall ${wrksrc}/resources/icons/simulide.png 644 usr/share/icons/hicolor/256x256/apps
+
+	# desktop file
+	vinstall ${wrksrc}/resources/simulide.desktop 644 usr/share/applications
+
+	# license
+	vlicense ${wrksrc}/copyright.txt
+}
