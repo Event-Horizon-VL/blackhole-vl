@@ -1,6 +1,6 @@
 # Template file for 'vscodium-bin'
 pkgname=vscodium-bin
-version=1.109.41146
+version=1.109.51242
 revision=1
 archs="x86_64"
 create_wrksrc=yes
@@ -13,7 +13,7 @@ distfiles="https://github.com/VSCodium/vscodium/releases/download/${version}/VSC
 nostrip_files="codium"
 nocross=yes
 changelog="https://raw.githubusercontent.com/VSCodium/vscodium/main/CHANGELOG.md"
-checksum=6d25f29f2b7aeb814179c005e8902afe5c66f8e97f0d1db542e3bc62fdc4ec5b
+checksum=66dba3b928d1ce9b367fb05c855016e31f247829c72b940718dbde08b444f904
 do_install() {
 	sed -i 's,/usr/share/codium,/usr/lib/vscodium,g' bin/codium
 
