@@ -1,7 +1,7 @@
 # Template file for 'libresprite'
 pkgname=libresprite
 version=1.2
-revision=1
+revision=2
 archs="x86_64*"
 build_style=cmake
 configure_args="-DCMAKE_INSTALL_PREFIX=/usr/ -G Ninja -DCMAKE_EXE_LINKER_FLAGS='-lwebp'"
@@ -15,7 +15,7 @@ distfiles="https://github.com/libresprite/libresprite/releases/download/v${versi
 checksum="38a2387694df9d5725244622d1c2e6cae8aced06b19c19cfbeab96afb13523c0"
 
 post_install() {
-	vinstall ${FILESDIR}/libresprite.desktop 644 usr/share/applications libresprite.desktop
+	vinstall desktop/libresprite.desktop 644 usr/share/applications libresprite.desktop
 	for size in 16 32 48 64 256; do
 		vinstall desktop/icons/hicolor/${size}x${size}/apps/libresprite.png 644 usr/share/icons/hicolor/${size}x${size}/apps/
 	done
