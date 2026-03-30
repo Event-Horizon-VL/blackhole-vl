@@ -1,6 +1,6 @@
 # Template file for 'eilmeldung'
 pkgname=eilmeldung
-version=1.1.0
+version=1.4.0
 revision=1
 build_style=cargo
 hostmakedepends="pkg-config libclang clang"
@@ -11,8 +11,6 @@ license="GPL-3.0-or-later"
 homepage="https://github.com/christo-auer/eilmeldung"
 changelog="https://github.com/christo-auer/eilmeldung/releases"
 distfiles="https://github.com/christo-auer/eilmeldung/archive/refs/tags/${version}.tar.gz"
-checksum=566aa7ec5477cd66ecf88a30f3faaeb84f873628dd11e5724f54a89677298b3c
+checksum=a8c495e659c98cf9e6398c950a8a4fd31bc994a92704252d5bf09959a0755079
 
-post_install() {
-	vlicense LICENSE
-}
+export AWS_LC_SYS_NO_JITTER_ENTROPY=1
