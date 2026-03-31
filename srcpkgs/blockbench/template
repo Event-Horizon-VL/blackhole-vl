@@ -1,7 +1,7 @@
 # Template file for 'blockbench'
 pkgname=blockbench
 version=5.0.7
-revision=1
+revision=2
 hostmakedepends="nodejs"
 short_desc="Low poly 3D model editor"
 maintainer="Kirilla <kirill39.pesin@ya.ru>"
