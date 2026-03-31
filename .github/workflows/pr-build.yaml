@@ -72,7 +72,7 @@ jobs:
 
             - name: Checkout void-packages
               run: |
-                  git clone --depth 1 https://github.com/void-linux/void-packages.git void-packages
+                  git clone https://github.com/void-linux/void-packages.git void-packages
                   cd void-packages
                   git checkout --detach master
 
