@@ -11,6 +11,9 @@ blackhole-vl is a community-driven repository. Packages and improvements welcome
 
 3. Open a PR. CI will check if it builds, after it is merged CI will build your package automatically.
 
+> [!IMPORTANT]
+> If your resulting `.xbps` package is ≥100 MB or requires ≥8 GB of RAM to build, target the `manual` branch. Otherwise, please target `main`.
+
 ## Template Notes
 
 #### Updating a template
