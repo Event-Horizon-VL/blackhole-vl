@@ -1,7 +1,7 @@
 # Template file for 'librewolf-bin'
 pkgname=librewolf-bin
-version=149.0
-revision=1
+version=149.0.2
+revision=2
 archs="x86_64 aarch64"
 depends="hunspell hyphen xdg-utils libavcodec libnotify nss"
 short_desc="LibreWolf web browser"
@@ -13,21 +13,18 @@ changelog="https://codeberg.org/librewolf/bsys6/releases"
 case "${XBPS_TARGET_MACHINE}" in
 x86_64)
 	_upstream_arch=x86_64
-	_checksum=a56d74bc335930598dc78df223776c48ed05350152d7a35506ed97f4d01af94a
+	_checksum=07381231e007137b773f92ff5e3d318c971fb05937508625ac9bd01a86a1a4cd
 	;;
 aarch64)
 	_upstream_arch=arm64
-	_checksum=da63a5797db929c346f3eda34a05c8dab4c3bd9ea357081560ea2820e1eaa891
+	_checksum=e3d38379c4dbfcd7936bc8b007c7f85f31aa3df15324fbc4811273f20b2818db
 	;;
 *)
 	broken="No distfiles available for ${XBPS_TARGET_MACHINE}"
 	;;
 esac
 
-_rev=1
-_tag="${version}-${_rev}"
-
-distfiles="https://codeberg.org/api/packages/librewolf/generic/librewolf/${_tag}/librewolf-${_tag}-linux-${_upstream_arch}-package.tar.xz"
+distfiles="https://codeberg.org/api/packages/librewolf/generic/librewolf/${version}-${revision}/librewolf-${version}-${revision}-linux-${_upstream_arch}-package.tar.xz"
 checksum="${_checksum}"
 
 do_install() {
