@@ -1,9 +1,9 @@
 # Template file for 'librewolf-bin'
 pkgname=librewolf-bin
-version=150.0
+version=150.0.3
 revision=1
 archs="x86_64 aarch64"
-depends="hunspell hyphen xdg-utils libavcodec libnotify nss"
+depends="hunspell hyphen xdg-utils libavcodec libnotify nss desktop-file-utils hicolor-icon-theme"
 short_desc="LibreWolf web browser"
 maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
 license="MPL-2.0"
@@ -13,11 +13,11 @@ changelog="https://codeberg.org/librewolf/bsys6/releases"
 case "${XBPS_TARGET_MACHINE}" in
 x86_64)
 	_upstream_arch=x86_64
-	_checksum=f6e97956c45d26d58149d3adddd36c47f19ac14e711233f185080d8dffb0137f
+	_checksum=49edf3bc01341b0d92c6be4e983e668d55310255478b4419ce12ab51ed6252d6
 	;;
 aarch64)
 	_upstream_arch=arm64
-	_checksum=ac9cecd1d81eda5229d7acdd0a502ff299a553e2a47a73d7f98fdc3ae9bf6804
+	_checksum=60ed97285c3d6532787028a66559c3312c414a190236800c356058d1f0dc4762
 	;;
 *)
 	broken="No distfiles available for ${XBPS_TARGET_MACHINE}"
@@ -28,15 +28,24 @@ distfiles="https://codeberg.org/api/packages/librewolf/generic/librewolf/${versi
 checksum="${_checksum}"
 
 do_install() {
-	vmkdir opt/${pkgname}
+	vmkdir /usr/lib/librewolf-bin
+	vcopy * /usr/lib/librewolf-bin
+
 	vmkdir usr/bin
+	vbin "${FILESDIR}/librewolf-wrapper" librewolf
+
+	vmkdir /usr/lib/librewolf-bin/browser/defaults/preferences
+	vinstall "${FILESDIR}/vendor.js" 644 \
+		/usr/lib/librewolf-bin/browser/defaults/preferences
+
+	vmkdir /usr/lib/librewolf-bin/distribution
+	vinstall "${FILESDIR}/distribution.ini" 644 \
+		/usr/lib/librewolf-bin/distribution
+
 	vmkdir usr/share/applications
 	vmkdir usr/share/pixmaps
 
-	vcopy * "opt/${pkgname}"
 	vinstall "${FILESDIR}/librewolf.desktop" 644 usr/share/applications/
-
-	ln -sf "/opt/${pkgname}/librewolf" "${DESTDIR}/usr/bin/librewolf"
 
 	vinstall browser/chrome/icons/default/default48.png 644 usr/share/pixmaps librewolf.png
 
@@ -45,7 +54,8 @@ do_install() {
 		vinstall browser/chrome/icons/default/default${size}.png 0644 usr/share/icons/hicolor/${size}x${size}/apps librewolf.png
 	done
 
-	ln -Ts /usr/share/hunspell "${DESTDIR}/opt/${pkgname}/dictionaries"
-	ln -Ts /usr/share/hyphen "${DESTDIR}/opt/${pkgname}/hyphenation"
-	ln -sf /usr/lib/libnssckbi.so "${DESTDIR}/opt/${pkgname}/libnssckbi.so"
+	ln -Ts /usr/share/hunspell "${DESTDIR}/usr/lib/librewolf-bin/dictionaries"
+	ln -Ts /usr/share/hyphen "${DESTDIR}/usr/lib/librewolf-bin/hyphenation"
+
+	ln -sf /usr/lib/libnssckbi.so "${DESTDIR}/usr/lib/librewolf-bin/libnssckbi.so"
 }
