@@ -1,20 +1,26 @@
-<!-- Uncomment relevant sections and delete options which are not applicable -->
+<!-- Uncomment relevant sections and remove those that do not apply -->
 
-#### Testing the changes
-- I tested the changes in this PR: **YES**|**briefly**|**NO**
+<!-- The keywords MUST, SHOULD, and MAY are used as defined in RFC 2119 -->
 
-<!-- Rules: target `manual` if the resulting .xbps package is ≥100 MB or requires ≥8 GB RAM to build, else `main` branch. Follow [blackhole-vl/CONTRIBUTING.md](https://github.com/Event-Horizon-VL/blackhole-vl/blob/main/CONTRIBUTING.md). -->
-<!--
-Uncomment if block below is a new package:
-#### New package
-- This new package conforms to the [our](https://github.com/Event-Horizon-VL/blackhole-vl/blob/main/CONTRIBUTING.md) rules: **YES**|**NO**
--->
+<!-- All preconditions MUST be met before submitting a PR. Please read the list carefully. -->
 
-<!--
-#### Local build testing
-- I built this PR locally for these architectures (if supported. mark crossbuilds):
-  - aarch64-musl(crossbuild|native)
-  - aarch64-glibc(crossbuild|native)
-  - x86_64-musl(crossbuild|native)
-  - x86_64-glibc(crossbuild|native)
--->
+#### Preconditions
+
+- [ ] I have read the [Code of Conduct](../CODE_OF_CONDUCT.md) and agree to comply with it.
+- [ ] I have read the [Contributing Guidelines](../CONTRIBUTING.md) and confirm that this PR follows them.
+- [ ] Commit messages follow the project's guidelines.
+- [ ] This PR does not include unrelated changes.
+
+#### Testing
+
+- [ ] The changes build successfully.
+- [ ] The changes have been tested.
+
+#### Local Build Testing
+<!-- Please build your changes before submitting.
+     Indicate how the PR was built (crossbuild or native) in the parentheses below. -->
+- I built this PR locally for the following architectures:
+  - [ ] aarch64-musl  (crossbuild | native)
+  - [ ] aarch64-glibc (crossbuild | native)
+  - [ ] x86_64-musl   (crossbuild | native)
+  - [ ] x86_64-glibc  (crossbuild | native)
