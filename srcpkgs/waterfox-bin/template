@@ -1,6 +1,6 @@
 # Template file for 'waterfox-bin'
 pkgname=waterfox-bin
-version=6.6.10
+version=6.6.11
 revision=1
 archs="x86_64"
 depends="alsa-lib dbus-glib gtk+3 libXt libnotify nss"
@@ -10,7 +10,7 @@ license="MPL-2.0"
 homepage="https://www.waterfox.net/"
 changelog="https://www.waterfox.com/releases/${version}/"
 distfiles="https://cdn1.waterfox.net/waterfox/releases/${version}/Linux_x86_64/waterfox-${version}.tar.bz2"
-checksum=8fe17790242cf9fe8f20e5229be8a8fce587f52a28b8655a153c91fe3d6cfeea
+checksum=aad70496d156265ccd5516312d87ea42b0a4d98405d1d894184ba77c0542516a
 
 do_install() {
 	vmkdir opt/${pkgname}
