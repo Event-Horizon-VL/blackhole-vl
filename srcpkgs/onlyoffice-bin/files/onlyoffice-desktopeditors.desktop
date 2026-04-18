@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=OnlyOffice Desktop Editors
+GenericName=Office Suite
+Comment=Edit text documents, spreadsheets and presentations
+Exec=onlyoffice-desktopeditors %F
+Icon=onlyoffice-desktopeditors
+Type=Application
+Categories=Office;WordProcessor;Spreadsheet;Presentation;
+MimeType=application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/msword;application/vnd.ms-excel;application/vnd.ms-powerpoint;
+Terminal=false
+StartupNotify=true
+StartupWMClass=DesktopEditors

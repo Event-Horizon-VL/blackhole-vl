@@ -1,0 +1,41 @@
+# Template file for 'onlyoffice-bin'
+pkgname=onlyoffice-bin
+version=9.3.1
+revision=1
+archs="x86_64"
+build_style=fetch
+hostmakedepends="bsdtar"
+depends="hicolor-icon-theme desktop-file-utils"
+short_desc="Office suite for document, spreadsheet and presentation editing"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="AGPL-3.0-or-later"
+homepage="https://www.onlyoffice.com"
+changelog="https://raw.githubusercontent.com/ONLYOFFICE/DesktopEditors/master/CHANGELOG.md"
+distfiles="https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors-x64.tar.xz"
+checksum="61d79bae5151540a28874dc6fcc7a47fb5df097bab601e6d5b75c1551b6968f0"
+nopie="yes"
+
+do_extract() {
+	mkdir -p ${wrksrc}
+	bsdtar xf ${XBPS_SRCDISTDIR}/${pkgname}-${version}/onlyoffice-desktopeditors-x64.tar.xz -C ${wrksrc}
+}
+
+do_install() {
+	vmkdir usr/lib/onlyoffice
+	vcopy ${wrksrc}/opt/onlyoffice/desktopeditors/* usr/lib/onlyoffice
+
+	vbin ${FILESDIR}/onlyoffice-desktopeditors
+
+	vinstall ${FILESDIR}/onlyoffice-desktopeditors.desktop 644 usr/share/applications
+
+	for size in 16 24 32 48 64 128 256; do
+		if [ -f ${DESTDIR}/usr/lib/onlyoffice/asc-de-${size}.png ]; then
+			vmkdir usr/share/icons/hicolor/${size}x${size}/apps
+			vinstall ${DESTDIR}/usr/lib/onlyoffice/asc-de-${size}.png \
+				644 usr/share/icons/hicolor/${size}x${size}/apps \
+				onlyoffice-desktopeditors.png
+		fi
+	done
+
+	vlicense ${wrksrc}/opt/onlyoffice/desktopeditors/LICENSE.txt
+}
