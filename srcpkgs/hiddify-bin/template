@@ -1,0 +1,31 @@
+# Template file for 'hiddify-bin'
+pkgname=hiddify-bin
+version=4.1.1
+revision=1
+archs="x86_64"
+hostmakedepends="tar xz zstd"
+depends="at-spi2-core cairo curl fontconfig glib glibc gtk+3 libayatana-appindicator libepoxy libgcc libstdc++ libffi pango"
+short_desc="Multi-platform auto-proxy client"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://hiddify.com"
+distfiles="https://github.com/hiddify/hiddify-app/releases/download/v${version}/Hiddify-Debian-x64.deb"
+checksum=e622abd15f7d4410c5655f3fdcd0fa9300944666fa40ac22761f06f93020f10e
+nopie=yes
+noverifyrdeps=yes
+noshlibprovides=yes
+
+do_extract() {
+	mkdir -p ${DESTDIR}
+	ar x ${XBPS_SRCDISTDIR}/${pkgname}-${version}/Hiddify-Debian-x64.deb
+	tar --zstd -xf data.tar.zst -C ${DESTDIR}
+}
+
+do_install() {
+	vmkdir opt/hiddify/
+	mv ${DESTDIR}/usr/share/hiddify/* ${DESTDIR}/opt/hiddify/
+
+	vmkdir usr/bin/
+	ln -s /opt/hiddify/hiddify ${DESTDIR}/usr/bin/
+	ln -s /opt/hiddify/HiddifyCli ${DESTDIR}/usr/bin/
+}
