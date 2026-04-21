@@ -1,0 +1,17 @@
+# Template file for 'ghgrab'
+pkgname=ghgrab
+version=1.3.2
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config"
+short_desc="Search and download files from GitHub without leaving your CLI"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="MIT"
+homepage="https://github.com/abhixdd/ghgrab"
+changelog="https://github.com/abhixdd/ghgrab/releases"
+distfiles="https://github.com/abhixdd/ghgrab/archive/refs/tags/v${version}.tar.gz"
+checksum=2c38e403957eb60c4c20cbd6accadc4900e09cee02edad2ee047e9284006a944
+
+post_install() {
+	vlicense LICENSE
+}
