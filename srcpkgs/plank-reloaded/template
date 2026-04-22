@@ -1,6 +1,6 @@
 # Template file for 'plank-reloaded'
 pkgname=plank-reloaded
-version=0.11.166
+version=0.11.167
 revision=1
 build_style=meson
 build_helper=qemu
@@ -13,7 +13,7 @@ maintainer="Octopus_L <octopus.l.2810@gmail.com>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/zquestz/plank-reloaded"
 distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
-checksum=28709ce2af9955c46c040ea314e14c61bd07a1dc93faa7e1ec0387d60b1892ee
+checksum=7c24a46bff96eb86f1dfc820c843d78a14634077cbcbb3695b2cb1aad184c536
 conflicts="plank plank-devel"
 
 build_options="dbusmenu"
