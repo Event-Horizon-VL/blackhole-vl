@@ -1,0 +1,32 @@
+# Template file for 'spicetify-cli'
+pkgname=spicetify-cli
+version=2.43.2
+revision=1
+build_style=go
+go_import_path="github.com/spicetify/cli"
+go_package="${go_import_path}"
+go_ldflags="-X main.version=${version}"
+short_desc="Command-line tool to customize Spotify client"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/spicetify/cli"
+changelog="https://github.com/spicetify/cli/releases/tag/v${version}"
+distfiles="https://github.com/spicetify/cli/archive/v${version}.tar.gz"
+checksum=3debce8af8e071ff9ec75b6a8a296bbd0bb5963151721b0ad2723660b64f65c5
+
+do_install() {
+	local _bin="$(find ${GOPATH}/bin -name cli -type f | head -n1)"
+	[ -z "$_bin" ] && msg_error "Cannot find cli binary\n"
+
+	vmkdir usr/libexec/${pkgname}
+	vinstall "${_bin}" 755 usr/libexec/${pkgname} spicetify
+
+	vcopy CustomApps usr/libexec/${pkgname}
+	vcopy Extensions usr/libexec/${pkgname}
+	vcopy jsHelper usr/libexec/${pkgname}
+	vcopy Themes usr/libexec/${pkgname}
+	vinstall css-map.json 644 usr/libexec/${pkgname}
+	vinstall globals.d.ts 644 usr/libexec/${pkgname}
+
+	vbin ${FILESDIR}/spicetify.sh spicetify
+}
