@@ -1,0 +1,12 @@
+case "$ACTION" in
+post)
+    if [ -d /usr/libexec/spotify ]; then
+        chmod -R a+wr /usr/libexec/spotify
+        chmod -R a+wr /usr/libexec/spotify/Apps
+    else
+        echo "ERROR: /usr/libexec/spotify not found." >&2
+        echo "Please install Spotify and reinstall this package." >&2
+        exit 1
+    fi
+    ;;
+esac
