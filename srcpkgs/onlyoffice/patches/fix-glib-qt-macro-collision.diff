@@ -1,0 +1,18 @@
+diff --git a/desktop-apps/win-linux/src/cthemes.cpp b/desktop-apps/win-linux/src/cthemes.cpp
+index d98742f77..ac3b26bdb 100644
+--- a/desktop-apps/win-linux/src/cthemes.cpp
++++ b/desktop-apps/win-linux/src/cthemes.cpp
+@@ -36,9 +36,12 @@
+ 
+ #include "cthemes.h"
+ #ifdef Q_OS_LINUX
++# pragma push_macro("signals")
++# undef signals
+ # include <gtk/gtk.h>
+ # include <gio/gio.h>
+ # include <glib.h>
++# pragma pop_macro("signals")
+ # include "cascapplicationmanagerwrapper.h"
+ #endif
+ #include "defines.h"
+ 
