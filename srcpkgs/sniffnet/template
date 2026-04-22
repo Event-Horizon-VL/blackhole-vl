@@ -1,6 +1,6 @@
 # Template file for 'sniffnet'
 pkgname=sniffnet
-version=1.4.2
+version=1.5.0
 revision=1
 archs="x86_64* aarch64*"
 build_style=cargo
@@ -13,7 +13,7 @@ license="Apache-2.0, MIT"
 homepage="https://github.com/GyulyVGC/sniffnet"
 changelog="https://raw.githubusercontent.com/GyulyVGC/sniffnet/refs/heads/main/CHANGELOG.md"
 distfiles="https://github.com/GyulyVGC/sniffnet/archive/refs/tags/v${version}.tar.gz"
-checksum=7fc4cc610a2bbd823604abe6acabceac2cbeb9d42129851df9b6b24cc24d05c7
+checksum=c2000ee833c8329d5aaf2b4c1f950d01b48b2a93bd094f949dbed5d6ac4f4d8c
 
 post_install() {
 	vinstall README.md 644 usr/share/doc/${pkgname}
