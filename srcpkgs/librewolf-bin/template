@@ -1,7 +1,7 @@
 # Template file for 'librewolf-bin'
 pkgname=librewolf-bin
-version=149.0.2
-revision=2
+version=150.0
+revision=1
 archs="x86_64 aarch64"
 depends="hunspell hyphen xdg-utils libavcodec libnotify nss"
 short_desc="LibreWolf web browser"
@@ -13,11 +13,11 @@ changelog="https://codeberg.org/librewolf/bsys6/releases"
 case "${XBPS_TARGET_MACHINE}" in
 x86_64)
 	_upstream_arch=x86_64
-	_checksum=07381231e007137b773f92ff5e3d318c971fb05937508625ac9bd01a86a1a4cd
+	_checksum=f6e97956c45d26d58149d3adddd36c47f19ac14e711233f185080d8dffb0137f
 	;;
 aarch64)
 	_upstream_arch=arm64
-	_checksum=e3d38379c4dbfcd7936bc8b007c7f85f31aa3df15324fbc4811273f20b2818db
+	_checksum=ac9cecd1d81eda5229d7acdd0a502ff299a553e2a47a73d7f98fdc3ae9bf6804
 	;;
 *)
 	broken="No distfiles available for ${XBPS_TARGET_MACHINE}"
