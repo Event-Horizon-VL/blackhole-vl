@@ -1,0 +1,23 @@
+# Template file for 'guile-git'
+pkgname=guile-git
+version=0.11.0
+revision=1
+build_style=gnu-configure
+configure_args="--with-guile-site-dir=no"
+hostmakedepends="autoconf automake libtool pkgconf texinfo guile-devel guile-bytestructures"
+makedepends="guile-devel libgit2-1.9-devel zlib-devel"
+checkdepends="tar git openssh"
+depends="guile-bytestructures libgit2-1.9-devel"
+short_desc="Guile bindings for libgit2"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://gitlab.com/guile-git/guile-git"
+changelog="https://gitlab.com/guile-git/guile-git/-/blob/master/NEWS"
+distfiles="https://gitlab.com/guile-git/guile-git/-/archive/v${version}/guile-git-v${version}.tar.gz"
+checksum=91ffe50e595907ad49a3a6e8c24f87613ba2a6cf59730c8ad5be4d2ef8f041cd
+# Clone and ssh auth tests fail
+make_check=no
+
+pre_configure() {
+	autoreconf -fi
+}
