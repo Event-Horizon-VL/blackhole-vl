@@ -1,0 +1,14 @@
+diff --git a/src/state/HyprlandIPC.cpp b/src/state/HyprlandIPC.cpp
+index 059c0d1..35641b4 100644
+--- a/src/state/HyprlandIPC.cpp
++++ b/src/state/HyprlandIPC.cpp
+@@ -66,7 +66,8 @@ std::expected<std::string, std::string> HyprlandIPC::getFromSocket(const std::st
+ 
+     std::string socketPath = getRuntimeDir() + "/" + HIS + "/.socket.sock";
+ 
+-    strncpy(serverAddress.sun_path, socketPath.c_str(), sizeof(serverAddress.sun_path) - 1);
++    std::ranges::copy(socketPath, serverAddress.sun_path);
++    serverAddress.sun_path[sizeof(serverAddress.sun_path) - 1] = '\0';
+ 
+     if (connect(SERVERSOCKET, rc<sockaddr*>(&serverAddress), SUN_LEN(&serverAddress)) < 0)
+         return std::unexpected(std::format("couldn't connect to the hyprland socket at {}", socketPath));

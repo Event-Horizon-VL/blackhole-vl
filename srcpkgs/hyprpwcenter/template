@@ -1,0 +1,20 @@
+# Template file for 'hyprpwcenter'
+pkgname=hyprpwcenter
+version=0.1.2
+revision=1
+build_style=cmake
+configure_args="-DCMAKE_BUILD_TYPE:STRING=Release \
+ -DCMAKE_INSTALL_PREFIX=/usr"
+hostmakedepends="pkg-config"
+makedepends="hyprtoolkit hyprutils cairo-devel libdrm-devel pipewire-devel
+ libxkbcommon-devel pango-devel pixman-devel"
+short_desc="GUI Pipewire control center"
+maintainer="Nizarjh <chel773@tutamail.com>"
+license="BSD-3-Clause"
+homepage="https://github.com/hyprwm/hyprpwcenter"
+distfiles="https://github.com/hyprwm/${pkgname}/archive/refs/tags/v${version}.tar.gz"
+checksum=ab4cfd4710566b07e98973d6723c24802d95774aa9c02aca839ff03e3bf09659
+
+post_install() {
+	vlicense LICENSE
+}
