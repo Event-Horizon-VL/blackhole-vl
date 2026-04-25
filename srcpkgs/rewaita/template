@@ -1,0 +1,19 @@
+# Template file for 'rewaita'
+pkgname=rewaita
+version=1.1.2
+revision=1
+build_style=meson
+hostmakedepends="ninja python3-setuptools gettext desktop-file-utils
+ glib-devel pkgconf gtk-update-icon-cache"
+makedepends="gtk4-devel libportal-devel gobject-introspection python3-devel
+ glib-devel libadwaita-devel"
+depends="gtk4 python3-gobject python3-Pillow python3-numpy python3-pyciede2000
+ libportal libportal-gtk4 python3-fortune libadwaita xdg-desktop-portal-gtk
+ gtksourceview5"
+short_desc="Bring color to Adwaita - GTK theme customizer"
+maintainer="Octopus_L <octopus.l.2810@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/SwordPuffin/Rewaita"
+changelog="https://github.com/SwordPuffin/Rewaita/releases"
+distfiles="https://github.com/SwordPuffin/Rewaita/archive/refs/tags/v${version}.tar.gz"
+checksum=925f7cd9ed8f23680f9d802833cd35d982879e85bb27f47b13e8d27b74842c96
