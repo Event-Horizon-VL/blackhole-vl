@@ -1,0 +1,17 @@
+# Template file for 'python3-textual-autocomplete'
+pkgname=python3-textual-autocomplete
+version=4.0.6
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-build python3-installer hatchling"
+depends="python3-textual python3-typing_extensions"
+short_desc="Easily add autocomplete dropdowns to your Textual apps"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="MIT"
+homepage="https://github.com/darrenburns/textual-autocomplete"
+distfiles="${PYPI_SITE}/t/textual-autocomplete/textual_autocomplete-${version}.tar.gz"
+checksum=2ba2f0d767be4480ecacb3e4b130cf07340e033c3500fc424fed9125d27a4586
+
+post_install() {
+	vlicense LICENSE
+}
