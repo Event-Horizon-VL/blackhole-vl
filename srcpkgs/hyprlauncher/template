@@ -1,29 +1,19 @@
 # Template file for 'hyprlauncher'
 pkgname=hyprlauncher
 version=0.1.5
-revision=2
+revision=1
 build_style=cmake
-configure_args="-DCMAKE_BUILD_TYPE=None \
- -DCMAKE_INSTALL_PREFIX=/usr"
-depends = "wl-clipboard"
-makedepends="
- hyprutils
- hyprwire
- hyprlang
- hyprtoolkit
- wayland-devel
- pixman-devel
- libdrm-devel
- icu-devel
- fontconfig-devel
- libqalculate-devel
- cairo-devel
- libxkbcommon-devel
-"
-hostmakedepends="pkg-config"
-short_desc="A multipurpose and versatile launcher / picker for Hyprland"
+hostmakedepends="hyprwire pkgconf"
+makedepends="hyprutils hyprwire hyprlang hyprtoolkit wayland-devel pixman-devel libdrm-devel
+ icu-devel fontconfig-devel libqalculate-devel cairo-devel libxkbcommon-devel pango-devel"
+depends="wl-clipboard"
+short_desc="Multipurpose and versatile launcher / picker for Hyprland"
 maintainer="Nizarjh <chel773@tutamail.com>"
 license="BSD-3-Clause"
-homepage="https://github.com/hyprwm/$pkgname"
-distfiles="$homepage/archive/v$version/$pkgname-$version.tar.gz"
+homepage="https://github.com/hyprwm/hyprlauncher"
+distfiles="https://github.com/hyprwm/${pkgname}/archive/refs/tags/v${version}.tar.gz"
 checksum=907bf3ce39699d565d49adff1f9b2baee4b59fbb0c1c2b1ec41814f05065bec7
+
+post_install() {
+	vlicense LICENSE
+}
