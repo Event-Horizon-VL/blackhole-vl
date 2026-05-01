@@ -1,0 +1,43 @@
+# Template file for 'mindustry'
+pkgname=mindustry
+version=157.4
+revision=1
+archs="~*-musl" # Mindustry doesn't support musl
+hostmakedepends="openjdk17 libicns"
+depends="openjdk17-jre"
+short_desc="Automation tower defense RTS"
+maintainer="Octopus_L <octopus.l.2810@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://mindustrygame.github.io/"
+changelog="https://github.com/anuken/mindustry/releases"
+distfiles="https://github.com/Anuken/Mindustry/archive/refs/tags/v${version}.tar.gz"
+checksum=980dbf5df8f50791413cd1ef91f36a367818d35648a6a54471d17e862d57976e
+
+do_build() {
+	. /etc/profile.d/jdk.sh
+	unset ANDROID_HOME JITPACK # skip android subproject
+	./gradlew --no-daemon -Pbuildversion=${version} desktop:dist server:dist
+}
+
+do_install() {
+	vinstall desktop/build/libs/Mindustry.jar 644 usr/lib/mindustry mindustry.jar
+	vbin ${FILESDIR}/mindustry.sh mindustry
+
+	vinstall ${FILESDIR}/mindustry.desktop 644 usr/share/applications
+
+	vinstall core/assets/icons/icon_64.png 644 usr/share/pixmaps mindustry.png
+	vinstall core/assets/icons/icon_64.png 644 usr/share/icons/hicolor/64x64/apps mindustry.png
+	icns2png -x core/assets/icons/icon.icns -o core/assets/icons
+	for size in 256 512 1024; do
+		vinstall core/assets/icons/icon_${size}x${size}x32.png 644 \
+			usr/share/icons/hicolor/${size}x${size}/apps mindustry.png
+	done
+}
+
+mindustry-server_package() {
+	short_desc+=" - server app"
+	pkg_install() {
+		vinstall server/build/libs/server-release.jar 644 usr/lib/mindustry mindustry-server.jar
+		vbin ${FILESDIR}/mindustry-server.sh mindustry-server
+	}
+}
