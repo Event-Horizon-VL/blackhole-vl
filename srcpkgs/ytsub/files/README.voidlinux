@@ -1,0 +1,5 @@
+Optional dependencies:
+
+* `mpv` and `yt-dlp` for video playback support
+* `ueberzug` and `chafa` for thumbnail support
+* `xclip`, `xsel`, `wl-clipboard` and `wayclip` for clipboard support
