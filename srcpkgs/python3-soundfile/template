@@ -1,0 +1,19 @@
+# Template file for 'python3-soundfile'
+pkgname=python3-soundfile
+version=0.13.1
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-setuptools python3-wheel python3-cffi"
+depends="python3-cffi python3-numpy libsndfile"
+checkdepends="python3-pytest $depends"
+short_desc="SoundFile is an audio library based on libsndfile, CFFI, and NumPy"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="BSD-3-Clause"
+homepage="https://github.com/bastibe/python-soundfile"
+changelog="https://github.com/bastibe/python-soundfile/releases"
+distfiles="${PYPI_SITE}/s/soundfile/soundfile-${version}.tar.gz"
+checksum=b2c68dab1e30297317080a5b43df57e302584c49e2942defdde0acccc53f0e5b
+
+post_install() {
+	vlicense LICENSE
+}
