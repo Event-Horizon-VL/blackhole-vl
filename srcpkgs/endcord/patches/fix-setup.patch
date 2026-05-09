@@ -1,0 +1,22 @@
+diff --git a/setup.py b/setup.py
+index de9c8ee..00d621a 100644
+--- a/setup.py
++++ b/setup.py
+@@ -2,7 +2,7 @@ import os
+ import shutil
+ 
+ from Cython.Build import cythonize
+-from setuptools import Extension, setup
++from setuptools import Extension, setup, find_packages
+ 
+ extra_compile_args = [
+     "-flto",
+@@ -61,6 +61,7 @@ extensions = [
+ 
+ setup(
+     name="endcord",
+-    packages=[],
++    packages=find_packages(),
++    py_modules=["main"],
+     ext_modules=cythonize(extensions, language_level=3),
+ )
