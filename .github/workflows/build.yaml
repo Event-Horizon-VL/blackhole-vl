@@ -43,23 +43,6 @@ jobs:
             xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo bash curl git
             # create non-root user
             useradd -G xbuilder -M builder
-      
-      - name: Setup SSH
-        if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
-        env:
-          SSH_MIRROR_SECRET_KEY: ${{ secrets.SSH_MIRROR_SECRET_KEY }}
-          SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_MIRROR_SECRET_KEY_NAME }}
-          SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
-          SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
-        run:  |
-            set -e
-
-            mkdir -p ~/.ssh
-
-            echo "$SSH_MIRROR_SECRET_KEY" > "/home/$USER/.ssh/${SSH_MIRROR_SECRET_KEY_NAME}"
-            chmod 600 "home/$USER/.ssh/$SSH_MIRROR_SECRET_KEY_NAME"
-
-            ssh-keyscan "${SSH_MIRROR_HOST}" -p "${SSH_MIRROR_PORT}" > "/home/$USER/.ssh/known_hosts" 2> /dev/null
 
       - name: Checkout this repo
         run: |
@@ -234,16 +217,15 @@ jobs:
                 git push "$REMOTE" "$BRANCH"
             fi
 
-      - name: Sign and merge with mirror
+      - name: Sign
         if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
         env:
           PRIV_KEY: ${{ secrets.PRIV_KEY }}
           XBPS_ARCH: ${{ matrix.config.arch }}
+          ACCESS_GIT: ${{ secrets.ACCESS_GIT }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
           RESULT_NAME: ${{ matrix.config.arch }}
-          SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_MIRROR_SECRET_KEY_NAME }}
-          SSH_MIRROR_USER: ${{ secrets.SSH_MIRROR_USER }}
-          SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
-          SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
         working-directory: void-packages/hostdir/binpkgs/
         run: |
             set -e
@@ -254,22 +236,20 @@ jobs:
             cp -v ./*.xbps /tmp/newpkgs/ 2>/dev/null || true
             cp -v ./*.xbps.sig /tmp/newpkgs/ 2>/dev/null || true
 
-            # 2. pull existing repo from mirror
+            # 2. pull existing repo branch
+            BRANCH="repository-${RESULT_NAME}"
+            REMOTE="https://$REPO_OWNER:${ACCESS_GIT}@github.com/${REPO_OWNER}/${REPO_NAME}.git"
             mkdir -p /tmp/oldrepo
 
             rm -f ./*
 
-            if rsync -avz \
-              -e "ssh -p $SSH_MIRROR_PORT -i /home/$USER/.ssh/$SSH_MIRROR_SECRET_KEY_NAME \
-                  -o StrictHostKeyChecking=no \
-                  -o BatchMode=yes" \
-              "${SSH_MIRROR_USER}@${SSH_MIRROR_HOST}:${MIRROR_PATH}/${XBPS_ARCH}/" \
-              /tmp/oldrepo/ 2>/dev/null; then
+            if git ls-remote --exit-code --heads "$REMOTE" "$BRANCH" >/dev/null 2>&1; then
+                git clone --depth 1 --branch "$BRANCH" "$REMOTE" /tmp/oldrepo
                 cp -v /tmp/oldrepo/*.xbps . 2>/dev/null || true
                 cp -v /tmp/oldrepo/*.xbps.sig . 2>/dev/null || true
                 cp -v /tmp/oldrepo/index* . 2>/dev/null || true
-              else
-                echo "No existing repo \"$XBPS_ARCH\" on mirror, starting fresh."
+            else
+                echo "No existing $BRANCH on remote, starting fresh."
             fi
 
             # 3. delete packages we just rebuilt successfully
@@ -307,18 +287,28 @@ jobs:
 
             rm -f private.pem
 
-      - name: Update on mirror binpkgs
+      - name: Push binpkgs branch (per arch)
         if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
         env:
-          SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_MIRROR_SECRET_KEY_NAME }}
-          SSH_MIRROR_USER: ${{ secrets.SSH_MIRROR_USER }}
-          SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
-          SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
-          MIRROR_PATH: ${{ secrets.MIRROR_PATH }}
-          XBPS_ARCH: ${{ matrix.config.arch }}
+            REPO_OWNER: ${{ github.repository_owner }}
+            REPO_NAME: ${{ github.event.repository.name }}
+            ACCESS_GIT: ${{ secrets.ACCESS_GIT }}
+            RESULT_NAME: ${{ matrix.config.arch }}
         run: |
             set -e
             cd extra
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            BRANCH="repository-${RESULT_NAME}"
+            REMOTE="https://$REPO_OWNER:${ACCESS_GIT}@github.com/${REPO_OWNER}/${REPO_NAME}.git"
+
+            if git ls-remote --exit-code --heads "$REMOTE" "$BRANCH" >/dev/null 2>&1; then
+                git fetch "$REMOTE" "$BRANCH"
+                git checkout -B "$BRANCH" FETCH_HEAD
+            else
+                git checkout --orphan "$BRANCH"
+            fi
 
             mkdir -p /tmp/failfiles
             cp build-failures-* /tmp/failfiles/ 2>/dev/null || true
@@ -329,10 +319,10 @@ jobs:
 
             cp /tmp/failfiles/* . 2>/dev/null || true
 
-            rsync -avz --delete \
-              --exclude='.git' \
-              -e "ssh -p $SSH_MIRROR_PORT -i /home/$USER/.ssh/$SSH_MIRROR_SECRET_KEY_NAME \
-                  -o StrictHostKeyChecking=no \
-                  -o BatchMode=yes" \
-              ./ \
-              "${SSH_MIRROR_USER}@${SSH_MIRROR_HOST}:${MIRROR_PATH}/${XBPS_ARCH}/"
+            git add -A
+            if git diff --cached --quiet; then
+                echo "No changes to push."
+            else
+                git commit -m "Update binary repository for ${RESULT_NAME}"
+                git push "$REMOTE" "$BRANCH"
+            fi
