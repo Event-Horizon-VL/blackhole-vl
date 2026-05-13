@@ -5,7 +5,7 @@ on:
         branches:
             - main
         paths:
-            - 'srcpkgs/**'
+            - "srcpkgs/**"
 
 jobs:
     build:
@@ -17,17 +17,41 @@ jobs:
             volumes:
                 - /dev:/dev
             env:
-                ARCH: '${{ matrix.config.arch }}'
-                BOOTSTRAP: '${{ matrix.config.host }}'
-                TEST: '${{ matrix.config.test }}'
+                ARCH: "${{ matrix.config.arch }}"
+                BOOTSTRAP: "${{ matrix.config.host }}"
+                TEST: "${{ matrix.config.test }}"
         strategy:
             fail-fast: false
             matrix:
                 config:
-                    - { arch: x86_64,       host: x86_64,      libc: glibc, platform: linux/amd64, test: 1 }
-                    - { arch: aarch64,      host: x86_64,      libc: glibc, platform: linux/amd64, test: 0 }
-                    - { arch: x86_64-musl,  host: x86_64-musl, libc: musl,  platform: linux/amd64, test: 1 }
-                    - { arch: aarch64-musl, host: x86_64-musl, libc: musl,  platform: linux/amd64, test: 0 }
+                    - {
+                          arch: x86_64,
+                          host: x86_64,
+                          libc: glibc,
+                          platform: linux/amd64,
+                          test: 1,
+                      }
+                    - {
+                          arch: aarch64,
+                          host: x86_64,
+                          libc: glibc,
+                          platform: linux/amd64,
+                          test: 0,
+                      }
+                    - {
+                          arch: x86_64-musl,
+                          host: x86_64-musl,
+                          libc: musl,
+                          platform: linux/amd64,
+                          test: 1,
+                      }
+                    - {
+                          arch: aarch64-musl,
+                          host: x86_64-musl,
+                          libc: musl,
+                          platform: linux/amd64,
+                          test: 0,
+                      }
 
         steps:
             - name: Prepare container
