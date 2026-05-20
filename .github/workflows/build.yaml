@@ -64,7 +64,7 @@ jobs:
                   mkdir -p /etc/xbps.d && cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/
                   sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
                   # install dependencies
-                  xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo bash curl git
+                  xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo bash curl git rsync openssh
                   # create non-root user
                   useradd -G xbuilder -M builder
 
@@ -207,146 +207,71 @@ jobs:
                   echo "built=$built" >> "$GITHUB_OUTPUT"
                   echo "failed=$failed" >> "$GITHUB_OUTPUT"
 
-            - name: Write failed list into repo branch
-              if: ${{ steps.build_step.outputs.failed != '' }}
-              env:
-                  ACCESS_GIT: ${{ secrets.ACCESS_GIT }}
-                  REPO_OWNER: ${{ github.repository_owner }}
-                  REPO_NAME: ${{ github.event.repository.name }}
-                  RESULT_NAME: ${{ matrix.config.arch }}
-              run: |
-                  set -e
-                  cd extra
-                  git config user.name "github-actions[bot]"
-                  git config user.email "github-actions[bot]@users.noreply.github.com"
-
-                  BRANCH="repository-${RESULT_NAME}"
-                  REMOTE="https://$REPO_OWNER:${ACCESS_GIT}@github.com/${REPO_OWNER}/${REPO_NAME}.git"
-
-                  if git ls-remote --exit-code --heads "$REMOTE" "$BRANCH" >/dev/null 2>&1; then
-                      git fetch "$REMOTE" "$BRANCH:$BRANCH"
-                      git checkout "$BRANCH"
-                  else
-                      git checkout --orphan "$BRANCH"
-                      find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
-                  fi
-
-                  echo "${{ steps.build_step.outputs.failed }}" | tr ' ' '\n' > build-failures-${{ matrix.config.arch }}.txt
-
-                  git add build-failures-${{ matrix.config.arch }}.txt
-                  if git diff --cached --quiet; then
-                      echo "No changes to push for failures file."
-                  else
-                      git commit -m "Record build failures for ${{ matrix.config.arch }}"
-                      git push "$REMOTE" "$BRANCH"
-                  fi
-
-            - name: Sign
+            - name: Setup SSH
               if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
               env:
-                  PRIV_KEY: ${{ secrets.PRIV_KEY }}
+                  SSH_MIRROR_SECRET_KEY: ${{ secrets.SSH_MIRROR_SECRET_KEY }}
+                  SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_MIRROR_SECRET_KEY_NAME }}
+                  SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
+                  SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
+              run: |
+                  set -e
+
+                  mkdir -p /home/builder/.ssh
+                  chmod 700 /home/builder/.ssh
+                  chown builder:builder /home/builder/.ssh
+
+                  printf "%s\n" "$SSH_MIRROR_SECRET_KEY" > "/home/builder/.ssh/${SSH_MIRROR_SECRET_KEY_NAME}"
+                  chmod 600 "/home/builder/.ssh/$SSH_MIRROR_SECRET_KEY_NAME"
+                  chown builder:builder /home/builder/.ssh/*
+
+                  ssh-keyscan -p "${SSH_MIRROR_PORT}" "${SSH_MIRROR_HOST}" > "/home/builder/.ssh/known_hosts" 2>/dev/null
+                  chmod 644 /home/builder/.ssh/known_hosts
+                  chown builder:builder /home/builder/.ssh/known_hosts
+
+            - name: Upload built packages
+              if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
+              env:
+                  SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_MIRROR_SECRET_KEY_NAME }}
+                  SSH_MIRROR_USER: ${{ secrets.SSH_MIRROR_USER }}
+                  SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
+                  SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
                   XBPS_ARCH: ${{ matrix.config.arch }}
-                  ACCESS_GIT: ${{ secrets.ACCESS_GIT }}
-                  REPO_OWNER: ${{ github.repository_owner }}
-                  REPO_NAME: ${{ github.event.repository.name }}
-                  RESULT_NAME: ${{ matrix.config.arch }}
-              working-directory: void-packages/hostdir/binpkgs/
+                  working-directory: void-packages/hostdir/binpkgs
               run: |
-                  set -e
-                  export PATH="/opt/xbps/usr/bin/:$PATH"
+                  set -euo pipefail
 
-                  # 1. stash newly built packages away
-                  mkdir -p /tmp/newpkgs
-                  cp -v ./*.xbps /tmp/newpkgs/ 2>/dev/null || true
-                  cp -v ./*.xbps.sig /tmp/newpkgs/ 2>/dev/null || true
+                  mkdir -p /tmp/upload
 
-                  # 2. pull existing repo branch
-                  BRANCH="repository-${RESULT_NAME}"
-                  REMOTE="https://$REPO_OWNER:${ACCESS_GIT}@github.com/${REPO_OWNER}/${REPO_NAME}.git"
-                  mkdir -p /tmp/oldrepo
+                  cp -v ./*.xbps /tmp/upload/ 2>/dev/null || true
 
-                  rm -f ./*
+                  printf "%s\n" "${{ steps.changed.outputs.removed }}" \
+                    > /tmp/upload/removed.txt
 
-                  if git ls-remote --exit-code --heads "$REMOTE" "$BRANCH" >/dev/null 2>&1; then
-                      git clone --depth 1 --branch "$BRANCH" "$REMOTE" /tmp/oldrepo
-                      cp -v /tmp/oldrepo/*.xbps . 2>/dev/null || true
-                      cp -v /tmp/oldrepo/*.xbps.sig . 2>/dev/null || true
-                      cp -v /tmp/oldrepo/index* . 2>/dev/null || true
-                  else
-                      echo "No existing $BRANCH on remote, starting fresh."
-                  fi
+                  sudo -Eu builder rsync -avz \
+                      -e "ssh -p $SSH_MIRROR_PORT \
+                      -i /home/builder/.ssh/$SSH_MIRROR_SECRET_KEY_NAME \
+                      -o StrictHostKeyChecking=no \
+                      -o BatchMode=yes" \
+                      /tmp/upload/ \
+                      "${SSH_MIRROR_USER}@${SSH_MIRROR_HOST}:/tmp/incoming/${XBPS_ARCH}/"
 
-                  # 3. delete packages we just rebuilt successfully
-                  for f in /tmp/newpkgs/*.xbps; do
-                      [ -e "$f" ] || continue
-                      base=$(basename "$f")
-                      # pkgname = everything before the first -<digit>
-                      pkgname=$(printf "%s\n" "$base" | sed -E 's/-[0-9].*$//')
-                      # remove all versions/revisions of that package from current repo dir
-                      rm -f "${pkgname}-"*.xbps "${pkgname}-"*.xbps.sig 2>/dev/null || true
-                  done
-
-                  # 4. also delete packages for templates that were removed
-                  removed="${{ steps.changed.outputs.removed }}"
-                  if [ -n "$removed" ]; then
-                      echo "==> removing packages for deleted templates..."
-                      for pkg in $removed; do
-                          rm -f "${pkg}-"*.xbps "${pkg}-"*.xbps.sig 2>/dev/null || true
-                          rm -f "${pkg}.xbps" "${pkg}.xbps.sig" 2>/dev/null || true
-                      done
-                  fi
-
-                  # 5. copy the newly built packages back in
-                  cp -v /tmp/newpkgs/* . 2>/dev/null || true
-
-                  # 6. sign + reindex
-                  printf "%s\n" "$PRIV_KEY" > private.pem
-                  chmod 600 private.pem
-
-                  xbps-rindex -a *.xbps || true
-                  xbps-rindex -r "$PWD"
-                  xbps-rindex -s --signedby "Nizarjh <chel773@tutamail.com>" --privkey private.pem "$PWD"
-                  xbps-rindex -S --privkey private.pem "$PWD"/*.xbps
-                  xbps-rindex -c "$PWD"
-
-                  rm -f private.pem
-
-            - name: Push binpkgs branch (per arch)
+            - name: Deploy repository on mirror
               if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
               env:
-                  REPO_OWNER: ${{ github.repository_owner }}
-                  REPO_NAME: ${{ github.event.repository.name }}
-                  ACCESS_GIT: ${{ secrets.ACCESS_GIT }}
-                  RESULT_NAME: ${{ matrix.config.arch }}
+                  SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_MIRROR_SECRET_KEY_NAME }}
+                  SSH_MIRROR_USER: ${{ secrets.SSH_MIRROR_USER }}
+                  SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
+                  SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
+                  MIRROR_PATH: ${{ secrets.MIRROR_PATH }}
+                  XBPS_ARCH: ${{ matrix.config.arch }}
               run: |
-                  set -e
-                  cd extra
-                  git config user.name "github-actions[bot]"
-                  git config user.email "github-actions[bot]@users.noreply.github.com"
-
-                  BRANCH="repository-${RESULT_NAME}"
-                  REMOTE="https://$REPO_OWNER:${ACCESS_GIT}@github.com/${REPO_OWNER}/${REPO_NAME}.git"
-
-                  if git ls-remote --exit-code --heads "$REMOTE" "$BRANCH" >/dev/null 2>&1; then
-                      git fetch "$REMOTE" "$BRANCH"
-                      git checkout -B "$BRANCH" FETCH_HEAD
-                  else
-                      git checkout --orphan "$BRANCH"
-                  fi
-
-                  mkdir -p /tmp/failfiles
-                  cp build-failures-* /tmp/failfiles/ 2>/dev/null || true
-
-                  find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
-
-                  cp ../void-packages/hostdir/binpkgs/* ./
-
-                  cp /tmp/failfiles/* . 2>/dev/null || true
-
-                  git add -A
-                  if git diff --cached --quiet; then
-                      echo "No changes to push."
-                  else
-                      git commit -m "Update binary repository for ${RESULT_NAME}"
-                      git push "$REMOTE" "$BRANCH"
-                  fi
+                  set -euo pipefail
+                      
+                  sudo -Eu builder ssh \
+                      -p "$SSH_MIRROR_PORT" \
+                      -i "/home/builder/.ssh/$SSH_MIRROR_SECRET_KEY_NAME" \
+                      -o StrictHostKeyChecking=no \
+                      -o BatchMode=yes \
+                      "${SSH_MIRROR_USER}@${SSH_MIRROR_HOST}" \
+                      "${MIRROR_PATH}/deploy-repo.sh '$XBPS_ARCH' '$MIRROR_PATH'"
