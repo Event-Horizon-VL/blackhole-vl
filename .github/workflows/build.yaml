@@ -232,7 +232,7 @@ jobs:
             - name: Upload built packages
               if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
               env:
-                  SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_MIRROR_SECRET_KEY_NAME }}
+                  SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_PRIV }}
                   SSH_MIRROR_USER: ${{ secrets.SSH_MIRROR_USER }}
                   SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
                   SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
