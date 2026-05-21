@@ -70,7 +70,7 @@ jobs:
 
             - name: Checkout this repo
               run: |
-                  git clone --depth 1 "https://github.com/${{ github.repository }}.git" extra
+                  git clone --depth 1 --single-branch -b Ci/Cd "https://github.com/${{ github.repository }}.git" extra
                   cd extra
                   # we need the previous revision to diff against
                   if [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
@@ -211,7 +211,7 @@ jobs:
               if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
               env:
                   SSH_PRIV: ${{ secrets.SSH_PRIV }}
-                  SSH_PRIV_NAME: ${{ secrets.SSH_PRIV_NAME }}
+                  SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_MIRROR_SECRET_KEY_NAME }}
                   SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
                   SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
               run: |
@@ -221,8 +221,8 @@ jobs:
                   chmod 700 /home/builder/.ssh
                   chown builder:builder /home/builder/.ssh
 
-                  printf "%s\n" "$SSH_PRIV" > "/home/builder/.ssh/${SSH_PRIV_NAME}"
-                  chmod 600 "/home/builder/.ssh/$SSH_PRIV_NAME"
+                  printf "%s\n" "$SSH_PRIV" > "/home/builder/.ssh/${SSH_MIRROR_SECRET_KEY_NAME}"
+                  chmod 600 "/home/builder/.ssh/$SSH_MIRROR_SECRET_KEY_NAME"
                   chown builder:builder /home/builder/.ssh/*
 
                   ssh-keyscan -p "${SSH_MIRROR_PORT}" "${SSH_MIRROR_HOST}" > "/home/builder/.ssh/known_hosts" 2>/dev/null
@@ -232,7 +232,7 @@ jobs:
             - name: Upload built packages
               if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
               env:
-                  SSH_PRIV_NAME: ${{ secrets.SSH_PRIV }}
+                  SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_PRIV }}
                   SSH_MIRROR_USER: ${{ secrets.SSH_MIRROR_USER }}
                   SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
                   SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
@@ -250,7 +250,7 @@ jobs:
 
                   sudo -Eu builder rsync -avz \
                       -e "ssh -p $SSH_MIRROR_PORT \
-                      -i /home/builder/.ssh/$SSH_PRIV_NAME \
+                      -i /home/builder/.ssh/$SSH_MIRROR_SECRET_KEY_NAME \
                       -o StrictHostKeyChecking=no \
                       -o BatchMode=yes" \
                       /tmp/upload/ \
@@ -259,7 +259,7 @@ jobs:
             - name: Deploy repository on mirror
               if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
               env:
-                  SSH_PRIV_NAME: ${{ secrets.SSH_PRIV_NAME }}
+                  SSH_MIRROR_SECRET_KEY_NAME: ${{ secrets.SSH_MIRROR_SECRET_KEY_NAME }}
                   SSH_MIRROR_USER: ${{ secrets.SSH_MIRROR_USER }}
                   SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
                   SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
@@ -270,7 +270,7 @@ jobs:
                       
                   sudo -Eu builder ssh \
                       -p "$SSH_MIRROR_PORT" \
-                      -i "/home/builder/.ssh/$SSH_PRIV_NAME" \
+                      -i "/home/builder/.ssh/$SSH_MIRROR_SECRET_KEY_NAME" \
                       -o StrictHostKeyChecking=no \
                       -o BatchMode=yes \
                       "${SSH_MIRROR_USER}@${SSH_MIRROR_HOST}" \
