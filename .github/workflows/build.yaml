@@ -261,7 +261,7 @@ jobs:
                   MIRROR_PATH: ${{ secrets.MIRROR_PATH }}
                   XBPS_ARCH: ${{ matrix.config.arch }}
               run: |
-                  set -euo pipefail
+                  set -eu
                       
                   sudo -Eu builder ssh \
                       -p "$SSH_MIRROR_PORT" \
