@@ -215,7 +215,6 @@ jobs:
                   SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
                   SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
               run: |
-                  set -e
 
                   mkdir -p /home/builder/.ssh
                   chmod 700 /home/builder/.ssh
