@@ -234,7 +234,7 @@ jobs:
                   XBPS_ARCH: ${{ matrix.config.arch }}
                   working-directory: void-packages/hostdir/binpkgs
               run: |
-                  set -euo pipefail
+                  set -eu
 
                   mkdir -p /tmp/upload
 
