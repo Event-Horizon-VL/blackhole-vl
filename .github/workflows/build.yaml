@@ -220,7 +220,7 @@ jobs:
                   printf "%s\n" "$SSH_PRIV" > "/home/builder/.ssh/${SSH_MIRROR_SECRET_KEY_NAME}"
                   chmod 700 /home/builder/.ssh
                   chmod 600 "/home/builder/.ssh/$SSH_MIRROR_SECRET_KEY_NAME"
-                  ssh-keyscan -p "${SSH_MIRROR_PORT}" "${SSH_MIRROR_HOST}" > "/home/builder/.ssh/known_hosts" 2>/dev/null
+                  ssh-keyscan -p "${SSH_MIRROR_PORT}" "${SSH_MIRROR_HOST}" > "/home/builder/.ssh/known_hosts"
                   chmod 644 /home/builder/.ssh/known_hosts
                   chown -R builder:builder /home/builder/.ssh
 
