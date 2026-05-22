@@ -5,7 +5,7 @@ ARCH="$1"
 MIRROR_PATH="$2"
 
 REPO="${MIRROR_PATH}/${ARCH}"
-INCOMING="/tmp/incoming/${ARCH}"
+INCOMING="~/INCOMING/${ARCH}"
 PRIVKEY="${MIRROR_PATH}/private.pem"
 
 sig2NED_BY="Nizarjh <chel773@tutamail.com>"
@@ -37,8 +37,8 @@ if [ -f "$INCOMING/removed.txt" ]; then
     while IFS= read -r pkg; do
         [ -z "$pkg" ] && continue
 
-        rm -f "${pkg}-"*.xbps
-        rm -f "${pkg}-"*.xbps.sig2
+        rm -f "${pkg}-".xbps
+        rm -f "${pkg}-".xbps.sig2
     done < "$INCOMING/removed.txt"
 fi
 
