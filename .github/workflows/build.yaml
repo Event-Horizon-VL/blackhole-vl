@@ -249,7 +249,7 @@ jobs:
                       -o StrictHostKeyChecking=no \
                       -o BatchMode=yes" \
                       /tmp/upload/ \
-                      "${SSH_MIRROR_USER}@${SSH_MIRROR_HOST}:/tmp/incoming/${XBPS_ARCH}/"
+                      "${SSH_MIRROR_USER}@${SSH_MIRROR_HOST}:~/INCOMING/${XBPS_ARCH}/"
 
             - name: Deploy repository on mirror
               if: ${{ steps.changed.outputs.pkgs != '' || steps.changed.outputs.removed != '' }}
