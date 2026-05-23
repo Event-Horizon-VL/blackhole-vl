@@ -260,6 +260,7 @@ jobs:
                   SSH_MIRROR_USER: ${{ secrets.SSH_MIRROR_USER }}
                   SSH_MIRROR_HOST: ${{ secrets.SSH_MIRROR_HOST }}
                   SSH_MIRROR_PORT: ${{ secrets.SSH_MIRROR_PORT }}
+                  SSH_MIRROR_HOME: ${{ secrets.SSH_MIRROR_HOME }}
                   MIRROR_PATH: ${{ secrets.MIRROR_PATH }}
                   XBPS_ARCH: ${{ matrix.config.arch }}
               run: |
@@ -271,4 +272,4 @@ jobs:
                       -o StrictHostKeyChecking=no \
                       -o BatchMode=yes \
                       "${SSH_MIRROR_USER}@${SSH_MIRROR_HOST}" \
-                      "${MIRROR_PATH}/sing-packages.sh '$XBPS_ARCH' '$MIRROR_PATH'"
+                      "${SSH_MIRROR_HOME}/sing-packages.sh '$XBPS_ARCH' '$MIRROR_PATH'"
