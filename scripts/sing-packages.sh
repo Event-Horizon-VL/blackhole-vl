@@ -31,7 +31,7 @@ echo "==> removing old versions of incoming packages"
 for f in "$INCOMING"/*.xbps; do
     base=$(basename "$f")
 
-    pkgname=$(xbps-uhelper getpkgname "$base")
+    pkgname=$(xbps-uhelper binpkgver "$base")
 
     echo "   - cleaning old package: $pkgname"
 
