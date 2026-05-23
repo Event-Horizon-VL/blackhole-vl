@@ -60,13 +60,9 @@ if ((${#xbps_files[@]})); then
     mv "${xbps_files[@]}" .
 fi
 
-sig_files=("$INCOMING"/*.xbps.sig2)
-
-if ((${#sig_files[@]})); then
-    mv "${sig_files[@]}" .
-fi
-
 echo "==> indexing repository"
+
+xbps-rindex -c "$PWD"
 
 repo_files=(./*.xbps)
 
@@ -92,10 +88,6 @@ if compgen -G "$PWD/*.xbps" > /dev/null; then
         --privkey "$PRIVKEY" \
         "$PWD"/*.xbps
 fi
-
-echo "==> compressing repository index"
-
-xbps-rindex -c "$PWD"
 
 echo "==> cleaning incoming directory"
 
