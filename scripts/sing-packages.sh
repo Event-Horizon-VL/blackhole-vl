@@ -8,7 +8,7 @@ REPO="${MIRROR_PATH}/${ARCH}"
 INCOMING="~/INCOMING/${ARCH}"
 PRIVKEY="${MIRROR_PATH}/private.pem"
 
-sig2NED_BY="Nizarjh <chel773@tutamail.com>"
+SIGNEDBY="Nizarjh <chel773@tutamail.com>"
 
 export PATH="/opt/xbps/usr/bin:$PATH"
 
@@ -50,7 +50,7 @@ xbps-rindex -r "$PWD"
 
 xbps-rindex \
     -s \
-    --sig2nedby "$sig2NED_BY" \
+    ----signedby  "$SIGNEDBY" \
     --privkey "$PRIVKEY" \
     "$PWD"
 
