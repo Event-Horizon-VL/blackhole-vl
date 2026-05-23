@@ -241,8 +241,9 @@ jobs:
 
                   cp -v ./*.xbps /tmp/upload/ 2>/dev/null || true
 
-                  printf "%s\n" "${{ steps.changed.outputs.removed }}" \
-                    > /tmp/upload/removed.txt
+                  printf "%s" "${{ steps.changed.outputs.removed }}" \
+                      | tr ' ' '\n' \
+                      > /tmp/upload/removed.txt
 
                   sudo -Eu builder rsync -avz \
                       -e "ssh -p $SSH_MIRROR_PORT \
