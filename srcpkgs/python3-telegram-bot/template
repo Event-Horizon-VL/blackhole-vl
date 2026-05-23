@@ -1,4 +1,4 @@
-# Template file for 'python3-telegram_bot'
+# Template file for 'python3-telegram-bot'
 pkgname=python3-telegram_bot
 version=22.7
 revision=3
