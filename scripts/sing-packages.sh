@@ -62,19 +62,20 @@ fi
 
 echo "==> indexing repository"
 
-xbps-rindex -c "$PWD"
+XBPS_TARGET_ARCH="$ARCH" xbps-rindex -c "$PWD"
 
 repo_files=(./*.xbps)
 
 if ((${#repo_files[@]})); then
-    xbps-rindex -a "${repo_files[@]}"
+     XBPS_TARGET_ARCH="$ARCH" xbps-rindex -a "${repo_files[@]}"
 fi
 
-xbps-rindex -r "$PWD"
+XBPS_TARGET_ARCH="$ARCH" xbps-rindex -r "$PWD"
 
 echo "==> signing repository index"
 
-xbps-rindex \
+XBPS_TARGET_ARCH="$ARCH" \
+    xbps-rindex \
     -s \
     --signedby "$SIGNEDBY" \
     --privkey "$PRIVKEY" \
@@ -83,7 +84,8 @@ xbps-rindex \
 if compgen -G "$PWD/*.xbps" > /dev/null; then
     echo "==> signing packages"
 
-    xbps-rindex \
+    XBPS_TARGET_ARCH="$ARCH" \
+	xbps-rindex \
         -S \
         --privkey "$PRIVKEY" \
         "$PWD"/*.xbps
