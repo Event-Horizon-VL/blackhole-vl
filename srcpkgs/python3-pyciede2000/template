@@ -1,0 +1,17 @@
+# Template file for 'python3-pyciede2000'
+pkgname=python3-pyciede2000
+version=0.0.21
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-build python3-installer python3-setuptools python3-wheel"
+depends="python3"
+short_desc="Python library to calculate CIEDE2000 color difference"
+maintainer="Octopus_L <octopus.l.2810@gmail.com>"
+license="MIT"
+homepage="https://github.com/shameempk/pyciede2000"
+distfiles="${PYPI_SITE}/p/pyciede2000/pyciede2000-${version}.tar.gz"
+checksum=18bd261368df2540ad3b6542ef5204dd57c6840b6e33b7f0b63868353072879e
+
+post_install() {
+	vlicense LICENSE
+}
