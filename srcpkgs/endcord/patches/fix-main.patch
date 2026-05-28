@@ -1,0 +1,15 @@
+diff --git a/main.py b/main.py
+index d54815f..44b34d8 100644
+--- a/main.py
++++ b/main.py
+@@ -168,6 +168,10 @@ def main(args):
+             sys.exit("Curses error, see log for more info")
+     sys.exit(0)
+ 
++def cli_main():
++    args = arg.parser(APP_NAME, VERSION, default_config_path, log_path)
++    signal.signal(signal.SIGINT, sigint_handler)
++    main(args)
+ 
+ if __name__ == "__main__":
+     args = arg.parser(APP_NAME, VERSION, default_config_path, log_path)
