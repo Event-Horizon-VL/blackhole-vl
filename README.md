@@ -5,6 +5,19 @@
 >
 > Use at your own discretion.
 
+---
+
+## ⚠️ Migration Notice
+
+> [!WARNING]
+> The binary repository system has been migrated.
+>
+> Previous GitHub-based binary repositories (e.g. `repository-x86_64`, `repository-aarch64`) are **deprecated** and no longer updated.
+>
+> All users must switch to the new VPS-based mirror system.
+> Please update `/etc/xbps.d/20-repository-extra.conf`
+
+
 ## Overview
 A collection of template files for building packages on Void Linux with `xbps-src`.
 
@@ -14,6 +27,16 @@ This repository provides:
 
 <hr>
 
+## Binary Repository (CURRENT)
+
+Use the VPS-based mirror:
+
+- x86_64 → https://mirror.black-hole.dev/x86_64/
+- x86_64-musl → https://mirror.black-hole.dev/x86_64-musl/
+- aarch64 → https://mirror.black-hole.dev/aarch64/
+- aarch64-musl → https://mirror.black-hole.dev/aarch64-musl/
+
+---
 ## Branches
 
 > [!IMPORTANT]
@@ -102,7 +125,7 @@ Currently packages are tested on / crosscompiled for the following architectures
 </details>
 
 <details>
-<summary><b> 📦 Prebuilt binaries </b></summary>
+<summary><b> Prebuilt binaries </b></summary>
 
 > Available **only for the `main` branch**
 
@@ -110,7 +133,7 @@ Currently packages are tested on / crosscompiled for the following architectures
    (replace the architecture as needed):
 
     ```
-    echo repository=https://raw.githubusercontent.com/Event-Horizon-VL/blackhole-vl/repository-x86_64 | sudo tee /etc/xbps.d/20-repository-extra.conf
+    echo "repository=https://mirror.black-hole.dev/$(uname -m)/"| sudo tee /etc/xbps.d/20-repository-extra.conf
     ```
 
 2. Refresh repositories and accept the fingerprint:
