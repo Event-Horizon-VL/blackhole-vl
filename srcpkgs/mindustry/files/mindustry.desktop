@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Mindustry
+Comment=The automation tower defense RTS
+Exec=mindustry
+Icon=mindustry
+Categories=Game;
+Terminal=false
