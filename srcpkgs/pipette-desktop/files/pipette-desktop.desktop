@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Pipette Desktop
+GenericName=Keyboard Configurator
+Comment=GUI for configuring Vial-compatible keyboards
+Exec=pipette-desktop
+Icon=pipette-desktop
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupNotify=true

@@ -1,0 +1,42 @@
+# Template file for 'pipette-desktop'
+pkgname=pipette-desktop
+version=0.4.5
+revision=1
+archs="x86_64"
+_electronver=35
+_electron_dist=/usr/lib/electron${_electronver}
+hostmakedepends="nodejs pnpm python3 pkg-config electron${_electronver}"
+makedepends="libusb-devel libgudev-devel"
+depends="electron${_electronver}"
+short_desc="GUI for Vial keyboard configuration"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/darakuneko/pipette-desktop"
+changelog="https://github.com/darakuneko/pipette-desktop/releases"
+distfiles="https://github.com/darakuneko/pipette-desktop/archive/refs/tags/v${version}.tar.gz"
+checksum=7e4221713284dab10389a7a6bc85075a7727de92ef611baeccd93843148b8b44
+noverifyrdeps=yes
+noshlibprovides=yes
+
+do_build() {
+	_electron_ver=$(cat ${_electron_dist}/version)
+	pnpm install --frozen-lockfile
+	pnpm dist:linux dir -c.electronDist=${_electron_dist} -c.electronVersion=${_electron_ver}
+}
+
+do_install() {
+	vmkdir opt/pipette-desktop
+	vcopy dist/linux-unpacked/* opt/pipette-desktop/
+
+	vmkdir usr/share/pixmaps
+	vinstall build/icon.svg 644 usr/share/pixmaps pipette-desktop.svg
+
+	vmkdir usr/share/applications
+	vinstall ${FILESDIR}/pipette-desktop.desktop 644 usr/share/applications
+
+	vmkdir usr/lib/udev/rules.d
+	vinstall scripts/99-vial.rules 644 usr/lib/udev/rules.d/
+
+	vmkdir usr/bin
+	ln -s /opt/pipette-desktop/pipette-desktop ${DESTDIR}/usr/bin/
+}
