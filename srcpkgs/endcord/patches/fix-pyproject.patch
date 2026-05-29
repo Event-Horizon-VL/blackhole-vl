@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index c73cb4b..8ee20c0 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -25,6 +25,9 @@ dependencies = [
+     "windows-toasts>=1.3.1; sys_platform == 'win32'",
+ ]
+ 
++[project.scripts]
++endcord = "main:cli_main"
++
+ [dependency-groups]
+ build = [
+     "cython>=3.2.4",
