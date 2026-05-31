@@ -163,14 +163,22 @@ jobs:
                   fi
 
                   if [ -n "$changed" ]; then
-                      PKGS=$(sudo -Eu builder ./xbps-src $test sort-dependencies $changed)
+                      PKGS=$(sudo -Eu builder ./xbps-src $test sort-dependencies $changed | \
+                             awk '!/-devel$/ && !/-dbg$/ && !/-32bit$/')
                   else
                       PKGS=""
                   fi
 
+                  CHECK_ARCH="${{ github.workspace }}/extra/scripts/check-arch.sh"
+
                   failed=""
 
                   for pkg in ${PKGS}; do
+                      if ! "$CHECK_ARCH" "$pkg" "$ARCH" srcpkgs; then
+                          echo "=> $pkg: skipping, not available for $ARCH"
+                          continue
+                      fi
+
                       if ! sudo -Eu builder ./xbps-src -j"$(nproc)" -s $arch $test pkg "${pkg}"; then
                           echo "!! build failed for ${pkg}"
                           failed="${failed} ${pkg}"
