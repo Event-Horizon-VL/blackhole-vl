@@ -1,6 +1,6 @@
 # Template file for 'bookokrat'
 pkgname=bookokrat
-version=0.3.10
+version=0.3.11
 revision=1
 build_style=cargo
 #Flaky test due to GUI diff
@@ -12,7 +12,7 @@ maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
 license="AGPL-3.0-or-later"
 homepage="https://github.com/bugzmanov/bookokrat"
 distfiles="https://github.com/bugzmanov/bookokrat/archive/v${version}.tar.gz"
-checksum=86cc446dce3c0a78de462ddce3434d052a6b0cc2c66e9ee4ffd5c0977f41441e
+checksum=f3f4987795e86fb7238955fc303a33ccd175e8b9e82ff9722b127a054b1666c4
 
 post_install() {
 	vlicense LICENSE
