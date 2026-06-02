@@ -1,6 +1,6 @@
 # Template file for 'librewolf-bin'
 pkgname=librewolf-bin
-version=150.0.3
+version=151.0.2
 revision=1
 archs="x86_64 aarch64"
 depends="hunspell hyphen xdg-utils libavcodec libnotify nss desktop-file-utils hicolor-icon-theme"
@@ -13,11 +13,11 @@ changelog="https://codeberg.org/librewolf/bsys6/releases"
 case "${XBPS_TARGET_MACHINE}" in
 x86_64)
 	_upstream_arch=x86_64
-	_checksum=49edf3bc01341b0d92c6be4e983e668d55310255478b4419ce12ab51ed6252d6
+	_checksum=36f9ea0ba4ef4fbba48525a27032e19e8065ba4231b3d9f7ee5fe9760cab2df8
 	;;
 aarch64)
 	_upstream_arch=arm64
-	_checksum=60ed97285c3d6532787028a66559c3312c414a190236800c356058d1f0dc4762
+	_checksum=1d87b155e7013d5a954b7569bb8bce8a60ee5d990f433a0ede7cbfed9bbdf7a0
 	;;
 *)
 	broken="No distfiles available for ${XBPS_TARGET_MACHINE}"
