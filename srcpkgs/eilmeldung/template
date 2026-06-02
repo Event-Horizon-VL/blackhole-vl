@@ -1,6 +1,6 @@
 # Template file for 'eilmeldung'
 pkgname=eilmeldung
-version=1.5.2
+version=1.5.3
 revision=1
 build_style=cargo
 hostmakedepends="pkgconf clang"
@@ -11,4 +11,4 @@ license="GPL-3.0-or-later"
 homepage="https://github.com/christo-auer/eilmeldung"
 changelog="https://raw.githubusercontent.com/christo-auer/eilmeldung/refs/heads/main/CHANGELOG.md"
 distfiles="https://github.com/christo-auer/eilmeldung/archive/refs/tags/${version}.tar.gz"
-checksum=7109d35bfcb16d7041d40b9d81a6e60f0bf7f9f478e56385c29fe22ce701a8ac
+checksum=8401280c214f06fd03b613f16d5603293d065500a39976ddac6105d93b509da7
