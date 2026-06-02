@@ -1,6 +1,6 @@
 # Template file for 'glide-browser-bin'
 pkgname=glide-browser-bin
-version=0.1.61a
+version=0.1.62a
 revision=1
 archs="x86_64 aarch64"
 depends="hunspell hyphen xdg-utils libavcodec libnotify nss"
@@ -12,11 +12,11 @@ homepage="https://glide-browser.app/"
 case "${XBPS_TARGET_MACHINE}" in
 x86_64*)
 	_upstream_arch=x86_64
-	_checksum=a31c5acfeb107f009bb1fc587073ccdda4350713f4084cfbd014e59ac8bfe51e
+	_checksum=b0e8a8a5635292c09d6ea45abcaad64fd929048c68a3ccdd311ac3d273162a0f
 	;;
 aarch64*)
 	_upstream_arch=aarch64
-	_checksum=decee2652ed99baff22be4c5cafaa5ead833a6ccbc57050374074ae7b713ff72
+	_checksum=cf4e436debf18927bfc43bd9299c5fb7579ba950baf8f93a542e181aed94becd
 	;;
 *)
 	broken="No distfiles available for this target"
