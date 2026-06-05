@@ -1,0 +1,19 @@
+# Template file for 'amneziawg-dkms'
+pkgname=amneziawg-dkms
+version=1.0.20260329
+revision=4
+build_wrksrc="src"
+depends="dkms amneziawg-tools"    # как в wireguard-dkms
+short_desc="AmneziaWG kernel module (DKMS)"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="GPL-2.0-only"
+homepage="https://github.com/amnezia-vpn/amneziawg-linux-kernel-module"
+distfiles="https://github.com/amnezia-vpn/amneziawg-linux-kernel-module/archive/refs/tags/v${version}.tar.gz"
+checksum=9bc6779711559a298f7c8ec1f5ca33ea151166f409b748cd761866a05b4bd39f
+
+dkms_modules="amneziawg ${version}"
+
+do_install() {
+    make DESTDIR="${DESTDIR}" \
+        DKMSDIR="/usr/src/amneziawg-${version}/" dkms-install
+}
