@@ -1,0 +1,27 @@
+# Template file for 'matcha-client'
+pkgname=matcha-client
+version=0.40.1
+revision=1
+build_style=go
+go_import_path="github.com/floatpane/matcha"
+hostmakedepends="pkgconf"
+makedepends="pcsclite-devel"
+depends=""
+short_desc="Beautiful and functional email client for your terminal"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="MIT"
+homepage="https://github.com/floatpane/matcha/tree/master"
+changelog="https://github.com/floatpane/matcha/releases"
+distfiles="https://github.com/floatpane/matcha/archive/refs/tags/v${version}.tar.gz"
+checksum=b12a51498c149ddb8d9f316a7c5bd892e3827dee87ca961f8af98329cea4c8ae
+
+do_build() {
+	go build -o ${GOPATH}/bin/matcha-client \
+		-ldflags "-X main.version=v${version}" \
+		${go_package}
+}
+
+do_install() {
+	vbin ${GOPATH}/bin/matcha-client
+	vlicense LICENSE
+}
