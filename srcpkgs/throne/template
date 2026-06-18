@@ -1,26 +1,27 @@
 # Template file for 'throne'
 pkgname=throne
-version=1.1.2
+version=1.1.6
 revision=1
+_srclist_commit=c18a492141c0b9fbc8d854a9d602cd21c301181b
 build_style=cmake
-hostmakedepends="pkg-config cmake qt6-base qt6-declarative-host-tools
- glib-devel protobuf go gendesk"
-makedepends="qt6-wayland-devel qt6-declarative-devel qt6-tools-private-devel"
+build_helper=qemu
+hostmakedepends="gendesk go protobuf qt6-base qt6-tools"
+makedepends="qt6-base-devel"
 short_desc="Cross-platform GUI proxy utility (Empowered by sing-box)"
 maintainer="Nizarjh <chel773@tutamail.com>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/throneproj/Throne"
-distfiles="https://github.com/throneproj/Throne/archive/${version}.tar.gz"
-checksum=39bc041266033909b5d91f0d6b2db7af853c3de53564fd2905187f7e1aecbca4
-nocross=yes
+distfiles="https://github.com/throneproj/Throne/archive/${version}.tar.gz
+https://raw.githubusercontent.com/throneproj/routeprofiles/${_srclist_commit}/srslist.h
+"
+checksum="7c4a8fe1b2fc11b3197ecf70a63ff1a583b2ad9858ceedff7fddbbb2f9189efc
+ 12b4415ea9dea40aedce25e208562fb06b0c46ac97fbcc477b29e1277a0f1caa"
+skip_extraction=srslist.h
 
-post_fetch() {
-	xbps-fetch https://raw.githubusercontent.com/throneproj/routeprofiles/rule-set/srslist.h
-}
+. $XBPS_COMMONDIR/environment/build-style/go.sh
 
 post_configure() {
-	cd $wrksrc
-	mv $XBPS_BUILDDIR/srslist.h $wrksrc/build/
+	vsrccopy srslist.h build
 	gendesk -f -n \
 		--pkgname "${pkgname}" \
 		--pkgdesc "${short_desc}" \
@@ -28,18 +29,14 @@ post_configure() {
 		--categories 'Network'
 	export GOBIN="${wrksrc}/bin"
 	export PATH="${PATH}:${GOBIN}"
-	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+	GOARCH= go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	GOARCH= go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	cd "$wrksrc/core/server/gen" || exit 1
 	protoc -I . --go_out=. --go-grpc_out=. libcore.proto
 }
 
 post_build() {
 	cd "$wrksrc/core/server"
-	export CGO_CPPFLAGS="${CPPFLAGS}"
-	export CGO_CFLAGS="${CFLAGS}"
-	export CGO_CXXFLAGS="${CXXFLAGS}"
-	export CGO_LDFLAGS="${LDFLAGS}"
 	export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
 	VERSION_SINGBOX=$(go list -m -f '{{.Version}}' github.com/sagernet/sing-box)
 	go build -o "${wrksrc}/build" \
@@ -48,9 +45,10 @@ post_build() {
 }
 
 do_install() {
-	vinstall "build/Throne" 755 /usr/lib/$pkgname
-	vinstall "build/ThroneCore" 755 /usr/lib/$pkgname
+	vinstall "build/Throne" 755 /usr/lib/throne
+	vinstall "build/ThroneCore" 755 /usr/lib/throne
 	vbin     "${FILESDIR}/throne"
-	vinstall "${pkgname}.desktop" 644 /usr/share/applications
-	vinstall res/public/Throne.png 644 /usr/share/pixmaps throne.png
+	vinstall "throne.desktop" 644 /usr/share/applications
+	vinstall res/public/Throne.png 644 \
+		usr/share/icons/hicolor/512x512/apps throne.png
 }
