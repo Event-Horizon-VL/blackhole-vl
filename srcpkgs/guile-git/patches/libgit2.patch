@@ -1,0 +1,48 @@
+--- a/git/bindings.scm	2026-03-24 18:48:58.000000000 +0400
++++ b/git/bindings.scm	2026-04-16 23:49:51.845013450 +0400
+@@ -47,10 +47,15 @@
+           %null-pointer
+           dirs))
+ 
++(define (libgit2-dynlib)
++  (or (false-if-exception (dynamic-link "libgit2.so.1.9"))
++      (false-if-exception (dynamic-link "libgit2"))
++      (error "Guile-Git: libgit2 not found (expected libgit2.so.1.9)")))
++
+ (define (libgit2->pointer name)
+   (catch #t
+     (lambda ()
+-      (dynamic-func name (dynamic-link %libgit2)))
++      (dynamic-func name (libgit2-dynlib)))
+     (lambda args
+       (lambda _
+         (throw 'system-error name  "~A" (list (strerror ENOSYS))
+@@ -59,7 +64,7 @@
+ (define (libgit2->procedure return name params)
+   (catch #t
+     (lambda ()
+-      (let ((ptr (dynamic-func name (dynamic-link %libgit2))))
++      (let ((ptr (dynamic-func name (libgit2-dynlib))))
+         (pointer->procedure return ptr params)))
+     (lambda args
+       (lambda _
+@@ -157,8 +162,8 @@
+   (let ((proc (libgit2->procedure void "git_libgit2_version" '(* * *))))
+     (lambda ()
+       (let ((major (make-double-pointer))
+-      (minor (make-double-pointer))
+-      (rev (make-double-pointer)))
++            (minor (make-double-pointer))
++            (rev (make-double-pointer)))
+         (proc major minor rev)
+         (map (compose pointer-address dereference-pointer) (list major minor rev))))))
+ 
+@@ -199,7 +204,7 @@
+         (let ((out* (buffer-content/string out)))
+           (free-buffer out)
+           out*)))))
+-
++          
+ ;;; FIXME: pathspec https://libgit2.github.com/libgit2/#HEAD/group/pathspec
+ 
+ ;;; FIXME: proxy https://libgit2.github.com/libgit2/#HEAD/group/proxy

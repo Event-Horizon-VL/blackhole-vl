@@ -1,0 +1,20 @@
+# Template file for 'monique'
+pkgname=monique
+version=0.6.5
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-build python3-installer python3-wheel python3-setuptools"
+depends="gtk4 libadwaita python3 python3-gobject"
+short_desc="Graphical monitor configurator for Hyprland and Sway"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/ToRvaLDz/monique"
+changelog="https://github.com/ToRvaLDz/monique/releases"
+distfiles="https://github.com/ToRvaLDz/monique/archive/refs/tags/v${version}.tar.gz"
+checksum=cc2e53bc1263bf37b180dac667c9582fcb3351b936af8a050d70f6fa01b8c15d
+
+post_install() {
+	vinstall data/com.github.monique.desktop 644 usr/share/applications
+	vinstall data/com.github.monique.svg 644 usr/share/icons/hicolor/scalable/apps
+	vinstall data/com.github.monique.rules 644 usr/share/polkit-1/rules.d 60-com.github.monique.rules
+}
