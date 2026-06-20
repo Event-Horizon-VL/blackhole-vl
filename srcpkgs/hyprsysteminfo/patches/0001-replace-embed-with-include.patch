@@ -1,0 +1,17 @@
+diff --git a/src/icons/Icons.hpp b/src/icons/Icons.hpp
+index 86f2ad9..574b8fb 100644
+--- a/src/icons/Icons.hpp
++++ b/src/icons/Icons.hpp
+@@ -1,9 +1,8 @@
+ #pragma once
+ 
+ #include <cstdint>
++#include "hyprlandlogo.hpp"
+ 
+ namespace Icons {
+-    inline constexpr uint8_t HYPRLAND_LOGO[] = {
+-#embed "../../resource/hyprlandlogo.svg"
+-    };
++    inline constexpr uint8_t* HYPRLAND_LOGO = HYPRLAND_LOGO_BYTES;
+ };
+\ No newline at end of file
