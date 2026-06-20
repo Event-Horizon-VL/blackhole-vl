@@ -1,6 +1,6 @@
 # Template file for 'hyprshade'
 pkgname=hyprshade
-version=4.0.1
+version=5.0.0
 revision=1
 build_style=python3-pep517
 hostmakedepends="hatchling hatch-vcs"
@@ -10,7 +10,7 @@ maintainer="Nizarjh <chel773@tutamail.com>"
 license="MIT"
 homepage="https://github.com/loqusion/hyprshade"
 distfiles="https://github.com/loqusion/hyprshade/archive/refs/tags/${version}.tar.gz"
-checksum=f90918fd9ff47e2f6b7bee1634577eecc0863913fa5a8d3ded2cef914ebaf573
+checksum=9a5e489bd17990635b003013d25128b6e83c7f97407fe916de7860ec81f9cbce
 
 post_install() {
 	vlicense LICENSE
