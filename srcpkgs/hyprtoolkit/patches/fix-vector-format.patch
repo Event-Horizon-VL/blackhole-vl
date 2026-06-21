@@ -1,0 +1,22 @@
+--- a/src/system/Icons.cpp
++++ b/src/system/Icons.cpp
+@@ -29,3 +29,12 @@ static std::optional<std::string> readFileAsString(const std::string& path) {
+ }
+-
++static std::string joinThemeDirs(const std::vector<std::string>& themeDirs) {
++    std::string result;
++
++    for (const auto& themeDir : themeDirs) {
++        result += result.empty() ? themeDir : ", " + themeDir;
++    }
++
++    return result;
++}
++
+ static const std::array<const char*, 4> ICON_THEME_DIRS = {"/usr/share/icons", "/usr/local/share/icons", "~/.icons", "~/.local/share/icons"};
+@@ -102 +112 @@ static std::optional<std::vector<std::string>> findAnyTheme() {
+-                g_logger->log(HT_LOG_TRACE, "CSystemIconFactory: Found {} as default fallback", themeDir.value());
++                g_logger->log(HT_LOG_TRACE, "CSystemIconFactory: Found {} as default fallback", joinThemeDirs(*themeDir));
+@@ -217 +227 @@ void CSystemIconFactory::parseTheme(const std::string& themeDir) {
+-                g_logger->log(HT_LOG_TRACE, "CSystemIconFactory: parsing inherited theme {}", *inheritTheme);
++                g_logger->log(HT_LOG_TRACE, "CSystemIconFactory: parsing inherited theme {}", joinThemeDirs(*inheritTheme));

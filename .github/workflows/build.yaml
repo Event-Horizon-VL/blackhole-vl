@@ -246,7 +246,7 @@ jobs:
                       | tr ' ' '\n' \
                       > /tmp/upload/removed.txt
 
-                  sudo -Eu builder rsync -avz \
+                  sudo -Eu builder rsync -avz --ignore-existing \
                       -e "ssh -p $SSH_MIRROR_PORT \
                       -i /home/builder/.ssh/$SSH_MIRROR_SECRET_KEY_NAME \
                       -o StrictHostKeyChecking=no \
