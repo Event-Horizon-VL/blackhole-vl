@@ -134,7 +134,7 @@ Currently packages are tested on / crosscompiled for the following architectures
    (replace the architecture as needed):
 
     ```
-    sudo sed -i "1i repository=https://mirror.black-hole.dev/$(uname -m)" 00-repository-main.conf
+    sudo sed -i "1i repository=https://mirror.black-hole.dev/$(xbps-uhelper arch)" 00-repository-main.conf
     ```
 
 2. Refresh repositories and accept the fingerprint:
