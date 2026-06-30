@@ -242,7 +242,7 @@ jobs:
 
                   cp -v ./*.xbps /tmp/upload/ 2>/dev/null || true
 
-                  printf "%s" "${{ steps.changed.outputs.removed }}" \
+                  printf "%s\n" "${{ steps.changed.outputs.removed }}" \
                       | tr ' ' '\n' \
                       > /tmp/upload/removed.txt
 

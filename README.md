@@ -15,7 +15,9 @@
 > Previous GitHub-based binary repositories (e.g. `repository-x86_64`, `repository-aarch64`) are **deprecated** and no longer updated.
 >
 > All users must switch to the new VPS-based mirror system.
-> Please update `/etc/xbps.d/20-repository-extra.conf`
+> Remove the old `/etc/xbps.d/20-repository-extra.conf` configuration and use the new mirror system.
+>
+> For migration steps, see: [**Repository migration troubleshooting →**](#troubleshooting)
 
 
 ## Overview
@@ -130,11 +132,11 @@ Currently packages are tested on / crosscompiled for the following architectures
 
 > Available **only for the `main` branch**
 
-1. Create an entry in `/etc/xbps.d/` and add this repository  
-   (replace the architecture as needed):
+1. Create a local repository configuration by copying the default Void repository file, then add the Blackhole mirror with higher priority:
 
     ```
-    sudo sed -i "1i repository=https://mirror.black-hole.dev/$(uname -m)" 00-repository-main.conf
+    sudo cp /usr/share/xbps.d/00-repository-main.conf /etc/xbps.d/
+    sudo sed -i "1i repository=https://mirror.black-hole.dev/$(xbps-uhelper arch)" /etc/xbps.d/00-repository-main.conf
     ```
 
 2. Refresh repositories and accept the fingerprint:
@@ -167,6 +169,9 @@ This usually means that an old Blackhole repository configuration is still prese
 ```
 
 2. Add the current mirror as the highest-priority repository.
+```sh
+    sudo cp /usr/share/xbps.d/00-repository-main.conf /etc/xbps.d/
+```
 
 For **x86_64**:
 
