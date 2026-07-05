@@ -1,0 +1,10 @@
+Optional dependencies:
+
+* `cava` for audio visualizer
+* `ImageMagick` for wallpaper thumbnails
+* `awww` for applying wallpapers from the wallpaper picker
+* `NetworkManager` for wifi control
+* `iwd` for wifi control
+* `SwayNotificationCenter` for the Focus do-not-disturb toggle
+* `tlp` for TLP power profile controls
+* `polkit` for applying TLP profiles via pkexec
