@@ -1,5 +1,9 @@
 Optional dependencies:
 
+* `hyprland` for Hyprland compositor integration
+* `niri` for niri compositor integration
+* `hyprsunset` for Night Light on Hyprland
+* `gammastep` for Night Light on niri or generic Wayland sessions
 * `cava` for audio visualizer
 * `ImageMagick` for wallpaper thumbnails
 * `awww` for applying wallpapers from the wallpaper picker
