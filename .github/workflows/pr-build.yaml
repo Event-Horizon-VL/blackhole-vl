@@ -8,6 +8,96 @@ on:
             - "srcpkgs/**"
 
 jobs:
+    # Lint changed templates.
+    xlint:
+        name: Lint templates
+        runs-on: ubuntu-latest
+
+        container:
+            image: ghcr.io/void-linux/void-musl-full
+            env:
+                LICENSE_LIST: common/travis/license.lst
+
+        steps:
+            - name: Prepare container
+              run: |
+                  # switch to repo-ci mirror
+                  mkdir -p /etc/xbps.d && cp /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/
+                  sed -i 's|repo-default|repo-ci|g' /etc/xbps.d/*-repository-*.conf
+                  # install dependencies
+                  xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo bash grep curl git
+                  # create non-root user
+                  useradd -G xbuilder -M builder
+
+            - name: Checkout repo (PR head)
+              run: |
+                  git clone --single-branch --branch main "https://github.com/${{ github.repository }}.git" extra
+                  cd extra
+                  git fetch --no-tags origin "${{ github.event.pull_request.head.sha }}"
+                  git checkout --detach "${{ github.event.pull_request.head.sha }}"
+
+            - name: Determine changed templates
+              id: changed
+              run: |
+                  cd extra
+                  tip="${{ github.event.pull_request.head.sha }}"
+                  base="$(git merge-base origin/main "$tip")"
+
+                  changed_pkgs=$(git diff-tree -r --no-renames --name-only --diff-filter=AM "$base" "$tip" -- 'srcpkgs/*/template' \
+                      | cut -d/ -f2 \
+                      | sort -u \
+                      | tr '\n' ' ')
+
+                  changed_pkgs="${changed_pkgs%% }"
+
+                  echo "Changed templates: ${changed_pkgs:-<none>}"
+                  printf "%s\n" "$changed_pkgs" \
+                    | tr ' ' '\n' \
+                    > /tmp/templates
+                  echo "$base $tip" > /tmp/revisions
+
+            - name: Checkout void-packages
+              run: |
+                  git clone --depth=1 https://github.com/void-linux/void-packages.git void-packages
+                  cd void-packages
+                  git checkout --detach master
+
+            - name: Merge templates and edit shlibs
+              run: |
+                  echo "==> copying templates (all from PR)..."
+                  cp -rv extra/srcpkgs/* void-packages/srcpkgs/
+
+                  SHLIBS_FILE="void-packages/common/shlibs"
+                  APPEND_FILE="extra/shlibs_append"
+                  REMOVE_FILE="extra/shlibs_remove"
+
+                  echo "==> updating common/shlibs..."
+                  if [ -f "$REMOVE_FILE" ]; then
+                      while IFS= read -r line; do
+                          [ -z "$line" ] && continue
+                          grep -vF "$line" "$SHLIBS_FILE" > "$SHLIBS_FILE.tmp" && mv "$SHLIBS_FILE.tmp" "$SHLIBS_FILE"
+                          echo "   - removed: $line"
+                      done < "$REMOVE_FILE"
+                  fi
+
+                  if [ -f "$APPEND_FILE" ]; then
+                      while IFS= read -r line; do
+                          [ -z "$line" ] && continue
+                          if ! grep -qF "$line" "$SHLIBS_FILE"; then
+                              echo "$line" >> "$SHLIBS_FILE"
+                              echo "   + added: $line"
+                          fi
+                      done < "$APPEND_FILE"
+                  fi
+
+            - name: Run lints
+              run: |
+                  cd void-packages
+                  sudo -Eu builder common/travis/verify-update-check.sh || rv=1
+                  sudo -Eu builder common/travis/xlint.sh || rv=1
+                  exit "${rv:-0}"
+
+    # Build changed packages.
     build:
         name: Test build changed packages
         runs-on: ubuntu-latest
@@ -139,7 +229,7 @@ jobs:
                   PUBLIC_KEY_OF_XBPS_REPO_NAME: ${{ secrets.PUBLIC_KEY_OF_XBPS_REPO_NAME }}
               run: |
                   cd void-packages
-                  
+
                   # adding black-hole mirror to conf
                   sed -i '1i repository=https://mirror.black-hole.dev/x86_64' \
                       etc/xbps.d/repos-remote.conf
