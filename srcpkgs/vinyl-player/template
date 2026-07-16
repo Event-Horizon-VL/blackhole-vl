@@ -1,6 +1,6 @@
 # Template file for 'vinyl-player'
 pkgname=vinyl-player
-version=1.4.1
+version=1.5.0
 revision=1
 build_style=cargo
 hostmakedepends="pkg-config glib-devel"
@@ -11,9 +11,10 @@ license="GPL-3.0-or-later"
 homepage="https://codeberg.org/M23Snezhok/Vinyl"
 changelog="https://codeberg.org/M23Snezhok/Vinyl/releases"
 distfiles="https://codeberg.org/M23Snezhok/Vinyl/archive/v${version}.tar.gz"
-checksum=299f01ea97f1dcf6a0f698cb02bc6db298389ab7d4c47228f4911516fd819790
+checksum=d980ee98ee838e32dd963d5cd521e8359e474d45ccd1a6a6538f200560f484da
 
 post_install() {
 	vinstall ${FILESDIR}/vinyl-player.desktop 644 usr/share/applications
+	vinstall data/hicolor/scalable/apps/page.codeberg.M23Snezhok.Vinyl.svg 644 usr/share/pixmaps vinyl.svg
 	vbin     "${FILESDIR}/vinyl-player.sh"
 }

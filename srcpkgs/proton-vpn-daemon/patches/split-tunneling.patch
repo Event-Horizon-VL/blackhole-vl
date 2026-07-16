@@ -1,0 +1,102 @@
+diff --git a/proton/vpn/daemon/split_tunneling/apps/process_monitor.bpf.c b/proton/vpn/daemon/split_tunneling/apps/process_monitor.bpf.c
+index c28ce91..3a3cfb4 100644
+--- a/proton/vpn/daemon/split_tunneling/apps/process_monitor.bpf.c
++++ b/proton/vpn/daemon/split_tunneling/apps/process_monitor.bpf.c
+@@ -24,14 +24,14 @@ struct data_t {
+ 
+ BPF_PERF_OUTPUT(events);
+ 
+-static int __submit_arg(struct pt_regs *ctx, void *ptr, struct data_t *data)
++static int __submit_arg(void *ctx, void *ptr, struct data_t *data)
+ {
+     bpf_probe_read_user(data->argv, sizeof(data->argv), ptr);
+     events.perf_submit(ctx, data, sizeof(struct data_t));
+     return 1;
+ }
+ 
+-static int submit_arg(struct pt_regs *ctx, void *ptr, struct data_t *data)
++static int submit_arg(void *ctx, void *ptr, struct data_t *data)
+ {
+     const char *argp = NULL;
+     bpf_probe_read_user(&argp, sizeof(argp), ptr);  // nosemgrep: raptor-incorrect-use-of-sizeof
+@@ -41,10 +41,7 @@ static int submit_arg(struct pt_regs *ctx, void *ptr, struct data_t *data)
+     return 0;
+ }
+ 
+-int syscall__execve(struct pt_regs *ctx,
+-    const char __user *filename,
+-    const char __user *const __user *__argv,
+-    const char __user *const __user *__envp)
++TRACEPOINT_PROBE(syscalls, sys_enter_execve)
+ {
+     // create data here and pass to submit_arg to save stack space (#555)
+     struct data_t data = {};
+@@ -60,23 +57,23 @@ int syscall__execve(struct pt_regs *ctx,
+     bpf_get_current_comm(&data.comm, sizeof(data.comm));
+     data.type = EVENT_EXEC_ARG;
+ 
+-    __submit_arg(ctx, (void *)filename, &data);
++    __submit_arg(args, (void *)args->filename, &data);
+ 
+     // skip first arg, as we submitted filename
+     #pragma unroll
+     for (int i = 1; i < MAXARG; i++) {
+-        if (submit_arg(ctx, (void *)&__argv[i], &data) == 0)
++        if (submit_arg(args, (void *)&args->argv[i], &data) == 0)
+              goto out;
+     }
+ 
+     // handle truncated argument list
+     char ellipsis[] = "...";
+-    __submit_arg(ctx, (void *)ellipsis, &data);
++    __submit_arg(args, (void *)ellipsis, &data);
+ out:
+     return 0;
+ }
+ 
+-int do_ret_sys_execve(struct pt_regs *ctx)
++TRACEPOINT_PROBE(syscalls, sys_exit_execve)
+ {
+     struct data_t data = {};
+ 
+@@ -90,7 +87,7 @@ int do_ret_sys_execve(struct pt_regs *ctx)
+ 
+     bpf_get_current_comm(&data.comm, sizeof(data.comm));
+     data.type = EVENT_EXEC_RET;
+-    events.perf_submit(ctx, &data, sizeof(data));
++    events.perf_submit(args, &data, sizeof(data));
+ 
+     return 0;
+ }
+diff --git a/proton/vpn/daemon/split_tunneling/apps/process_monitor.py b/proton/vpn/daemon/split_tunneling/apps/process_monitor.py
+index 10547d4..ba58cd6 100644
+--- a/proton/vpn/daemon/split_tunneling/apps/process_monitor.py
++++ b/proton/vpn/daemon/split_tunneling/apps/process_monitor.py
+@@ -157,23 +157,12 @@ class ProcessMonitor:
+                         "or not compatible with the current kernel version."
+                     ) from exc
+                 raise
+-
+-        # Explicitly attach kprobes/kretprobes,
+-        # tracepoints using TRACEPOINT_PROBE are automatically attached when
+-        # the BPF object is created
+-        execve_fnname = self._bpf.get_syscall_fnname("execve")
+-        self._bpf.attach_kprobe(event=execve_fnname, fn_name="syscall__execve")
+-        self._bpf.attach_kretprobe(event=execve_fnname, fn_name="do_ret_sys_execve")
++            # All probes use TRACEPOINT_PROBE and are automatically
++            # attached when the BPF object is created.
+ 
+     def _detach_bpf(self):
+-        # Explicitly detach kprobes/kretprobes,
+-        # tracepoints using TRACEPOINT_PROBE are automatically detached when
+-        # the BPF object is destroyed
+-        execve_fnname = self._bpf.get_syscall_fnname("execve")
+-        self._bpf.detach_kprobe(event=execve_fnname, fn_name="syscall__execve")
+-        self._bpf.detach_kretprobe(event=execve_fnname, fn_name="do_ret_sys_execve")
+-
+-        # Destroy the BPF object to detach tracepoints
++        # All probes use TRACEPOINT_PROBE and are automatically
++        # detached when the BPF object is destroyed.
+         self._bpf = None
+ 
+     async def _run_process_monitoring(self):
