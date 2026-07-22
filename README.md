@@ -103,13 +103,16 @@ Currently packages are tested on / crosscompiled for the following architectures
    and appending the lines from `shlibs_append`:
 
     ```
-    cd void-packages
-    nvim common/shlibs
+    grep -vFxf blackhole-vl/shlibs_remove void-packages/common/shlibs > temp
+    mv temp void-packages/common/shlibs
+    cat blackhole-vl/shlibs_append >> void-packages/common/shlibs
     ```
+
 
 5. Bootstrap the build system:
 
     ```
+    cd void-packages
     ./xbps-src binary-bootstrap
     ```
 
