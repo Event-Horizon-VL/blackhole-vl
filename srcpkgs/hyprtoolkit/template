@@ -1,7 +1,7 @@
 # Template file for 'hyprtoolkit'
 pkgname=hyprtoolkit
 version=0.5.4
-revision=1
+revision=2
 build_style=cmake
 configure_args="-DDISABLE_TESTS=ON"
 hostmakedepends="hyprwayland-scanner pkgconf"
