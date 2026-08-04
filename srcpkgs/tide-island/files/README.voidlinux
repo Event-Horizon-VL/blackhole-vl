@@ -12,3 +12,4 @@ Optional dependencies:
 * `SwayNotificationCenter` for the Focus do-not-disturb toggle
 * `tlp` for TLP power profile controls
 * `polkit` for applying TLP profiles via pkexec
+* `zenity` for Ask-mode TLP password prompts when no Polkit agent is running
