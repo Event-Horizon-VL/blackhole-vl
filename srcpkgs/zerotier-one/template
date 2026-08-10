@@ -1,0 +1,42 @@
+# Template file for 'zerotier-one'
+pkgname=zerotier-one
+version=1.16.2
+revision=1
+build_style=gnu-makefile
+build_helper=rust
+make_build_args="V=1"
+hostmakedepends="cargo rust pkg-config"
+makedepends="libnatpmp-devel miniupnpc-devel openssl-devel"
+short_desc="Smart Ethernet Switch for Earth"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="MPL-2.0"
+homepage="https://www.zerotier.com/"
+distfiles="https://github.com/zerotier/ZeroTierOne/archive/refs/tags/${version}.tar.gz"
+checksum=2c607f573c6e38815433af289d364a689a203b18b51125f06c4472014d0657f0
+
+if [ "$CROSS_BUILD" ]; then
+	makedepends+=" rust-std"
+fi
+
+pre_configure() {
+	rm -rf ext/miniupnpc
+	sed \
+		-e 's/sbin/bin/' \
+		-e "s|/usr/include/miniupnpc/miniupnpc.h|${XBPS_CROSS_BASE}/usr/include/miniupnpc/miniupnpc.h|" \
+		-e "s|/usr/include/natpmp.h|${XBPS_CROSS_BASE}/usr/include/natpmp.h|" \
+		-i make-linux.mk
+
+	if [ "$CROSS_BUILD" ]; then
+		sed \
+			-e "s|rustybits/target/release/libzeroidc.a|rustybits/target/${RUST_TARGET}/release/libzeroidc.a|" \
+			-e "s|rustybits/target/debug/libzeroidc.a|rustybits/target/${RUST_TARGET}/debug/libzeroidc.a|" \
+			-e "s|rustybits/target/release/libsmeeclient.a|rustybits/target/${RUST_TARGET}/release/libsmeeclient.a|" \
+			-e "s|rustybits/target/debug/libsmeeclient.a|rustybits/target/${RUST_TARGET}/debug/libsmeeclient.a|" \
+			-i make-linux.mk
+	fi
+}
+
+post_install() {
+	vinstall ${FILESDIR}/zerotier-one.sysusers 644 usr/lib/sysusers.d zerotier-one.conf
+	vsv zerotier-one
+}
