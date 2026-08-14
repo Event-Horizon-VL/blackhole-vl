@@ -10,6 +10,6 @@ short_desc="GTK+2.0 integration plugins for Qt6"
 maintainer="Akira25 <skullgamer205@disroot.org>"
 license="GPL-2.0-or-later"
 homepage="https://www.opencode.net/trialuser/qt6gtk2"
-changelog="${homepage}/-/raw/${version}/ChangeLog"
+changelog="https://www.opencode.net/trialuser/qt6gtk2/-/raw/${version}/ChangeLog"
 distfiles="${homepage}/-/archive/${version}/${pkgname}-${version}.tar.gz"
 checksum=72569c42c060cfce847533cd18395b080cf404e54dac1c45e29c97d33ca93013
