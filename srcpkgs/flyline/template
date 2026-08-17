@@ -1,0 +1,24 @@
+# Template file for 'flyline'
+pkgname=flyline
+version=1.5.0
+revision=1
+build_style=cargo
+depends="bash"
+short_desc="Bash plugin to replace readline for a modern line editing experience"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="MIT OR GPL-3.0-only"
+homepage="https://github.com/HalFrgrd/flyline"
+distfiles="https://github.com/HalFrgrd/flyline/archive/refs/tags/v${version}.tar.gz"
+checksum=f0e2dbd1d094f946b91a0015bbf3c9f6a05edf8161df8c35317e35cba47f1c12
+# Upstream check suite includes docker integration tests, which
+# cannot run inside the xbps-src build sandbox.
+make_check=no
+
+do_install() {
+	vinstall target/${RUST_TARGET}/release/libflyline.so 755 usr/lib/bash
+}
+
+post_install() {
+	vlicense LICENSE-MIT
+	vdoc README.md
+}

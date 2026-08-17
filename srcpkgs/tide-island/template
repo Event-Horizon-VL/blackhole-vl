@@ -1,10 +1,10 @@
 # Template file for 'tide-island'
 pkgname=tide-island
-version=1.0.21
+version=1.0.35
 revision=1
 build_style=cmake
 build_helper=qemu
-hostmakedepends="ninja pkg-config qt6-base qt6-tools qt6-declarative-host-tools"
+hostmakedepends="ninja pkg-config dbus qt6-base qt6-tools qt6-declarative-host-tools"
 makedepends="qt6-base-private-devel qt6-declarative-devel qt6-wayland-devel qt6-connectivity-devel
  qt6-svg-devel pipewire-devel wireplumber-devel eudev-libudev-devel"
 depends="quickshell dbus brightnessctl upower bluez libpulseaudio"
@@ -13,7 +13,7 @@ maintainer="nerdyslacker <karyan40024@gmail.com>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/enhaoswen/Tide-island"
 distfiles="https://github.com/enhaoswen/Tide-island/archive/refs/tags/${version}.tar.gz"
-checksum=c155c9cb929d27793f9cddd7de2a67116fd1df9d50ef1cbcdd14b4d856399fc6
+checksum=b57f6ae11b44336c2e49a262e206974cccb12a8ea73e6766f23505e70e2b9ce7
 
 post_install() {
 	mv ${DESTDIR}/usr/share/tide-island/bin/lyricsmpris ${DESTDIR}/usr/bin/

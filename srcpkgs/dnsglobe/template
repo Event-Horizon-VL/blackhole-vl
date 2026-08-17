@@ -1,0 +1,16 @@
+# Template file for 'dnsglobe'
+pkgname=dnsglobe
+version=0.4.0
+revision=1
+build_style=cargo
+short_desc="Global DNS propagation checker TUI"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="MIT"
+homepage="https://github.com/514-labs/dnsglobe"
+distfiles="https://github.com/514-labs/dnsglobe/archive/refs/tags/v${version}.tar.gz"
+checksum=7e63f170acc2af62923de0c368b3c7d95ef9851b81f5b53c82bd529595def523
+
+post_install() {
+	vlicense LICENSE
+	vdoc README.md
+}

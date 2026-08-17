@@ -134,24 +134,8 @@ jobs:
                   fi
 
             - name: Prepare masterdir
-              env:
-                  PUBLIC_KEY_OF_XBPS_REPO: ${{ secrets.PUBLIC_KEY_OF_XBPS_REPO }}
-                  PUBLIC_KEY_OF_XBPS_REPO_NAME: ${{ secrets.PUBLIC_KEY_OF_XBPS_REPO_NAME }}
               run: |
                   cd void-packages
-                  
-                  # adding black-hole mirror to conf
-                  sed -i '1i repository=https://mirror.black-hole.dev/x86_64' \
-                      etc/xbps.d/repos-remote.conf
-                  sed -i '1i repository=https://mirror.black-hole.dev/x86_64-musl' \
-                      etc/xbps.d/repos-remote-musl.conf
-                  sed -i '1i repository=https://mirror.black-hole.dev/aarch64' \
-                      etc/xbps.d/repos-remote-aarch64.conf
-                  sed -i '1i repository=https://mirror.black-hole.dev/aarch64-musl' \
-                      etc/xbps.d/repos-remote-aarch64-musl.conf
-                  printf '%s' "$PUBLIC_KEY_OF_XBPS_REPO" | base64 -d \
-                    > "common/repo-keys/$PUBLIC_KEY_OF_XBPS_REPO_NAME"
-
                   chown -R builder:builder .
                   sudo -Eu builder common/travis/set_mirror.sh
                   sudo -Eu builder common/travis/prepare.sh
