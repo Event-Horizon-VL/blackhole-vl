@@ -1,7 +1,7 @@
 # Template file for 'hyprlock'
 pkgname=hyprlock
 version=0.9.5
-revision=1
+revision=2
 build_style=cmake
 hostmakedepends="hyprwayland-scanner pkgconf"
 makedepends="cairo-devel elogind-devel file-devel hyprgraphics hyprlang
