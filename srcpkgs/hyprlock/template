@@ -6,7 +6,7 @@ build_style=cmake
 hostmakedepends="hyprwayland-scanner pkgconf"
 makedepends="cairo-devel elogind-devel file-devel hyprgraphics hyprlang
  hyprutils libdrm-devel libjpeg-turbo-devel libwebp-devel libxkbcommon-devel
- MesaLib-devel pam-devel pango-devel sdbus-cpp wayland-devel wayland-protocols"
+ MesaLib-devel pam-devel pango-devel sdbus-c++-devel wayland-devel wayland-protocols"
 short_desc="Hyprland's GPU-accelerated screen locking utility"
 maintainer="Nizarjh <chel773@tutamail.com>"
 license="BSD-3-Clause"
