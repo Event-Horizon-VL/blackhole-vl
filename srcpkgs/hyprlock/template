@@ -1,7 +1,7 @@
 # Template file for 'hyprlock'
 pkgname=hyprlock
-version=0.9.5
-revision=2
+version=0.9.6
+revision=1
 build_style=cmake
 hostmakedepends="hyprwayland-scanner pkgconf"
 makedepends="cairo-devel elogind-devel file-devel hyprgraphics hyprlang
@@ -13,7 +13,7 @@ license="BSD-3-Clause"
 homepage="https://github.com/hyprwm/hyprlock"
 changelog="https://github.com/hyprwm/${pkgname}/releases"
 distfiles="https://github.com/hyprwm/${pkgname}/archive/refs/tags/v${version}.tar.gz"
-checksum=cbc49fc5553c550131e1a15089847501de42579944814229bfa9f8ea18519f89
+checksum=7f653b87765bcfff7c1f8e04af326a7e73bbcacd1fb7d4436f6a16624a2247bb
 
 post_install() {
 	vlicense LICENSE
