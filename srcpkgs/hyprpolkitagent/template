@@ -1,7 +1,7 @@
 # Template file for 'hyprpolkitagent'
 pkgname=hyprpolkitagent
 version=0.1.3
-revision=3
+revision=4
 build_style=cmake
 hostmakedepends="pkgconf qt6-base qt6-declarative-devel"
 makedepends="hyprutils polkit-qt6-devel qt6-base-devel qt6-declarative-devel"

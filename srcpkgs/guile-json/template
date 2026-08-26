@@ -1,0 +1,14 @@
+# Template file for 'guile-json'
+pkgname=guile-json
+version=4.7.3
+revision=1
+build_style=gnu-configure
+configure_args="--with-guile-site-dir=no"
+hostmakedepends="guile-devel pkgconf texinfo"
+makedepends="guile-devel"
+short_desc="JSON implementation for GNU Guile"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://savannah.nongnu.org/projects/guile-json/"
+distfiles="${NONGNU_SITE}/guile-json/guile-json-${version}.tar.gz"
+checksum=38ba048ed29d12f05b32c5b2fb7a51795c448b41e403a2b1b72ff0035817f388

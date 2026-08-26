@@ -15,7 +15,9 @@
 > Previous GitHub-based binary repositories (e.g. `repository-x86_64`, `repository-aarch64`) are **deprecated** and no longer updated.
 >
 > All users must switch to the new VPS-based mirror system.
-> Please update `/etc/xbps.d/20-repository-extra.conf`
+> Remove the old `/etc/xbps.d/20-repository-extra.conf` configuration and use the new mirror system.
+>
+> For migration steps, see: [**Repository migration troubleshooting →**](#troubleshooting)
 
 
 ## Overview
@@ -35,6 +37,7 @@ Use the VPS-based mirror:
 - x86_64-musl → https://mirror.black-hole.dev/x86_64-musl/
 - aarch64 → https://mirror.black-hole.dev/aarch64/
 - aarch64-musl → https://mirror.black-hole.dev/aarch64-musl/
+- ru mirror (recommended for CIS users) → https://ru.mirror.black-hole.dev/
 
 ---
 ## Branches
@@ -100,13 +103,16 @@ Currently packages are tested on / crosscompiled for the following architectures
    and appending the lines from `shlibs_append`:
 
     ```
-    cd void-packages
-    nvim common/shlibs
+    grep -vFxf blackhole-vl/shlibs_remove void-packages/common/shlibs > temp
+    mv temp void-packages/common/shlibs
+    cat blackhole-vl/shlibs_append >> void-packages/common/shlibs
     ```
+
 
 5. Bootstrap the build system:
 
     ```
+    cd void-packages
     ./xbps-src binary-bootstrap
     ```
 
@@ -129,11 +135,11 @@ Currently packages are tested on / crosscompiled for the following architectures
 
 > Available **only for the `main` branch**
 
-1. Create an entry in `/etc/xbps.d/` and add this repository  
-   (replace the architecture as needed):
+1. Create a local repository configuration by copying the default Void repository file, then add the Blackhole mirror with higher priority:
 
     ```
-    echo "repository=https://mirror.black-hole.dev/$(uname -m)/"| sudo tee /etc/xbps.d/20-repository-extra.conf
+    sudo cp /usr/share/xbps.d/00-repository-main.conf /etc/xbps.d/
+    sudo sed -i "1i repository=https://mirror.black-hole.dev/$(xbps-uhelper arch)" /etc/xbps.d/00-repository-main.conf
     ```
 
 2. Refresh repositories and accept the fingerprint:
@@ -152,6 +158,73 @@ Currently packages are tested on / crosscompiled for the following architectures
 </details>
 
 <hr>
+
+## Troubleshooting
+
+### `unresolvable shlib libhyprutils.so.10`
+
+This usually means that an old Blackhole repository configuration is still present on the system.
+
+1. Remove the deprecated repository configuration:
+
+```sh
+    sudo rm -f /etc/xbps.d/20-repository-extra.conf
+```
+
+2. Add the current mirror as the highest-priority repository.
+```sh
+    sudo cp /usr/share/xbps.d/00-repository-main.conf /etc/xbps.d/
+```
+
+For **x86_64**:
+
+```sh
+    sudo sed -i '1i repository=https://mirror.black-hole.dev/x86_64/' /etc/xbps.d/00-repository-main.conf
+```
+
+For **x86_64-musl**:
+
+```sh
+    sudo sed -i '1i repository=https://mirror.black-hole.dev/x86_64-musl/' /etc/xbps.d/00-repository-main.conf
+```
+
+For **aarch64**:
+
+```sh
+    sudo sed -i '1i repository=https://mirror.black-hole.dev/aarch64/' /etc/xbps.d/00-repository-main.conf
+```
+
+For **aarch64-musl**:
+
+```sh
+    sudo sed -i '1i repository=https://mirror.black-hole.dev/aarch64-musl/' /etc/xbps.d/00-repository-main.conf
+```
+
+3. Refresh repository metadata:
+
+```sh
+    sudo xbps-install -S
+```
+
+4. Retry the installation.
+
+### `ERROR: package: the RSA signature is not valid!`
+
+This usually means corrupted or partially updated package metadata or cached binaries.
+
+Fix it by clearing the local xbps cache and retrying:
+
+```sh
+    sudo xbps-remove -O
+    sudo rm -rf /var/cache/xbps/*
+    sudo xbps-install -S
+```
+If the issue persists, remove the problematic package and reinstall it:
+
+```sh
+    sudo xbps-remove -R <package>
+    sudo xbps-install -S <package>
+```
 
 ## Contributing
 

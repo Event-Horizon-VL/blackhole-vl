@@ -1,0 +1,21 @@
+# Template file for 'proton-vpn-qt-app'
+pkgname=proton-vpn-qt-app
+version=1.10.4
+revision=1
+build_style=cmake
+build_wrksrc=src
+configure_args="-GNinja"
+hostmakedepends="ninja qt6-base qt6-tools"
+makedepends="qt6-base-devel qt6-svg-devel"
+depends="proton-vpn-cli curl libnatpmp"
+short_desc="Qt GUI frontend for the ProtonVPN CLI"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-only"
+homepage="https://github.com/wheat32/proton-vpn-qt-app"
+distfiles="https://github.com/wheat32/proton-vpn-qt-app/archive/refs/tags/v${version}.tar.gz"
+checksum=4766749d30e47fbceadbb167202c2485ec81973b0904468e45ab179d0f18eb57
+
+post_install() {
+	# Compatibility symlink for any existing scripts/launchers
+	ln -s /usr/bin/proton_vpn_qt ${DESTDIR}/usr/bin/proton-vpn-qt-app
+}

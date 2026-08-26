@@ -1,0 +1,19 @@
+# Template file for 'nls'
+pkgname=nls
+version=0.12.0
+revision=1
+build_style="go"
+go_import_path="github.com/nolight132/nls"
+go_package="./cmd/nls"
+short_desc="Nushell-style ls for bash, zsh, and fish"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="MIT"
+homepage="https://github.com/nolight132/nls"
+changelog="https://raw.githubusercontent.com/nolight132/nls/refs/heads/main/CHANGELOG.md"
+distfiles="https://github.com/nolight132/nls/archive/refs/tags/v${version}.tar.gz"
+checksum=0fada44662ac28191b679c2c143d5d67ccc1b75849dfecf74d2cc5fae23dc133
+
+post_install() {
+	vlicense LICENSE
+	vdoc README.md
+}

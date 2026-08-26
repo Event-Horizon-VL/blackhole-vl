@@ -1,0 +1,37 @@
+# Template file for 'openvpn3'
+_pkgname=openvpn3-linux
+pkgname=openvpn3
+version=27
+revision=1
+build_style=meson
+build_helper=qemu
+configure_args="-Dselinux=disabled -Dselinux_policy=disabled -Dbash-completion=enabled
+ -Dtest_programs=enabled -Dunit_tests=disabled"
+hostmakedepends="cmake pkg-config python3 python3-docutils python3-dbus python3-gobject python3-Jinja2
+ protobuf python3-packaging-bootstrap"
+makedepends="glib-devel jsoncpp-devel libcap-ng-devel liblz4-devel util-linux-libs openssl-devel
+ protobuf-devel tinyxml2-devel libnl3-devel gdbuspp"
+depends="python3-dbus python3-gobject"
+checkdepends="dbus"
+short_desc="OpenVPN 3 Linux client"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="AGPL-3.0-only"
+homepage="https://codeberg.org/OpenVPN/openvpn3-linux"
+distfiles="https://swupdate.openvpn.net/community/releases/${_pkgname}-${version}.tar.xz"
+checksum="d8c474032546bdd90b5b7f67e40c57b4b6030253f07bda7bb6ad0db84b9eed73"
+system_accounts="openvpn"
+make_check_pre="dbus-run-session"
+# Tests config-override-selftest and platforminfo are failing:
+# Could not connect to the D-Bus
+# disabled everything as old meson doesn't have exclude flag
+make_check=no
+
+pre_configure() {
+	export CXXFLAGS="${CXXFLAGS} -Wno-error=non-virtual-dtor"
+}
+
+post_install() {
+	vinstall ${FILESDIR}/openvpn3.rule 644 etc/repkg/rules/system
+	vinstall ${FILESDIR}/sysusers-openvpn3.conf 644 usr/lib/sysusers.d/openvpn3.conf
+	vlicense COPYRIGHT.md
+}

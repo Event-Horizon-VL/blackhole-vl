@@ -1,11 +1,11 @@
 # Template file for 'hyprland-qt-support'
 pkgname=hyprland-qt-support
 version=0.1.0
-revision=2
+revision=5
 build_style=cmake
 configure_args="-DINSTALL_QML_PREFIX=/lib/qt6/qml"
 hostmakedepends="pkgconf qt6-base qt6-declarative-devel"
-makedepends="hyprlang qt6-base-devel qt6-declarative-devel"
+makedepends="hyprlang qt6-base-devel qt6-declarative-devel qt6-declarative-private-devel"
 short_desc="QML style provider for Hypr* QT apps"
 maintainer="Nizarjh <chel773@tutamail.com>"
 license="BSD-3-Clause"

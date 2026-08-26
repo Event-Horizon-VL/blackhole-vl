@@ -1,0 +1,22 @@
+# Template file for 'tide-island'
+pkgname=tide-island
+version=1.0.35
+revision=1
+build_style=cmake
+build_helper=qemu
+hostmakedepends="ninja pkg-config dbus qt6-base qt6-tools qt6-declarative-host-tools"
+makedepends="qt6-base-private-devel qt6-declarative-devel qt6-wayland-devel qt6-connectivity-devel
+ qt6-svg-devel pipewire-devel wireplumber-devel eudev-libudev-devel"
+depends="quickshell dbus brightnessctl upower bluez libpulseaudio"
+short_desc="Dynamic island for Hyprland and Niri using Quickshell"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/enhaoswen/Tide-island"
+distfiles="https://github.com/enhaoswen/Tide-island/archive/refs/tags/${version}.tar.gz"
+checksum=b57f6ae11b44336c2e49a262e206974cccb12a8ea73e6766f23505e70e2b9ce7
+
+post_install() {
+	mv ${DESTDIR}/usr/share/tide-island/bin/lyricsmpris ${DESTDIR}/usr/bin/
+	rm -f ${DESTDIR}/usr/lib/qt6/qml/TideIsland/tide-island-config-app_qml_module_dir_map.qrc
+	vdoc ${FILESDIR}/README.voidlinux
+}
