@@ -1,0 +1,22 @@
+PortProtonQt has the following optional dependencies:
+- exiftool: Reads file metadata
+- mesa-demos: Detects 3D graphics drivers and system capabilities
+- pciutils: Detects exact graphics card model
+- unrar: Extracts RAR archives
+- unzip: Extracts ZIP archives
+- qt6-imageformat: For animated (GIF, WebM) covers
+- qt6-multimedia: Allows playing interface sounds
+
+For unrar you need nonfree-repo:
+# xbps-install -S void-repo-nonfree
+
+# xbps-install -S exiftool mesa-demos pciutils unrar unzip qt6-imageformat qt6-multimedia
+
+For correct work system manager (ppqtos) you need:
+- NetworkManager: System tab network management
+- bluez: System tab bluetooth management
+- upower: System tab bluetooth battery level
+- libpulseaudio: System tab audio volume/output management
+- python3-qrcode: Wi-Fi QR code generation
+
+# xbps-install -S NetworkManager bluez upower libpulseaudio python3-qrcode 
