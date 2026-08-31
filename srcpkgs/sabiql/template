@@ -1,15 +1,16 @@
 # Template file for 'sabiql'
 pkgname=sabiql
-version=2.0.0
+version=2.0.1
 revision=1
 build_style=cargo
+checkdepends="sqlite"
 short_desc="Driver-less TUI to browse, query, and edit PostgreSQL databases"
 maintainer="Kirilla39 <kirill39.pesin@ya.ru>"
 license="MIT"
 homepage="https://github.com/riii111/sabiql/"
 changelog="https://github.com/riii111/sabiql/releases"
 distfiles="https://github.com/riii111/sabiql/archive/v${version}.tar.gz"
-checksum=148f412dfe1233f2128dd08ef11aef43f90b9a088e6d3477683074b234e54f7c
+checksum=6e0fe05a98f0f7f7e1391894ec0600c36a2218195ed90b80db52bf1e7640c858
 
 post_install() {
 	vlicense LICENSE
