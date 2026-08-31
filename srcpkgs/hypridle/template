@@ -1,11 +1,11 @@
 # Template file for 'hypridle'
 pkgname=hypridle
 version=0.1.7
-revision=7
+revision=6
 build_style=cmake
 configure_args="-DNO_SYSTEMD:BOOL=true"
 hostmakedepends="cmake hyprwayland-scanner pkgconf"
-makedepends="elogind-devel hyprlang hyprland-protocols sdbus-c++-devel wayland-devel 
+makedepends="elogind-devel hyprlang hyprland-protocols sdbus-cpp wayland-devel 
  wayland-protocols"
 short_desc="Hyprland's idle daemon"
 maintainer="Nizarjh <chel773@tutamail.com>"

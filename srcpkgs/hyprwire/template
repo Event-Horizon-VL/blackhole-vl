@@ -1,7 +1,7 @@
 # Template file for 'hyprwire'
 pkgname=hyprwire
 version=0.3.1
-revision=2
+revision=1
 build_style=cmake
 configure_args="-DBUILD_TESTING:BOOL=OFF"
 hostmakedepends="pkgconf pugixml-devel"

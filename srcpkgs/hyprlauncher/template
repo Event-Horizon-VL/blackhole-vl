@@ -1,7 +1,7 @@
 # Template file for 'hyprlauncher'
 pkgname=hyprlauncher
 version=0.1.6
-revision=2
+revision=1
 build_style=cmake
 hostmakedepends="hyprwire pkgconf"
 makedepends="hyprutils hyprwire hyprlang hyprtoolkit wayland-devel pixman-devel libdrm-devel
