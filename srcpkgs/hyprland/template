@@ -1,9 +1,11 @@
 # Template file for 'hyprland'
 pkgname=hyprland
 version=0.56.2
-revision=1
+revision=2
 build_style=cmake
-configure_args="-DNO_SYSTEMD:BOOL=true -Dglaze_DIR:PATH=/usr/share/glaze"
+configure_args="-DNO_SYSTEMD:BOOL=true \
+ -Dglaze_DIR:PATH=/usr/share/glaze \
+ -DCMAKE_EXE_LINKER_FLAGS=-Wl,--exclude-libs,liblua.a"
 hostmakedepends="cmake cpio glslang hyprwayland-scanner hyprwire jq pkgconf python3 xxd"
 makedepends="aquamarine cairo-devel glaze glslang-devel hwids hyprcursor
  hyprgraphics hyprlang hyprutils hyprwire lcms2-devel libdisplay-info-devel libdrm-devel
@@ -48,7 +50,7 @@ post_install() {
 }
 
 hyprland-devel_package() {
-	depends="hyprland>=${version}_${revision}"
+	depends="${sourcepkg}>=${version}_${revision} ${makedepends}"
 	short_desc="Dynamic tiling Wayland compositor - development files"
 	pkg_install() {
 		vmove usr/include
