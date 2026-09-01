@@ -3,7 +3,8 @@ case "$ACTION" in
 post)
 	# Hyprland does not work correctly with libinput plugins enabled.
 	# Disable them to prevent them from interfering with Hyprland.
-	if [ "$UPDATE" != "yes" ]; then
+	if [ -d /usr/lib64/libinput/plugins ] &&
+	   [ ! -e /usr/lib64/libinput/plugins.disabled ]; then
 		mv /usr/lib64/libinput/plugins \
 			/usr/lib64/libinput/plugins.disabled
 	fi
