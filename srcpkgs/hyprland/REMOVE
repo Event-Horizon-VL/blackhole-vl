@@ -1,13 +1,10 @@
 # REMOVE
 case "$ACTION" in
 pre)
-	# Only if not updating
-	if [ "$UPDATE" != "yes" ]; then
-		if [ -d /usr/lib64/libinput/plugins.disabled ] &&
-		   [ ! -e /usr/lib64/libinput/plugins ]; then
-			mv /usr/lib64/libinput/plugins.disabled \
-				/usr/lib64/libinput/plugins
-		fi
+	if [ -d /usr/lib64/libinput/plugins.disabled ] &&
+	   [ ! -e /usr/lib64/libinput/plugins ]; then
+		mv /usr/lib64/libinput/plugins.disabled \
+			/usr/lib64/libinput/plugins
 	fi
 	;;
 esac
