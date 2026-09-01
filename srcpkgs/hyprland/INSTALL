@@ -1,0 +1,11 @@
+# INSTALL
+case "$ACTION" in
+post)
+	# Hyprland does not work correctly with libinput plugins enabled.
+	# Disable them to prevent them from interfering with Hyprland.
+	if [ "$UPDATE" != "yes" ]; then
+		mv /usr/lib64/libinput/plugins \
+			/usr/lib64/libinput/plugins.disabled
+	fi
+	;;
+esac

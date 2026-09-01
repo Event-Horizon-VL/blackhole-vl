@@ -1,11 +1,10 @@
 # Template file for 'hyprland'
 pkgname=hyprland
 version=0.56.2
-revision=2
+revision=3
 build_style=cmake
 configure_args="-DNO_SYSTEMD:BOOL=true \
- -Dglaze_DIR:PATH=/usr/share/glaze \
- -DCMAKE_EXE_LINKER_FLAGS=-Wl,--exclude-libs,liblua.a"
+ -Dglaze_DIR:PATH=/usr/share/glaze"
 hostmakedepends="cmake cpio glslang hyprwayland-scanner hyprwire jq pkgconf python3 xxd"
 makedepends="aquamarine cairo-devel glaze glslang-devel hwids hyprcursor
  hyprgraphics hyprlang hyprutils hyprwire lcms2-devel libdisplay-info-devel libdrm-devel
