@@ -1,6 +1,6 @@
 # Template file for 'hyprmoncfg'
 pkgname=hyprmoncfg
-version=1.16.1
+version=1.17.0
 revision=1
 build_style=go
 go_import_path=github.com/crmne/hyprmoncfg
@@ -11,7 +11,7 @@ maintainer="Kirilla39 <kirill39.pesin@ya.ru>"
 license="MIT"
 homepage="https://github.com/crmne/hyprmoncfg/"
 distfiles="https://github.com/crmne/hyprmoncfg/archive/v${version}.tar.gz"
-checksum=af2c1255412b15212b1aad976e7845d1f25efcac86ecc7e45c38973f9a6dbe20
+checksum=add174cb0c3a31b9594fd2c04af549d0f32b339067eb17dd6a137d01bd8c5001
 
 post_install() {
 	vlicense LICENSE
