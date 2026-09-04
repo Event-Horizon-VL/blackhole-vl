@@ -1,0 +1,24 @@
+# Template file for 'posting'
+pkgname=posting
+version=2.10.0
+revision=1
+build_style=python3-pep517
+# test_snapshots.py requires pytest-textual-snapshot (not in Void repo)
+make_check_args="--ignore=tests/test_snapshots.py"
+hostmakedepends="python3-build python3-installer hatchling"
+depends="python3-click python3-click-default-group python3-xdg-base-dirs
+ python3-httpx python3-pyperclip python3-pydantic python3-pydantic-settings
+ python3-yaml python3-dotenv python3-watchfiles python3-textual python3-textual-autocomplete python3-rich
+ python3-typing_extensions python3-openapi-pydantic"
+checkdepends="python3-pytest $depends"
+short_desc="Modern API client that lives in your terminal"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="MIT"
+homepage="https://github.com/darrenburns/posting"
+changelog="https://github.com/darrenburns/posting/releases/tag/${version}"
+distfiles="https://github.com/darrenburns/posting/archive/refs/tags/${version}/${pkgname}-${version}.tar.gz"
+checksum=4dab923cc9bd374f5b3d54a9f4d4d9e712c3854df6be192d407e34b77da99653
+
+post_install() {
+	vlicense LICENSE
+}
