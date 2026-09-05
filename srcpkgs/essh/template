@@ -1,0 +1,20 @@
+# Template file for 'essh'
+pkgname=essh
+version=0.2.8
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config nasm"
+makedepends="sqlite-devel"
+depends="openssh"
+checkdepends="python3 ${depends}"
+short_desc="Enhanced SSH client with TUI"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="MIT"
+homepage="https://www.netwatchlabs.com"
+distfiles="https://github.com/matthart1983/essh/archive/refs/tags/v${version}.tar.gz"
+checksum=3706fa416512ce3ffeedfcb5dfe091b17e5c241cdfc50472d3506661038dd2a0
+
+post_install() {
+	vdoc README.md
+	vlicense LICENSE
+}

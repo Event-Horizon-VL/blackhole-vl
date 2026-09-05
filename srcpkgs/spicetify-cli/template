@@ -1,6 +1,6 @@
 # Template file for 'spicetify-cli'
 pkgname=spicetify-cli
-version=2.43.2
+version=2.44.0
 revision=1
 build_style=go
 go_import_path="github.com/spicetify/cli"
@@ -12,7 +12,7 @@ license="LGPL-2.1-or-later"
 homepage="https://github.com/spicetify/cli"
 changelog="https://github.com/spicetify/cli/releases/tag/v${version}"
 distfiles="https://github.com/spicetify/cli/archive/v${version}.tar.gz"
-checksum=3debce8af8e071ff9ec75b6a8a296bbd0bb5963151721b0ad2723660b64f65c5
+checksum=aafdfceeae5ff926ffe27bf3808cd4228e3a2725f7f3539531f4f5c0ac98962d
 
 do_install() {
 	local _bin="$(find ${GOPATH}/bin -name cli -type f | head -n1)"
