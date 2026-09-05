@@ -1,0 +1,22 @@
+# Template file for 'asdf'
+pkgname=asdf
+version=0.20.0
+revision=1
+archs="x86_64 aarch64 x86_64-musl aarch64-musl"
+build_style=go
+make_check=no
+go_import_path="github.com/asdf-vm/asdf"
+go_package="github.com/asdf-vm/asdf/cmd/asdf"
+short_desc="Extendable version manager"
+maintainer="LINUXHUNTERREDHAT <soyu7658@gmail.com>"
+license="MIT"
+homepage="https://github.com/asdf-vm/asdf/"
+distfiles="https://github.com/asdf-vm/asdf/archive/refs/tags/v${version}.tar.gz"
+checksum=49f47b5b5255c6f29384f7d403d6c27bae9ce9944a4ff9334c67987d4b6c97b4
+
+post_install() {
+	vinstall internal/completions/asdf.bash 644 usr/share/bash-completion/completions asdf
+	vinstall internal/completions/asdf.fish 644 usr/share/fish/vendor_completions.d asdf.fish
+	vinstall internal/completions/asdf.zsh 644 usr/share/zsh/site-functions _asdf
+	vlicense LICENSE
+}
