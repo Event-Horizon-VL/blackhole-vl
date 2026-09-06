@@ -1,0 +1,15 @@
+# Template file for 'amneziawg-headers'
+pkgname=amneziawg-headers
+version=1.0.20260329
+revision=1
+short_desc="AmneziaWG UAPI kernel headers (linux/wireguard.h)"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="GPL-2.0-only"
+homepage="https://github.com/amnezia-vpn/amneziawg-linux-kernel-module"
+distfiles="https://github.com/amnezia-vpn/amneziawg-linux-kernel-module/archive/refs/tags/v${version}.tar.gz"
+checksum=9bc6779711559a298f7c8ec1f5ca33ea151166f409b748cd761866a05b4bd39f
+
+do_install() {
+    vmkdir usr/include/linux
+    vinstall src/uapi/wireguard.h 644 usr/include/linux
+}

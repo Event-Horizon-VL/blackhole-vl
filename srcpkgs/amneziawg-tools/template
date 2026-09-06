@@ -1,0 +1,34 @@
+# Template file for 'amneziawg-tools'
+pkgname=amneziawg-tools
+version=1.0.20260223
+revision=1
+build_wrksrc="src"
+build_style=gnu-makefile
+makedepends="libmnl-devel amneziawg-headers"
+depends="openresolv"
+short_desc="AmneziaWG userspace tools (awg, awg-quick)"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="GPL-2.0-only"
+homepage="https://github.com/amnezia-vpn/amneziawg-tools"
+distfiles="https://github.com/amnezia-vpn/amneziawg-tools/archive/refs/tags/v${version}.tar.gz"
+checksum=ab09cfafe6c1e9a6260964a8ba5cb2d657cc23862eb0c29253305e532ac40a16
+make_dirs="/etc/wireguard 0700 root root"
+
+do_build() {
+    make CC="$CC" \
+         RUNSTATEDIR=/run
+}
+
+do_install() {
+    make DESTDIR="$DESTDIR" \
+         BINDIR=/usr/bin \
+         MANDIR=/usr/share/man \
+         RUNSTATEDIR=/run \
+         WITH_BASHCOMPLETION=yes \
+         WITH_WGQUICK=yes \
+         install
+}
+
+post_install() {
+    vlicense ${wrksrc}/COPYING
+}
