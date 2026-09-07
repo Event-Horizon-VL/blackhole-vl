@@ -1,0 +1,14 @@
+# Template file for 'cassette'
+pkgname=cassette
+version=0.2.4
+revision=1
+build_style=meson
+hostmakedepends="blueprint-compiler vala pkg-config gettext-devel glib-devel gtk4-devel libadwaita-devel"
+makedepends="libadwaita-devel libsoup3-devel libgee-devel libwebkitgtk60-devel"
+depends="hicolor-icon-theme libadwaita cairo gdk-pixbuf libgee glib gstreamer1 gtk4 json-glib libsoup3 sqlite libwebkitgtk60 libxml2 gst-plugins-good1"
+short_desc="Unofficial Yandex Music client"
+maintainer="LINUXHUNTERREDHAT <soyu7658@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://altlinux.space/rirusha/Cassette"
+distfiles="https://altlinux.space/rirusha/Cassette/releases/download/v${version}/Cassette-${version}.tar.zst"
+checksum=5c829f6be16bb7cf93d4846b3ffbd05f8bf5c2fd7aae41c8aa85f3155d089cc5
