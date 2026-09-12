@@ -1,0 +1,7 @@
+Optional dependencies:
+
+* `graphviz` required for PostgreSQL and MySQL ER diagrams
+* `postgresql-client` to use with PostgreSQL
+* `mysql` to use with MySQL
+* `sqlite` to use with SQLite
+
