@@ -1,0 +1,86 @@
+# Template file for 'vscodium'
+pkgname=vscodium
+version=1.135.06055
+revision=1
+_electronver=35.7.2
+_npmver=10.8.3
+hostmakedepends="pkg-config python3 python3-setuptools nodejs tar git ripgrep"
+makedepends="libxkbfile-devel libsecret-devel libxml2-devel mit-krb5-devel nodejs-devel ncurses-devel electron${_electronver%%.*}-devel
+  jq-devel"
+depends="libXtst ncurses nss xdg-utils ripgrep electron${_electronver%%.*}"
+short_desc="Free/libre build of Visual Studio Code"
+maintainer="Nizarjh <chel773@tutamail.com>"
+license="MIT"
+homepage="https://vscodium.com/"
+distfiles="https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${version}-src.tar.gz"
+checksum=73639a55ea72bb57f0134bf2d5228cc2f70e869a95fa7919a4da2c14c72dac74
+nocross=yes # x64 build does not cut it, it contains native code
+
+if [ "$XBPS_TARGET_WORDSIZE" = "32" ]; then
+	broken="FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed - JavaScript heap out of memory"
+fi
+
+# avoid downloading electron binaries for target platform; we use
+# the system electron, and downloading does not work for all archs
+export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+
+do_configure() {
+	# Disable CLI (tunnel app)
+	# error with target x86_64-unknown-linux-musl
+	vsed -i 's|. ../build_cli.sh||g' build.sh
+}
+
+do_build() {
+	# Export necessary environment variables
+	export SHOULD_BUILD=yes
+	export SHOULD_BUILD_REH=no
+	export SHOULD_BUILD_REH_WEB=no
+	export CI_BUILD=no
+	export OS_NAME=linux
+	export VSCODE_ARCH=x64
+	export VSCODE_QUALITY=stable
+	export RELEASE_VERSION="${version}"
+	export DISABLE_UPDATE=yes
+
+	HOME="$wrksrc" ./get_repo.sh
+	HOME="$wrksrc" ./build.sh
+}
+
+do_install() {
+	# Application
+	vmkdir usr/lib/${pkgname}
+	vcopy ../VSCode-linux-x64/resources/app usr/lib/${pkgname}/resources
+
+	# Replace bundled ripgrep with system copy
+	ln -sf /usr/bin/rg \
+		${DESTDIR}/usr/lib/${pkgname}/resources/app/node_modules/@vscode/ripgrep/bin/rg
+
+	# Launcher
+	vmkdir usr/bin
+	vinstall "${FILESDIR}/codium" 0755 usr/bin
+	ln -sf codium ${DESTDIR}/usr/bin/vscodium
+
+	# Desktop
+	vmkdir usr/share/applications
+	ln -sf /usr/lib/${pkgname}/resources/app/resources/linux/code.desktop \
+		${DESTDIR}/usr/share/applications/${pkgname}.desktop
+
+	# Icon
+	vmkdir usr/share/pixmaps
+	ln -sf /usr/lib/${pkgname}/resources/app/resources/linux/code.png \
+		${DESTDIR}/usr/share/pixmaps/${pkgname}.png
+
+	# Zsh completion
+	vmkdir usr/share/zsh/site-functions
+	ln -sf /usr/lib/${pkgname}/resources/completions/zsh/_codium \
+		${DESTDIR}/usr/share/zsh/site-functions/_codium
+
+	# Bash completion
+	vmkdir usr/share/bash-completion/completions
+	ln -sf /usr/lib/${pkgname}/resources/completions/bash/codium \
+		${DESTDIR}/usr/share/bash-completion/completions/codium
+
+	vlicense LICENSE.txt
+
+	chmod -R o-w ${DESTDIR}/usr/lib/${pkgname}/resources/app
+}
