@@ -1,7 +1,7 @@
 # Template file for 'tide-island'
 pkgname=tide-island
 version=1.0.35
-revision=1
+revision=2
 build_style=cmake
 build_helper=qemu
 hostmakedepends="ninja pkg-config dbus qt6-base qt6-tools qt6-declarative-host-tools"
