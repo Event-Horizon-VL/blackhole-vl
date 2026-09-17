@@ -1,0 +1,21 @@
+This package was ported from the Arch Linux AUR: https://aur.archlinux.org/packages/qt6ct-kde
+
+This patchset contains multiple fixes/features in comparison to vanilla qt6ct:
+ - KDE color schemes support
+ - KDE QML applications theming support
+ - KDE's icon engine is used, fixing monochrome icons colors (problems with e.g. Adapta Kvantum theme on KDE applications toolbars, like dolphin, they're grey when should be white)
+
+It's important to set a KDE color scheme (marked as (KColorScheme) in the list) for proper theming of KDE apps.
+
+Additionally, if one wants KDE dialogs, this could be reached either with plasma-integration or xdg-desktop-portal (both work with vanilla qt6ct, too).
+
+To get them with plasma-integration:
+ - Install plasma-integration
+ - Choose KDE as standard dialogs in qt6ct configurator
+
+To get them with xdg-desktop-portal-kde:
+ - Install xdg-desktop-portal + xdg-desktop-portal-kde
+ - Configure xdg-desktop-portal's FileChooser to kde, see `man 5 portals.conf`
+ - Ensure that session dbus instance is running correctly
+ - Choose XDG Desktop Portal as standard dialogs in qt6ct configurator
+
