@@ -1,0 +1,46 @@
+--- a/src/python/session-watcher/meson.build	2026-02-04 17:02:15.000000000 +0400
++++ b/src/python/session-watcher/meson.build	2026-05-28 17:17:02.383061050 +0400
+@@ -5,26 +5,30 @@
+ #  Copyright (C) 2025-  OpenVPN Inc <sales@openvpn.net>
+ #  Copyright (C) 2025-  David Sommerseth <davids@openvpn.net>
+ 
+-
+ systemd_cfg = configuration_data({
+         'BINDIR': get_option('prefix') / get_option('bindir')
+     }
+ )
+ 
+-systemd_service_cfg = dependency('systemd')
++# Optional on non-systemd systems (e.g. Void Linux)
++systemd_service_cfg = dependency('systemd', required: false)
+ 
+-systemd_user_unit_dir = get_option('systemd_user_unit_dir')
+-if systemd_user_unit_dir == ''
+-  systemd_user_unit_dir = systemd_service_cfg.get_variable('systemduserunitdir')
+-endif
++if systemd_service_cfg.found()
+ 
+-configure_file(
+-    input: 'openvpn3-desktop-session-watcher.service.in',
+-    output: 'openvpn3-desktop-session-watcher.service',
+-    configuration: systemd_cfg,
+-    install: true,
+-    install_dir: systemd_user_unit_dir,
+-)
++    systemd_user_unit_dir = get_option('systemd_user_unit_dir')
++    if systemd_user_unit_dir == ''
++      systemd_user_unit_dir = systemd_service_cfg.get_variable('systemduserunitdir')
++    endif
++
++    configure_file(
++        input: 'openvpn3-desktop-session-watcher.service.in',
++        output: 'openvpn3-desktop-session-watcher.service',
++        configuration: systemd_cfg,
++        install: true,
++        install_dir: systemd_user_unit_dir,
++    )
++
++endif
+ 
+ custom_target('openvpn3-desktop-session-watcher',
+     input: 'openvpn3-desktop-session-watcher.py',

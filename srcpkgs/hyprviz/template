@@ -1,0 +1,22 @@
+# Template file for 'hyprviz'
+pkgname=hyprviz
+version=0.9.0
+revision=1
+build_style=cargo
+hostmakedepends="pkgconf glib-devel"
+makedepends="gdk-pixbuf-devel cairo-devel pango-devel gtk4-devel"
+depends="hyprland gtk4 desktop-file-utils"
+short_desc="GUI for configuring Hyprland"
+maintainer="Nizarjh <chel773@tutamail.com>"
+license="GPL-2.0"
+homepage="https://github.com/timasoft/hyprviz"
+changelog="https://github.com/timasoft/hyprviz/releases"
+distfiles="https://github.com/timasoft/hyprviz/archive/refs/tags/v${version}.tar.gz"
+checksum=d1817d067b1015d2a7e18712b4a689f9ec351b80189b449684c61762fa461d3b
+
+post_install(){
+	vlicense LICENSE
+	vinstall assets/hyprviz.desktop 644 usr/share/applications
+	vinstall assets/hyprviz.svg 644 usr/share/icons/hicolor/scalable/apps
+	vinstall assets/hyprviz.png 644 usr/share/icons/hicolor/512x512/apps
+}

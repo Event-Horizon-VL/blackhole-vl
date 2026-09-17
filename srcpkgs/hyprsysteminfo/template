@@ -1,7 +1,7 @@
 # Template file for 'hyprsysteminfo'
 pkgname=hyprsysteminfo
 version=0.2.0
-revision=2
+revision=3
 build_style=cmake
 hostmakedepends="pkgconf qt6-base qt6-declarative-devel xxd"
 makedepends="hyprland-qt-support hyprutils qt6-base-devel qt6-base-private-devel

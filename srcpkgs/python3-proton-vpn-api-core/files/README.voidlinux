@@ -1,0 +1,4 @@
+Optional dependencies:
+
+* `network-manager-applet` password prompt on Gnome and other GTK DEs
+* `plasma-nm` password prompt on KDE Plasma

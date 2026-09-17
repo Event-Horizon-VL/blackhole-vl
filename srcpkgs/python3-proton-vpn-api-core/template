@@ -1,0 +1,19 @@
+# Template file for 'python3-proton-vpn-api-core'
+pkgname=python3-proton-vpn-api-core
+version=5.2.5
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-build python3-installer python3-setuptools python3-wheel python3-packaging-bootstrap"
+depends="NetworkManager-openvpn libnm python3 python3-cryptography python3-distro python3-Jinja2 python3-proton-core
+ python3-proton-vpn-local-agent python3-cairo python3-gobject python3-pynacl python3-packaging python3-sentry python3-fido2"
+checkdepends="python3-pytest python3-pytest-cov python3-proton-vpn-api-core"
+short_desc="Facade API for Proton VPN services"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/ProtonVPN/python-proton-vpn-api-core"
+distfiles="https://github.com/ProtonVPN/python-proton-vpn-api-core/archive/refs/tags/v${version}.tar.gz"
+checksum=5724b974c299736954105ae19fc497e724c71345e9e27708e389209bae02c322
+
+post_install() {
+	vdoc ${FILESDIR}/README.voidlinux
+}

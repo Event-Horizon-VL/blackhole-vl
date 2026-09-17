@@ -1,17 +1,16 @@
 # Template file for 'aquamarine'
 pkgname=aquamarine
-version=0.12.1
+version=0.15.0
 revision=1
 build_style=cmake
-configure_args="-DCMAKE_BUILD_TYPE:STRING=Release"
 hostmakedepends="hyprwayland-scanner pkgconf"
 makedepends="hwids hyprutils libdisplay-info-devel libinput-devel
  libseat-devel MesaLib-devel pixman-devel wayland-devel wayland-protocols"
 short_desc="Aquamarine is a very light linux rendering backend library"
 maintainer="Nizarjh <chel773@tutamail.com>"
 license="LGPL-3.0-only"
-homepage="https://hyprland.org/hyprlang/index.html"
+homepage="https://github.com/hyprwm/aquamarine"
 changelog="https://github.com/hyprwm/aquamarine/releases"
 distfiles="https://github.com/hyprwm/aquamarine/archive/refs/tags/v${version}.tar.gz"
-checksum=80120257c983e18dec78c4df03246931b1bca1e44e50fb41ca21bad772479bd9
+checksum=bb5323f58cd2f379cb11c39893336e49980fe2e9fb101745addd87cebde3d13d
 make_check=no # cant run in sandbox

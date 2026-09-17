@@ -1,0 +1,28 @@
+# Template file for 'PineconeMC'
+pkgname=PineconeMC
+version=11.0.3
+revision=1
+build_style=cmake
+configure_args="-DLauncher_BUILD_PLATFORM=Void"
+hostmakedepends="extra-cmake-modules openjdk8 pkg-config qt6-tools qt6-base scdoc Vulkan-Headers"
+makedepends="qt6-base-devel qt6-networkauth-devel cmark-devel libgamemode-devel qrencode-devel
+ zlib-devel libarchive-devel libglvnd-devel tomlplusplus-devel pciutils-devel"
+depends="virtual?java-runtime mesa-dri qt6-imageformats qt6-svg hicolor-icon-theme"
+short_desc="Prism Launcher fork with Ely.by accounts support (ElyPrismLauncher)"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/ElyPrismLauncher/Launcher"
+distfiles="https://github.com/ElyPrismLauncher/Launcher/releases/download/${version}/PineconeMC-${version}.tar.gz"
+checksum=635bb2eafe26589577b649b9b3201d6ed10f7a28acec707d883fee9ed5b0e296
+
+if [ -z "$XBPS_CHECK_PKGS" ]; then
+	configure_args+=" -DBUILD_TESTING=0"
+fi
+
+pre_configure() {
+	. /etc/profile.d/jdk.sh
+}
+
+post_install() {
+	vdoc ${FILESDIR}/README.voidlinux
+}

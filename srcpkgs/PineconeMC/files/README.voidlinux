@@ -1,0 +1,6 @@
+Optional dependencies:
+
+* `glfw` to use system GLFW libraries
+* `libopenal` to use system OpenAL libraries
+* `xrandr` for older minecraft versions
+* `flite` minecraft voice narration

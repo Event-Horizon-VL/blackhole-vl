@@ -1,6 +1,6 @@
 --- a/hyprctl/src/main.cpp
 +++ b/hyprctl/src/main.cpp
-@@ -271,7 +271,7 @@
+@@ -296,7 +296,7 @@
      sockaddr_un serverAddress = {0};
      serverAddress.sun_family  = AF_UNIX;
  
@@ -11,7 +11,8 @@
  
 --- a/src/config/shared/parserUtils/ParserUtils.cpp
 +++ b/src/config/shared/parserUtils/ParserUtils.cpp
-@@ -14,7 +14,7 @@ using namespace Hyprutils::String;
+@@ -14,7 +14,7 @@
+ using namespace Hyprutils::String;
  
  static std::expected<uint64_t, std::string> parseHex(std::string_view value) {
 -    auto res = value.starts_with("0x") ? strToNumber<uint64_t>(value) : strToNumber<uint64_t>(std::string{"0x"} + value);

@@ -1,0 +1,19 @@
+# Template file for 'livediff'
+pkgname=livediff
+version=3.2.0
+revision=1
+build_style=cargo
+checkdepends="git"
+short_desc="Real-time file monitoring with beautiful, pulsing TUI diff visualization"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="MIT OR Apache-2.0"
+homepage="https://socket7.github.io/Livediff"
+changelog="https://raw.githubusercontent.com/SoCkEt7/Livediff/refs/heads/main/CHANGELOG.md"
+distfiles="https://github.com/SoCkEt7/Livediff/archive/refs/tags/v${version}.tar.gz"
+checksum=a813b9df67351cb4e401cdd6d483b907ad590f345a94fdd876e1c46e998df16e
+
+post_install() {
+	vdoc README.md
+	vdoc docs/use-cases.md USE-CASES.md
+	vlicense LICENSE-MIT
+}

@@ -1,0 +1,21 @@
+# Template file for 'proton-vpn-gtk-app'
+pkgname=proton-vpn-gtk-app
+version=4.16.5
+revision=2
+build_style=python3-pep517
+hostmakedepends="python3-build python3-installer python3-setuptools python3-wheel"
+depends="gdk-pixbuf gtk4 libnotify pango python3-cairo python3-distro python3-gobject python3-dbus
+ python3-bcc python3-packaging python3-requests python3-proton-core python3-proton-keyring-linux
+ python3-proton-vpn-api-core python3-proton-vpn-local-agent proton-vpn-daemon"
+short_desc="Community-maintained ProtonVPN GTK application"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/ProtonVPN/proton-vpn-gtk-app"
+distfiles="https://github.com/ProtonVPN/proton-vpn-gtk-app/archive/refs/tags/v${version}.tar.gz"
+checksum=6d106a38befd51e045cfb8abdf4c5c8d249021038092d6a9cb1d81ad555f9ee6
+
+post_install() {
+	vinstall rpmbuild/SOURCES/proton.vpn.app.gtk.desktop 644 usr/share/applications
+	vinstall rpmbuild/SOURCES/proton-vpn-logo.svg 644 usr/share/icons/hicolor/scalable/apps
+	vinstall proton/vpn/app/gtk/assets/icons/proton-vpn-sign.svg 644 usr/share/icons/hicolor/scalable/apps
+}

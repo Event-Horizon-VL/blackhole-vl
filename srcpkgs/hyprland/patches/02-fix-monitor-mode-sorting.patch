@@ -1,6 +1,6 @@
---- a/src/helpers/Monitor.cpp
-+++ b/src/helpers/Monitor.cpp
-@@ -632,7 +632,9 @@
+--- a/src/output/Monitor.cpp
++++ b/src/output/Monitor.cpp
+@@ -761,7 +761,9 @@
          std::ranges::sort(sortedModes, sortFunc);
          if (sortedModes.size() > 3)
              sortedModes.erase(sortedModes.begin() + 3, sortedModes.end());
@@ -9,5 +9,5 @@
 +        for (auto& mode : reversedModes)
 +            requestedModes.push_back(mode);
      };
-
+ 
      // last fallback is always preferred mode

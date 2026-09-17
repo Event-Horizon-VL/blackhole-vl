@@ -1,0 +1,24 @@
+diff --git a/src/utils/HyprlandIPC.cpp b/src/utils/HyprlandIPC.cpp
+index 5074772..dceb23a 100644
+--- a/src/utils/HyprlandIPC.cpp
++++ b/src/utils/HyprlandIPC.cpp
+@@ -10,6 +10,7 @@
+ #include <format>
+ 
+ #include <hyprutils/memory/Casts.hpp>
++#include <cstring>
+ 
+ using namespace Hyprutils::Memory;
+ 
+diff --git a/src/utils/SystemInfo.cpp b/src/utils/SystemInfo.cpp
+index 99eb112..8d7db99 100644
+--- a/src/utils/SystemInfo.cpp
++++ b/src/utils/SystemInfo.cpp
+@@ -17,7 +17,6 @@
+ #include <pwd.h>
+ #include <sys/types.h>
+ #include <sys/sysinfo.h>
+-#include <linux/sysinfo.h>
+ #include <unistd.h>
+ #include <glob.h>
+ #include <pci/pci.h>
