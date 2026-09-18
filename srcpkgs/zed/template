@@ -1,0 +1,19 @@
+# Template file for 'zed'
+pkgname=zed
+version=1.20.2
+revision=1
+archs="x86_64* aarch64*"
+build_style=cargo
+hostmakedepends="rust gcc pkg-config cmake unzip Vulkan-ValidationLayers"
+makedepends="fontconfig-devel libxkbcommon-devel libX11-devel libxcb-devel libzstd-devel glib-devel openssl-devel vulkan-loader-devel zlib-devel alsa-lib-devel wayland-devel"
+short_desc="High-performance, multiplayer code editor"
+maintainer="LINUXHUNTERREDHAT <soyu7658@gmail.com>"
+license="GPL-3.0-or-later AND Apache-2.0"
+homepage="https://zed.dev/"
+distfiles="https://github.com/zed-industries/zed/archive/refs/tags/v${version}.tar.gz"
+checksum=497f190a21908e962df47a3f8095d0d67f67331bdf89992b198adc58458b469e
+
+post_install() {
+	vlicense LICENSE-APACHE
+	vlicense LICENSE-GPL
+}
