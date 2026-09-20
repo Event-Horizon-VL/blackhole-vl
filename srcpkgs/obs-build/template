@@ -1,6 +1,6 @@
 # Template file for 'obs-build'
 pkgname=obs-build
-version=20260901
+version=20260910
 revision=1
 build_style=gnu-makefile
 depends="perl"
@@ -9,4 +9,4 @@ maintainer="LINUXHUNTERREDHAT <soyu7658@gmail.com>"
 license="GPL-2.0-or-later"
 homepage="https://github.com/openSUSE/obs-build"
 distfiles="https://github.com/openSUSE/obs-build/archive/refs/tags/${version}.tar.gz"
-checksum=921556c0c17bf0f2aae031636c64ff1da8b32e012f142cb056ca61ccdbc22ce0
+checksum=e0fb5df9805a2e217fea92c03c65f9f65f5f6884ac5f470e6c79254f41d6d498
