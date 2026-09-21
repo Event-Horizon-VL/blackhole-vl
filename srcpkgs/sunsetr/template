@@ -1,6 +1,6 @@
 # Template file for 'sunsetr'
 pkgname=sunsetr
-version=0.12.3
+version=0.12.5
 revision=1
 build_style=cargo
 hostmakedepends="pkg-config"
@@ -11,7 +11,7 @@ license="MIT"
 homepage="https://github.com/psi4j/sunsetr"
 changelog="https://raw.githubusercontent.com/psi4j/sunsetr/refs/heads/main/docs/src/changelog.md"
 distfiles="https://github.com/psi4j/sunsetr/archive/refs/tags/v${version}.tar.gz"
-checksum=1b9425820ba52a26d68837ab2cc8030c0b5981b590cc13ff08c4ac0c854018b6
+checksum=7362000dd0a58190cd4ff652843580341a2e865cec813b8b4b00d229f40a68a1
 
 post_install() {
 	vdoc README.md
