@@ -1,6 +1,6 @@
 # Template file for 'essh'
 pkgname=essh
-version=0.2.8
+version=0.4.1
 revision=1
 build_style=cargo
 hostmakedepends="pkg-config nasm"
@@ -12,7 +12,7 @@ maintainer="nerdyslacker <karyan40024@gmail.com>"
 license="MIT"
 homepage="https://www.netwatchlabs.com"
 distfiles="https://github.com/matthart1983/essh/archive/refs/tags/v${version}.tar.gz"
-checksum=3706fa416512ce3ffeedfcb5dfe091b17e5c241cdfc50472d3506661038dd2a0
+checksum=4e1e083fffacbfe88f819ac59ad23dc5729dd040436e9dafb0e6ed1e8af888e1
 
 post_install() {
 	vdoc README.md
