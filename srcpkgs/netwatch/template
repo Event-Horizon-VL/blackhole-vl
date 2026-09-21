@@ -1,8 +1,10 @@
 # Template file for 'netwatch'
 pkgname=netwatch
-version=0.28.1
+version=0.32.3
 revision=1
 build_style=cargo
+# procfs polling cannot reliably attribute test TCP connections to processes
+make_check_args="-- --skip controlled_polling_matrix_matches_independent_processes"
 hostmakedepends="pkg-config"
 makedepends="libpcap-devel"
 short_desc="Real-time network diagnostics in your terminal"
@@ -11,7 +13,7 @@ license="MIT"
 homepage="https://www.netwatchlabs.com"
 changelog="https://raw.githubusercontent.com/matthart1983/netwatch/refs/heads/main/CHANGELOG.md"
 distfiles="https://github.com/matthart1983/netwatch/archive/refs/tags/v${version}.tar.gz"
-checksum=db428f9a85b930a37da33e2bd3ff9dd13c867de3e222e70a20c29e2fd3d5378e
+checksum=f91dfa39c0cf0dd721d5f8ec82bac46666c3ec2be1eb234b00b7524bc58122ba
 
 post_install() {
 	vdoc README.md
