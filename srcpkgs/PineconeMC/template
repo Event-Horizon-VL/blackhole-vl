@@ -1,6 +1,6 @@
 # Template file for 'PineconeMC'
 pkgname=PineconeMC
-version=11.0.3
+version=11.1.0
 revision=1
 build_style=cmake
 configure_args="-DLauncher_BUILD_PLATFORM=Void"
@@ -13,7 +13,7 @@ maintainer="nerdyslacker <karyan40024@gmail.com>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/ElyPrismLauncher/Launcher"
 distfiles="https://github.com/ElyPrismLauncher/Launcher/releases/download/${version}/PineconeMC-${version}.tar.gz"
-checksum=635bb2eafe26589577b649b9b3201d6ed10f7a28acec707d883fee9ed5b0e296
+checksum=488b5880ab050d9bbd481154e639553d020b6996068d3b477889443c13807247
 
 if [ -z "$XBPS_CHECK_PKGS" ]; then
 	configure_args+=" -DBUILD_TESTING=0"
