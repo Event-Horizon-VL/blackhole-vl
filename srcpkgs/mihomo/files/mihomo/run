@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec 2>&1
+exec chpst -u _mihomo:_mihomo /usr/bin/mihomo -d /etc/mihomo
