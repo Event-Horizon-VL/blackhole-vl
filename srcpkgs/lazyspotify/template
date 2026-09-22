@@ -1,0 +1,21 @@
+# Template file for 'lazyspotify'
+pkgname=lazyspotify
+version=0.5.1
+revision=1
+build_style=go
+go_import_path="github.com/dubeyKartikay/lazyspotify"
+go_package="./cmd/lazyspotify"
+go_ldflags=" -X github.com/dubeyKartikay/lazyspotify/buildinfo.PackagedDaemonPath=/usr/lib/lazyspotify/lazyspotify-librespot"
+depends="alsa-lib flac libogg libvorbis lazyspotify-librespot"
+short_desc="Terminal Spotify client"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="MIT"
+homepage="https://dubeykartikay.github.io/lazyspotify"
+changelog="https://github.com/dubeyKartikay/lazyspotify/releases"
+distfiles="https://github.com/dubeyKartikay/lazyspotify/archive/refs/tags/v${version}.tar.gz"
+checksum=3f4b3e045eeff1d6fc9a25e9e5cc612dc3e524f6aeb03d4da00db4ab0fb51809
+
+post_install() {
+	vlicense LICENSE
+    vdoc README.md
+}
