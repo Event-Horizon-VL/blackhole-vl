@@ -1,0 +1,18 @@
+# Template file for 'python3-openapi-pydantic'
+pkgname=python3-openapi-pydantic
+version=0.5.1
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-build python3-installer python3-poetry-core"
+depends="python3-pydantic"
+short_desc="Modern, type-safe OpenAPI schemas in Python"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="MIT"
+homepage="https://github.com/mike-oakley/openapi-pydantic"
+changelog="https://github.com/mike-oakley/openapi-pydantic/releases"
+distfiles="${PYPI_SITE}/o/openapi-pydantic/openapi_pydantic-${version}.tar.gz"
+checksum=ff6835af6bde7a459fb93eb93bb92b8749b754fc6e51b2f1590a19dc3005ee0d
+
+post_install() {
+	vlicense LICENSE
+}

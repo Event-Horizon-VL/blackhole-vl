@@ -1,0 +1,24 @@
+# Template file for 'python3-pydantic-settings'
+pkgname=python3-pydantic-settings
+version=2.14.1
+revision=1
+build_style=python3-pep517
+# test_docs.py requires pytest-examples (not packaged for Void)
+# test_source_json.py uses importlib.resources.files('tests') which fails
+# in xbps-src sandbox where tests aren't installed as importable package
+# test_read_dotenv_vars_from_fifo fails in sandbox/container environment
+make_check_args="--ignore=tests/test_docs.py --ignore=tests/test_source_json.py -k not test_read_dotenv_vars_from_fifo"
+hostmakedepends="python3-build python3-installer hatchling"
+depends="python3-dotenv python3-pydantic python3-pydantic-core
+ python3-typing_extensions python3-typing-inspection"
+checkdepends="python3-pytest python3-pytest-mock $depends"
+short_desc="Settings management using Pydantic"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="MIT"
+homepage="https://github.com/pydantic/pydantic-settings/"
+distfiles="${PYPI_SITE}/p/pydantic-settings/pydantic_settings-${version}.tar.gz"
+checksum=e874d3bec7e787b0c9958277956ed9b4dd5de6a80e162188fdaff7c5e26fd5fa
+
+post_install() {
+	vlicense LICENSE
+}
