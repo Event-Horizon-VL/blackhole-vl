@@ -1,0 +1,14 @@
+# Template file for 'adwsteamgtk'
+pkgname=adwsteamgtk
+version=0.8.0
+revision=1
+build_style=meson
+hostmakedepends="blueprint-compiler pkg-config gettext-devel glib-devel gtk4-devel libadwaita-devel"
+makedepends="libadwaita-devel python3-packaging-bootstrap"
+depends="libadwaita libportal-gtk4 python3-gobject python3-packaging"
+short_desc="Simple Gtk wrapper for Adwaita-for-Steam"
+maintainer="LINUXHUNTERREDHAT <soyu7658@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Foldex/AdwSteamGtk"
+distfiles="https://github.com/Foldex/AdwSteamGtk/archive/refs/tags/v${version}.tar.gz"
+checksum=fed0a33049fd38233d1a77fa8cfe06d9b71ec272b9419f8aa9f831826d466925
