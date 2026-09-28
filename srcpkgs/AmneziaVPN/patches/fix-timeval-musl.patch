@@ -1,0 +1,12 @@
+diff --git a/client/core/networkUtilities.cpp b/client/core/networkUtilities.cpp
+index 1a52a97..4905318 100644
+--- a/client/core/networkUtilities.cpp
++++ b/client/core/networkUtilities.cpp
+@@ -16,6 +16,7 @@
+     #include <QSettings>
+ #endif
+ #ifdef Q_OS_LINUX
++    #include <sys/time.h>
+     #include <arpa/inet.h>
+     #include <linux/netlink.h>
+     #include <linux/rtnetlink.h>

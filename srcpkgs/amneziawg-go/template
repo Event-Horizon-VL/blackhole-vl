@@ -1,0 +1,18 @@
+# Template file for 'amneziawg-go'
+pkgname=amneziawg-go
+version=0.2.18
+revision=1
+build_style=go
+make_check_args="-- --skip=TestFormatting"
+go_import_path="github.com/amnezia-vpn/amneziawg-go"
+depends="amneziawg-tools amneziawg-dkms"
+short_desc="AmneziaWG - obfuscated WireGuard implementation (Go userspace)"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="MIT"
+homepage="https://github.com/amnezia-vpn/amneziawg-go"
+distfiles="https://github.com/amnezia-vpn/amneziawg-go/archive/refs/tags/v${version}.tar.gz"
+checksum=52f620c45e3bdcae09ef0a17ab4d60e24ac7af2a7b56bd8b1d09ab2219d9d6e7
+
+post_install() {
+	vlicense LICENSE
+}
