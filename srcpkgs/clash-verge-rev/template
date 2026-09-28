@@ -1,0 +1,98 @@
+# Template file for 'clash-verge-rev'
+pkgname=clash-verge-rev
+version=2.5.2
+revision=1
+_ipc_version=2.3.3
+# Only supported on x86_64 and aarch64 (glibc)
+archs="x86_64 aarch64"
+build_helper=rust
+hostmakedepends="pkg-config nodejs pnpm rust cargo cargo-auditable jq moreutils"
+makedepends="libwebkit2gtk41-devel gtk+3-devel libayatana-appindicator-devel"
+depends="mihomo"
+short_desc="Clash Meta GUI based on Tauri"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/clash-verge-rev/clash-verge-rev"
+distfiles="https://github.com/clash-verge-rev/clash-verge-rev/archive/refs/tags/v${version}.tar.gz
+ https://github.com/clash-verge-rev/clash-verge-service-ipc/archive/refs/tags/v${_ipc_version}.tar.gz"
+checksum="31187d435e83b33b481b01d52e15f2e3a829ae65e288d3beead94cdaf8c16988
+ 144b39fe20b23940dafe5082e8944427dc2a01eaec26fc4468cef6df38f7098d"
+_pkg_dir="clash-verge-rev-${version}"
+_ipc_dir="clash-verge-service-ipc-${_ipc_version}"
+
+if [ "$CROSS_BUILD" ]; then
+	makedepends+=" rust-std"
+fi
+
+do_configure() {
+	cd "${wrksrc}/${_ipc_dir}"
+
+	cargo auditable fetch --locked --target "${RUST_TARGET}"
+
+	cd "${wrksrc}/${_pkg_dir}"
+
+	# Disable Tauri updater artifacts.
+	jq '.bundle.createUpdaterArtifacts = false' \
+		src-tauri/tauri.conf.json |
+		sponge src-tauri/tauri.conf.json
+
+	pnpm install --frozen-lockfile
+
+	cd src-tauri
+
+	cargo auditable fetch --locked --target "${RUST_TARGET}"
+}
+
+do_build() {
+	cd "${wrksrc}/${_ipc_dir}"
+
+	export CFLAGS="${CFLAGS} -ffat-lto-objects"
+	export AWS_LC_SYS_NO_JITTER_ENTROPY=1
+
+	cargo auditable build --frozen --release --locked --features standalone --target "${RUST_TARGET}"
+
+	local _sidecar_dir="${wrksrc}/${_pkg_dir}/src-tauri/sidecar"
+
+	install -Dm755 "target/${RUST_TARGET}/release/clash-verge-service" \
+		"${_sidecar_dir}/clash-verge-service-${RUST_TARGET}"
+
+	install -Dm755 "target/${RUST_TARGET}/release/clash-verge-service-install" \
+		"${_sidecar_dir}/clash-verge-service-install-${RUST_TARGET}"
+
+	install -Dm755 "target/${RUST_TARGET}/release/clash-verge-service-uninstall" \
+		"${_sidecar_dir}/clash-verge-service-uninstall-${RUST_TARGET}"
+
+	cd "${wrksrc}/${_pkg_dir}"
+
+	touch "src-tauri/sidecar/verge-mihomo-${RUST_TARGET}" \
+		"src-tauri/sidecar/verge-mihomo-alpha-${RUST_TARGET}"
+
+	pnpm build --no-bundle
+}
+
+do_install() {
+	cd "${wrksrc}/${_pkg_dir}"
+
+	if [ "$CROSS_BUILD" ]; then
+		_cargo_target_dir="target/${RUST_TARGET}"
+	else
+		_cargo_target_dir="target"
+	fi
+
+	vbin ${_cargo_target_dir}/release/clash-verge
+	vbin ${_cargo_target_dir}/release/clash-verge-service
+	vbin ${_cargo_target_dir}/release/clash-verge-service-install
+	vbin ${_cargo_target_dir}/release/clash-verge-service-uninstall
+
+	vmkdir usr/lib/clash-verge/resources
+	vcopy src-tauri/resources/* usr/lib/clash-verge/resources/
+
+	vinstall src-tauri/icons/32x32.png 644 usr/share/icons/hicolor/32x32/apps/ clash-verge.png
+	vinstall src-tauri/icons/128x128.png 644 usr/share/icons/hicolor/128x128/apps/ clash-verge.png
+	vinstall src-tauri/icons/128x128@2x.png 644 usr/share/icons/hicolor/256x256/apps/ clash-verge.png
+
+	vinstall ${FILESDIR}/clash-verge.desktop 644 usr/share/applications/
+
+	ln -sf /usr/bin/mihomo "${DESTDIR}/usr/bin/verge-mihomo"
+	ln -sf /usr/bin/mihomo "${DESTDIR}/usr/bin/verge-mihomo-alpha"
+}
