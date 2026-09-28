@@ -1,0 +1,5 @@
+Optional dependencies:
+
+* `wl-clipboard` for clipboard support on Wayland auth screen
+* `xclip` for clipboard support on X11 auth screen
+* `xsel` for clipboard support on X11 auth screen

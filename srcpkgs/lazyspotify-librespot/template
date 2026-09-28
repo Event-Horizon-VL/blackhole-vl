@@ -1,0 +1,25 @@
+# Template file for 'lazyspotify-librespot'
+pkgname=lazyspotify-librespot
+version=0.7.1.1
+revision=1
+build_style=go
+go_import_path="github.com/devgianlu/go-librespot"
+go_package="./cmd/daemon"
+hostmakedepends="pkg-config"
+makedepends="libogg-devel libvorbis-devel libflac-devel alsa-lib-devel"
+short_desc="Yet another open source Spotify client, written in Go"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/dubeyKartikay/go-librespot"
+changelog="https://github.com/dubeyKartikay/go-librespot/releases"
+distfiles="https://github.com/dubeyKartikay/go-librespot/archive/refs/tags/v${version}.tar.gz"
+checksum=48931d10f9d9501c9580fb2746dc851137023aa1eb272f650d6ef5d7024279f9
+
+do_build() {
+	go build -o build/ ./cmd/daemon
+}
+
+do_install() {
+	vmkdir usr/lib/lazyspotify
+	vinstall build/daemon 755 usr/lib/lazyspotify/ lazyspotify-librespot
+}
