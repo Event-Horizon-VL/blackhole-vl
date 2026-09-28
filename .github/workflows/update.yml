@@ -1,0 +1,91 @@
+name: update
+run-name: "Automated update of ${{ github.ref_name }} by @${{ github.actor }}"
+
+on:
+    schedule:
+        - cron: "0 4 * * *"
+    workflow_dispatch:
+
+jobs:
+    update-all:
+        runs-on: ubuntu-latest
+        if: ${{ github.ref == 'refs/heads/main' }}
+        container:
+            image: ghcr.io/void-linux/void-musl-full
+            env:
+                LICENSE_LIST: common/travis/license.lst
+                GH_TOKEN: ${{ github.token }}
+        steps:
+            - name: Prepare container
+              run: |
+                  # install dependencies
+                  xbps-install -Syu xbps && xbps-install -yu && xbps-install -y sudo bash grep curl git github-cli xtools
+                  # create non-root user
+                  useradd -G xbuilder -M builder
+
+            - name: Checkout repo (PR head)
+              run: |
+                  git clone --single-branch --branch main "https://github.com/${{ github.repository }}.git" blackhole-vl
+
+            - name: Checkout void-packages
+              run: |
+                  git clone --depth=1 https://github.com/void-linux/void-packages.git void-packages
+                  cd void-packages
+                  git checkout --detach master
+
+            - name: Merge templates and edit shlibs
+              run: |
+                  echo "==> copying templates (all from PR)..."
+                  cp -rv blackhole-vl/srcpkgs/* void-packages/srcpkgs/
+
+                  SHLIBS_FILE="void-packages/common/shlibs"
+                  APPEND_FILE="blackhole-vl/shlibs_append"
+                  REMOVE_FILE="blackhole-vl/shlibs_remove"
+
+                  echo "==> updating common/shlibs..."
+                  if [ -f "$REMOVE_FILE" ]; then
+                      while IFS= read -r line; do
+                          [ -z "$line" ] && continue
+                          grep -vF "$line" "$SHLIBS_FILE" > "$SHLIBS_FILE.tmp" && mv "$SHLIBS_FILE.tmp" "$SHLIBS_FILE"
+                          echo "   - removed: $line"
+                      done < "$REMOVE_FILE"
+                  fi
+
+                  if [ -f "$APPEND_FILE" ]; then
+                      while IFS= read -r line; do
+                          [ -z "$line" ] && continue
+                          if ! grep -qF "$line" "$SHLIBS_FILE"; then
+                              echo "$line" >> "$SHLIBS_FILE"
+                              echo "   + added: $line"
+                          fi
+                      done < "$APPEND_FILE"
+                  fi
+
+                  echo "=> applying inline edits..."
+                  if [ -d "void-packages/srcpkgs/hyprutils/patches" ]; then
+                      echo "   - removing void-packages/srcpkgs/hyprutils/patches"
+                      rm -rf void-packages/srcpkgs/hyprutils/patches
+                  fi
+
+            - name: Commit updates
+              if: ${{ steps.check-updates.outputs.has_updates == 'true' }}
+              run: |
+                  git config --global user.name "github-actions[bot]"
+                  git config --global user.email "41898282+github-actions[bot]USERNAME@users.noreply.github.com"
+                  git commit --all --message "Automated update"
+
+            - name: Create Pull Request
+              id: cpr
+              uses: peter-evans/create-pull-request@v8
+              with:
+                  token: ${{ secrets.PAT }}
+                  commit-message: Update report
+                  committer: github-actions[bot]
+                      <41898282+github-actions[bot]@users.noreply.github.com>
+                  author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor
+                      }}@users.noreply.github.com>
+                  signoff: false
+                  branch: example-patches
+                  labels: package-update
+                  assignees: Nizarjh
+                  draft: false
