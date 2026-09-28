@@ -1,0 +1,40 @@
+# Template file for 'bashpp'
+pkgname=bashpp
+version=0.8.11
+revision=1
+build_style=gnu-makefile
+make_use_env=yes
+make_check_target=test
+hostmakedepends="bison flex pandoc perl json-c++
+ utfcpp frozen"
+makedepends="utfcpp json-c++ frozen"
+depends="bash"
+checkdepends="$depends"
+short_desc="Bash++: Bash with classes"
+maintainer="Nizarjh <chel773@tutamail.com>"
+license="GPL-3.0-or-later"
+homepage="https://bpp.sh/"
+changelog="https://raw.githubusercontent.com/rail5/bashpp/refs/heads/main/debian/changelog"
+distfiles="https://github.com/rail5/bashpp/archive/refs/tags/v${version}.tar.gz"
+checksum=8070963d4bfb5210e3cf3af349727cae6b69e7df20cefb54f412667c7c404b22
+
+do_install() {
+	vbin bin/bpp
+}
+
+bashpp-std_package() {
+	short_desc="Bash++ standard library"
+
+	pkg_install() {
+		vmkdir usr/lib/bpp
+		vcopy stdlib usr/lib/bpp/
+	}
+}
+
+bashpp-lsp_package() {
+	short_desc="Bash++ LSP server"
+
+	pkg_install() {
+		vbin bin/bpp-lsp
+	}
+}
