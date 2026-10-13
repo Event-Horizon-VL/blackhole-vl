@@ -1,0 +1,16 @@
+# Template file for 'python3-crontab'
+pkgname=python3-crontab
+version=3.4.0
+revision=1
+build_style=python3-module
+# Skip Windows-specific shell compatibility test, which fails on POSIX systems.
+make_check_args="--deselect=tests/test_compatibility.py::CompatTestCase::test_07_non_posix_shell"
+hostmakedepends="python3-setuptools"
+depends="python3"
+checkdepends="python3-croniter"
+short_desc="Python Crontab API"
+maintainer="Muransk <museyibmehdi@gmail.com>"
+license="LGPL-3.0-or-later"
+homepage="https://gitlab.com/doctormo/python-crontab"
+distfiles="${PYPI_SITE}/p/python-crontab/python_crontab-${version}.tar.gz"
+checksum=d2b5ad91f7a641d774661b7f3ba52258fd68273862c88713f4cc092ba614e707
