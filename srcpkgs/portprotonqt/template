@@ -1,7 +1,7 @@
 # Template file for 'portprotonqt'
 pkgname=portprotonqt
-version=1.4.1
-revision=2
+version=1.5.0
+revision=1
 build_style=meson
 hostmakedepends="ninja pkgconf python-devel gettext Vulkan-Headers"
 makedepends="vulkan-loader-devel SDL3-devel python3-packaging-bootstrap"
@@ -11,7 +11,7 @@ maintainer="LINUXHUNTERREDHAT <soyu7658@gmail.com>"
 license="GPL-3.0-or-later"
 homepage=https://git.linux-gaming.ru/Linux-Gaming/PortProtonQt
 distfiles="http://git.linux-gaming.ru/Linux-Gaming/PortProtonQt/archive/v${version}.tar.gz"
-checksum=31c25790d13e728b28ae1de26788a6563d00e696d6c67c04699f8ce4f4aa8a1d
+checksum=a09270cbd29c0277a9166ba5fd3084598c8992e41609c91d7c87b08f12e73068
 post_install() {
 	bash "${wrksrc}/dev-scripts/generate-completions.sh"
 	vcompletion "${wrksrc}/completions/portprotonqt" bash
