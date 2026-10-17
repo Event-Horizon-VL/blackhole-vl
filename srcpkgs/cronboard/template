@@ -1,0 +1,17 @@
+# Template file for 'cronboard'
+pkgname=cronboard
+version=1.2.1
+revision=1
+build_style=python3-pep517
+# Skip app tests that access the real user crontab; PAM denies access.
+make_check_args="--deselect=tests/test_app.py::test_close --deselect=tests/test_app.py::test_load_config"
+hostmakedepends="python3-build hatchling"
+depends="python3 python3-bcrypt python3-cron-descriptor python3-croniter python3-paramiko python3-crontab python3-textual python3-textual-autocomplete python3-tomlkit cronie"
+checkdepends="python3-pytest-asyncio python3-paramiko python3-tomlkit python3-cron-descriptor python3-pytest-cov python3-crontab python3-textual python3-textual-autocomplete"
+short_desc="Terminal-based dashboard application built with Python"
+maintainer="Muransk <museyibmehdi@gmail.com>"
+license="Apache-2.0"
+homepage="https://github.com/antoniorodr/cronboard"
+changelog="https://github.com/antoniorodr/cronboard/blob/main/CHANGELOG.md"
+distfiles="https://github.com/antoniorodr/cronboard/archive/refs/tags/v${version}.tar.gz"
+checksum=af60bc6ee7894e527e59d4efa5374eaff6d5bb61d45afdb4ad614ae65b44a310
