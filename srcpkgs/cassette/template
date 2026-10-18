@@ -1,6 +1,6 @@
 # Template file for 'cassette'
 pkgname=cassette
-version=0.2.4
+version=0.2.5
 revision=1
 build_style=meson
 hostmakedepends="blueprint-compiler vala pkg-config gettext-devel glib-devel gtk4-devel libadwaita-devel"
@@ -11,4 +11,4 @@ maintainer="LINUXHUNTERREDHAT <soyu7658@gmail.com>"
 license="GPL-3.0-or-later"
 homepage="https://altlinux.space/rirusha/Cassette"
 distfiles="https://altlinux.space/rirusha/Cassette/releases/download/v${version}/Cassette-${version}.tar.zst"
-checksum=5c829f6be16bb7cf93d4846b3ffbd05f8bf5c2fd7aae41c8aa85f3155d089cc5
+checksum=60d018b5eaf4190e42abb54ec0fc507cf5f62384a4cd90d112c7a3b30ec273c4
