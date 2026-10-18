@@ -1,0 +1,31 @@
+# Template file for 'python3-pytest-textual-snapshot'
+pkgname=python3-pytest-textual-snapshot
+version=1.1.0
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-build python3-poetry-core"
+depends="python3-Jinja2 python3-pytest python3-rich python3-syrupy python3-textual"
+short_desc="Snapshot testing for Textual applications"
+maintainer="Muransk <museyibmehdi@gmail.com>"
+license="MIT"
+homepage="https://github.com/Textualize/pytest-textual-snapshot"
+changelog="https://github.com/Textualize/pytest-textual-snapshot/releases"
+distfiles="https://github.com/Textualize/pytest-textual-snapshot/archive/refs/tags/v${version}.tar.gz"
+checksum=806fff445c17721cb465669fef522d9b586dd6808e1266d4af8e31b5fbc34d9b
+make_check=no # upstream 1.1.0 does not ship tests
+
+post_patch() {
+	vsed -e 's/syrupy = "4.8.0"/syrupy = ">=5.0.0"/' \
+		-i pyproject.toml
+
+	vsed -e 's/_file_extension = "svg"/file_extension = "svg"/' \
+		-e 's/def _read_snapshot_data_from_location/def read_snapshot_data_from_location/' \
+		-e 's/super()._read_snapshot_data_from_location/super().read_snapshot_data_from_location/' \
+		-i pytest_textual_snapshot.py
+
+	vsed -e 's|include = \["resources/\*\*/\*"\]|include = [{ path = "resources/**/*", format = ["sdist", "wheel"] }]|' -i pyproject.toml
+}
+
+post_install() {
+	vlicense LICENSE
+}

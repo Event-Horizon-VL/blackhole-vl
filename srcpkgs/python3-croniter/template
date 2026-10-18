@@ -1,0 +1,25 @@
+# Template file for 'python3-croniter'
+pkgname=python3-croniter
+version=6.2.4
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-build hatchling"
+depends="python3-dateutil"
+checkdepends="python3-pytest python3-dateutil python3-pytz"
+short_desc="Parses cron schedules to iterate over datetime objects"
+maintainer="Muransk <museyibmehdi@gmail.com>"
+license="MIT"
+homepage="https://github.com/pallets-eco/croniter"
+changelog="https://github.com/pallets-eco/croniter/blob/main/CHANGELOG.rst"
+distfiles="https://github.com/pallets-eco/croniter/archive/refs/tags/${version}.tar.gz"
+checksum=38729b9c329f95cf3f6f25ba2b233a1412afd366f6e79f8c4a38b4c90fb99a23
+
+post_patch() {
+	vsed -e 's/==/>=/g' -i pyproject.toml
+	vsed -e 's/hatchling>=1.30.1/hatchling>=1.29.0/g' -i pyproject.toml
+	vsed -e 's/trove-classifiers>=2026.6.1.19/trove-classifiers>=2026.5.22.10/g' -i pyproject.toml
+}
+
+post_install() {
+	vlicense LICENSE
+}

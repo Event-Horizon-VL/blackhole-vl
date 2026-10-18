@@ -1,0 +1,22 @@
+# Template file for 'python3-textual-autocomplete'
+pkgname=python3-textual-autocomplete
+version=4.0.6
+revision=1
+build_style=python3-pep517
+# These two snapshots differ only in CSS class names with current Textual;
+# see known downstream workaround in Gentoo for textual-autocomplete 4.0.6.
+make_check_args="--deselect=tests/snapshots/test_cursor_tracking.py::test_dropdown_tracks_input_cursor_and_cursor_prefix_as_search_string --deselect=tests/snapshots/test_cursor_tracking.py::test_dropdown_tracks_input_cursor_on_click_and_cursor_prefix_search_string"
+hostmakedepends="python3-build hatchling"
+depends="python3-textual python3-typing_extensions"
+checkdepends="python3-pytest python3-textual python3-pytest-asyncio python3-pytest-textual-snapshot"
+short_desc="Easily add autocomplete dropdowns to your Textual apps"
+maintainer="Muransk <museyibmehdi@gmail.com>"
+license="MIT"
+homepage="https://github.com/darrenburns/textual-autocomplete"
+changelog="https://github.com/darrenburns/textual-autocomplete/releases"
+distfiles="https://github.com/darrenburns/textual-autocomplete/archive/refs/tags/v${version}.tar.gz"
+checksum=3bad59149414d6e45ee88d3f53a28c1547e1d27822259acfe64dd7ab8e6affbd
+
+post_install() {
+	vlicense LICENSE
+}
