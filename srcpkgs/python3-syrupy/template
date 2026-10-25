@@ -1,0 +1,20 @@
+# Template file for 'python3-syrupy'
+pkgname=python3-syrupy
+version=6.1.1
+revision=1
+build_style=python3-pep517
+make_check_args="-n0"
+hostmakedepends="python3-build hatchling"
+depends="python3-pytest"
+checkdepends="python3-attrs python3-hypothesis python3-pydantic python3-pytest-xdist"
+short_desc="Most popular pytest snapshot plugin"
+maintainer="Muransk <museyibmehdi@gmail.com>"
+license="MIT"
+homepage="https://github.com/syrupy-project/syrupy"
+changelog="https://raw.githubusercontent.com/syrupy-project/syrupy/refs/heads/main/CHANGELOG.md"
+distfiles="https://github.com/syrupy-project/syrupy/archive/refs/tags/v${version}.tar.gz"
+checksum=e814c346efb105e4c11ac12eddbf551c6ff2cd2db2e0db2f6e10fbf20f735bf6
+
+post_install() {
+	vlicense LICENSE
+}

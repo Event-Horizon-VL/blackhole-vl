@@ -1,0 +1,19 @@
+# Template file for 'python3-cron-descriptor'
+pkgname=python3-cron-descriptor
+version=2.2.1
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-build python3-setuptools"
+depends="python3-typing_extensions"
+checkdepends="python3-pytest python3-typing_extensions"
+short_desc="Python library for converting cron expressions into human descriptions"
+maintainer="Muransk <museyibmehdi@gmail.com>"
+license="MIT"
+homepage="https://github.com/Salamek/cron-descriptor"
+changelog="https://github.com/Salamek/cron-descriptor/releases"
+distfiles="https://github.com/Salamek/cron-descriptor/archive/refs/tags/${version}.tar.gz"
+checksum=5d180d7f597603b7517c870266ab91701626b304c0a389a682186a337a2b67da
+
+post_install() {
+	vlicense LICENSE
+}
