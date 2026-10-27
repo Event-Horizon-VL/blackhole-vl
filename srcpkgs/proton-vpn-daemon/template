@@ -1,6 +1,6 @@
 # Template file for 'proton-vpn-daemon'
 pkgname=proton-vpn-daemon
-version=0.13.7
+version=0.13.8
 revision=1
 build_style=python3-pep517
 hostmakedepends="python3-build python3-installer python3-setuptools python3-wheel"
@@ -11,7 +11,7 @@ maintainer="nerdyslacker <karyan40024@gmail.com>"
 license="GPL-3.0-only"
 homepage="https://github.com/ProtonVPN/proton-vpn-daemon"
 distfiles="https://github.com/ProtonVPN/proton-vpn-daemon/archive/refs/tags/v${version}.tar.gz"
-checksum=c079288c9df17b63caef2039a6d3cbf2e1804cc1d7dacc1d405dead1098b7152
+checksum=a8b51794932035797e93db50c64145816fdc4bea951488b5ebdc9c7a4c504ab2
 # py3:systemd-python doesn't exist
 noverifypydeps=yes
 
