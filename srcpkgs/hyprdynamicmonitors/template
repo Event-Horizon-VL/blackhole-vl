@@ -1,0 +1,19 @@
+# Template file for 'hyprdynamicmonitors'
+pkgname=hyprdynamicmonitors
+version=1.4.0
+revision=1
+build_style=go
+depends="hyprland upower"
+go_import_path=github.com/fiffeek/hyprdynamicmonitors
+short_desc="Dynamic monitor configuration tool for Hyprland"
+maintainer="Muransk <mehtimuseib@gmail.com>"
+license="MIT"
+homepage="https://github.com/fiffeek/hyprdynamicmonitors"
+distfiles="https://github.com/fiffeek/hyprdynamicmonitors/archive/refs/tags/v${version}.tar.gz"
+checksum=93ba3920214b17e33003354717b0051faee50939dfae62d99979fcb26f69c470
+make_check=no # can't run in sandbox
+
+post_install() {
+	vlicense LICENSE
+}
+
