@@ -1,0 +1,12 @@
+if [ "$UPDATE" = "no" ]; then
+    case "$ACTION" in
+        post)
+            if [ -d usr/lib/vscodium ]; then
+                rm -rf usr/lib/vscodium
+            fi
+            if [ -d usr/share/vscodium ]; then
+                rm -rf usr/share/vscodium
+            fi
+        ;;
+    esac
+fi
