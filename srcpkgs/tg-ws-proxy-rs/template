@@ -1,0 +1,14 @@
+# Template file for 'tg-ws-proxy-rs'
+pkgname=tg-ws-proxy-rs
+version=2.7.0
+revision=1
+build_style=cargo
+short_desc="Telegram MTProto WebSocket Bridge Proxy"
+maintainer="Kirilla <kirill39.pesin@ya.ru>"
+license="MIT"
+homepage="https://github.com/valnesfjord/tg-ws-proxy-rs"
+distfiles="https://github.com/valnesfjord/tg-ws-proxy-rs/archive/v${version}.tar.gz"
+checksum=74bd71af5fd058d0c2b6aae63b5918bab30712d22f46bea7c76f40298ce4e242
+post_install() {
+	vlicense LICENSE
+}
