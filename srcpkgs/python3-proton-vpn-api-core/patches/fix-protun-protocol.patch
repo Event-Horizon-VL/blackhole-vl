@@ -1,0 +1,11 @@
+--- a/resources/nm-protun.name
++++ b/resources/nm-protun.name
+@@ -3,7 +3,7 @@
+ service=org.freedesktop.NetworkManager.protun
+ program=$PWD/target/debug/nm-protun-service
+ supports-multiple-connections=false
+-SystemdService=nm-protun.service
++supports-safe-private-file-access=true
+ 
+ [GNOME]
+ auth-dialog=$PWD/target/debug/nm-protun-auth-dialog
