@@ -1,0 +1,32 @@
+# Template file for 'amnezia-xray-bindings'
+pkgname=amnezia-xray-bindings
+version=1.1.0
+revision=1
+build_style=gnu-makefile
+make_build_target=all
+make_build_args="ARCH=amd64 OS=unix"
+hostmakedepends="go pkg-config git"
+makedepends="openssl-devel"
+short_desc="AmneziaVPN XRay bindings library"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/amnezia-vpn/amnezia-xray-bindings"
+distfiles="https://github.com/amnezia-vpn/amnezia-xray-bindings/archive/v${version}.tar.gz"
+checksum=21e6ceb7cee692e5d93d21fc3b5f8d73de519a9a2451a2cc09536ff0d8591acb
+
+do_install() {
+    vlicense LICENSE
+
+    vinstall build/amnezia_xray.h 644 usr/include
+    vinstall build/amnezia_xray.a 644 usr/lib libamnezia_xray.a
+}
+
+amnezia-xray-bindings-devel_package() {
+    depends="${sourcepkg}>=${version}_${revision}"
+    short_desc+=" - development files"
+
+    pkg_install() {
+        vmove usr/include
+        vmove usr/lib/libamnezia_xray.a
+    }
+}

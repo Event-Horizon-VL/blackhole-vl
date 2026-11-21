@@ -1,0 +1,124 @@
+# Template file for 'AmneziaVPN'
+pkgname=AmneziaVPN
+version=4.8.15.4
+revision=1
+build_style=cmake
+
+_prebuilt_commit=51bb4703a4049e4d28ef7e28c2ec87db1bbb0d1e
+_qsimplecrypto_commit=c99b33f0e08b7206116ddff85c22d3b97ce1e79d
+_sortfilterproxymodel_commit=f2881493e42bd7b7d5b7abe804dad084dd610b71
+_amneziawg_apple_commit=cf63135331d33b2a684cca5a2b213d851cb79e77
+_qtgamepad_commit=f72b3e0c6229d1622b6bc7f6a5ec5ccff83460eb
+_qtkeychain_commit=7460df6a978669290de5b56c2d98b199b61c3f88
+
+hostmakedepends="cmake qt6-base-devel qt6-tools-devel qt6-declarative-devel
+ qt6-svg-devel qt6-qt5compat-devel qt6-remoteobjects-devel extra-cmake-modules
+ pkg-config git"
+makedepends="qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-svg-devel
+ qt6-qt5compat-devel qt6-remoteobjects-devel openssl-devel libssh-devel
+ libsecret-devel amnezia-xray-bindings-devel"
+depends="qt6-base qt6-tools qt6-declarative qt6-svg qt6-qt5compat qt6-remoteobjects
+ openssl libssh openvpn amneziawg-go openresolv amnezia-tun2socks
+ amnezia-xray-bindings"
+
+short_desc="Open-source VPN client with obfuscation support"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="GPL-3.0-or-later"
+homepage="https://amnezia.org"
+changelog="https://github.com/amnezia-vpn/amnezia-client/releases"
+
+distfiles="
+ https://github.com/amnezia-vpn/amnezia-client/archive/refs/tags/${version}.tar.gz
+ https://github.com/amnezia-vpn/3rd-prebuilt/archive/${_prebuilt_commit}.tar.gz
+ https://github.com/amnezia-vpn/QSimpleCrypto/archive/${_qsimplecrypto_commit}.tar.gz
+ https://github.com/mitchcurtis/SortFilterProxyModel/archive/${_sortfilterproxymodel_commit}.tar.gz
+ https://github.com/amnezia-vpn/amneziawg-apple/archive/${_amneziawg_apple_commit}.tar.gz
+ https://github.com/amnezia-vpn/qtgamepad/archive/${_qtgamepad_commit}.tar.gz
+ https://github.com/frankosterfeld/qtkeychain/archive/${_qtkeychain_commit}.tar.gz
+"
+
+skip_extraction="
+ ${_prebuilt_commit}.tar.gz
+ ${_qsimplecrypto_commit}.tar.gz
+ ${_sortfilterproxymodel_commit}.tar.gz
+ ${_amneziawg_apple_commit}.tar.gz
+ ${_qtgamepad_commit}.tar.gz
+ ${_qtkeychain_commit}.tar.gz
+"
+
+checksum="
+ 02760cb859106999a345581509af51c192ebd26bb91b98b1b57a358384c37a3d
+ ab9c219cc3c760224c10a6f64ad2b6f7636423e0eee367e7d52dbbe796e94d14
+ 889f93eb2926362ff9c2f53781f26306ba6eee5390f1ef296969c020156c158d
+ a0db392f0bd7c405a375b76973289e5996d1e7617916a18e17f36f589eb81a89
+ 29fef1a75c766aa6d321fab23892c3b9b73c937d33e304a1811efc7b4ae368d2
+ 418fae0df3f55d084c86163486c7becffbc8ee390597f2ae32b4d73ad11e5fee
+ c0dd8065d4e7b3bd17d715ed6d607a555d4931e54fc5ac19efbcb01b55326641
+"
+
+post_extract() {
+	vsrcextract -C "${wrksrc}/client/3rd-prebuilt"       "${_prebuilt_commit}.tar.gz"
+	vsrcextract -C "${wrksrc}/client/3rd/QSimpleCrypto"  "${_qsimplecrypto_commit}.tar.gz"
+	vsrcextract -C "${wrksrc}/client/3rd/SortFilterProxyModel" "${_sortfilterproxymodel_commit}.tar.gz"
+	vsrcextract -C "${wrksrc}/client/3rd/amneziawg-apple" "${_amneziawg_apple_commit}.tar.gz"
+	vsrcextract -C "${wrksrc}/client/3rd/qtgamepad"      "${_qtgamepad_commit}.tar.gz"
+	vsrcextract -C "${wrksrc}/client/3rd/qtkeychain"     "${_qtkeychain_commit}.tar.gz"
+}
+
+pre_configure() {
+	export PROD_AGW_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAj5mxl/4DL3Sk89ntxs5G\nX3JawGQWIoq6rvNkOzNGuNgedNS2+pi6hZl3Izl1Io9om4KiUlMT6mgLO1hTr9q+\ns7CYhlvroFA7ErucF+9L+7FCt0Igi0kIK/R2/vxd/2HaUrorn/aSvvutkYwbfxqW\nSwtzE+RuBeDWGvEt937OW0oqYONPYv9E4T56Dz/EZ6v2t8ejAnKLbGD/GocMmipK\n7etFSiSMAB2RmaztqTq4NleBepfO80XpYlW9pCSXuHcE8wxHczkzxsbyMAMsG/K3\nvUQY6qPtohqqzSSBwa/8u2ptNHBeor7l7DdYXeR/Nqcc4z92VUkZ5lOVR4evkS5V\n/wQqp5tnOJEj3NjUhEhXFoNEapbZd1bh6iQoUk7jC1TdvKJ/nPKGZAsHRpr0rNKz\nfx/N/Oo6lr2yh/+ps6VxTkbPmB6E85WOO3UvjImZUY0XQdBjWle/4iJLdEC77Nr0\njXhdgeypucy6jkB6iBHMeVMlrNMEV7UxoBR/cCNx55zu/8sml5ByiDvCDT7sRomN\nNgVt5S/FaVjYuzFUifJ12ToChXFgESKFmuso7WluEaWvMIGREdrMrKQKHfYLOzWF\n2B5ZJDqw4o03fU4J/6rw61M1b+rjVpXMjPnzc2A+RgcjTvXv955gfZkwe4lt5wk/\n3j8zMVo3+zLrMTAaEeIUM0UCAwEAAQ==\n-----END PUBLIC KEY-----"
+    	export PROD_S3_ENDPOINT="https://s3.eu-north-1.amazonaws.com/amnezia/, https://storage.googleapis.com/lambda-list/"
+
+    	GIT_COMMIT_HASH="${version}"
+	vsed -i "s|add_definitions(-DGIT_COMMIT_HASH=\"\${GIT_COMMIT_HASH}\")|add_definitions(-DGIT_COMMIT_HASH=\"${GIT_COMMIT_HASH}\")|" \
+		client/CMakeLists.txt 2>/dev/null || true
+
+	vsed -i \
+		-e 's|set(ZLIB_LIB_PATH "${LIBSSH_ROOT_DIR}/linux/x86_64/libz.a")|set(ZLIB_LIB_PATH "/usr/lib/libz.so")|' \
+		-e 's|set(LIBSSH_LIB_PATH "${LIBSSH_ROOT_DIR}/linux/x86_64/libssh.a")|set(LIBSSH_LIB_PATH "/usr/lib/libssh.so")|' \
+		-e 's|set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/linux/include")|set(OPENSSL_INCLUDE_DIR "/usr/include")|' \
+		-e 's|set(OPENSSL_LIB_SSL_PATH "${OPENSSL_ROOT_DIR}/linux/x86_64/libssl.a")|set(OPENSSL_LIB_SSL_PATH "/usr/lib/libssl.so")|' \
+		-e 's|set(OPENSSL_LIB_CRYPTO_PATH "${OPENSSL_ROOT_DIR}/linux/x86_64/libcrypto.a")|set(OPENSSL_LIB_CRYPTO_PATH "/usr/lib/libcrypto.so")|' \
+		-e 's|set(OPENSSL_USE_STATIC_LIBS TRUE)|set(OPENSSL_USE_STATIC_LIBS FALSE)|' \
+        	client/cmake/3rdparty.cmake
+
+	vsed -i \
+		-e 's|set(AMNEZIA_XRAY_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../../client/3rd-prebuilt/3rd-prebuilt/amnezia_xray")|set(AMNEZIA_XRAY_ROOT_DIR "/usr")|' \
+		-e 's|set(AMNEZIA_XRAY_LIB_PATH "${AMNEZIA_XRAY_ROOT_DIR}/linux/x86_64/amnezia_xray.a")|set(AMNEZIA_XRAY_LIB_PATH "/usr/lib/libamnezia_xray.a")|' \
+		-e 's|set(AMNEZIA_XRAY_INCLUDE_DIR "${AMNEZIA_XRAY_ROOT_DIR}/linux/x86_64")|set(AMNEZIA_XRAY_INCLUDE_DIR "/usr/include")|' \
+		-e 's|set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/linux/include")|set(OPENSSL_INCLUDE_DIR "/usr/include")|' \
+		-e 's|set(OPENSSL_LIB_CRYPTO_PATH "${OPENSSL_ROOT_DIR}/linux/x86_64/libcrypto.a")|set(OPENSSL_LIB_CRYPTO_PATH "/usr/lib/libcrypto.so")|' \
+		-e 's|set(OPENSSL_USE_STATIC_LIBS TRUE)|set(OPENSSL_USE_STATIC_LIBS FALSE)|' \
+		-e 's|/linux/x86_64/libcrypto.a|/usr/lib/libcrypto.so|g' \
+		-e 's|/linux/x86_64/libssl.a|/usr/lib/libssl.so|g' \
+		service/server/CMakeLists.txt
+
+	vsed -i \
+		-e 's|return Utils::executable("../../client/bin/openvpn", true);|return Utils::usrExecutable("openvpn");|' \
+		-e 's|return Utils::executable("../../client/bin/tun2socks", true);|return Utils::usrExecutable("amnezia-tun2socks");|' \
+		client/utilities.cpp || true
+
+	vsed -i 's|m_tunnel.start(appPath.filePath("../../client/bin/wireguard-go"), wgArgs);|m_tunnel.start("/usr/bin/amneziawg-go", wgArgs);|' \
+		client/platforms/linux/daemon/wireguardutilslinux.cpp || true
+
+	vsed -i 's|.arg(qApp->applicationDirPath());|.arg("/usr/libexec/AmneziaVPN");|' \
+		client/configurators/openvpn_configurator.cpp || true
+}
+
+cmake_args=(
+	-DCMAKE_BUILD_TYPE=RelWithDebInfo
+	-DBUILD_TESTING=OFF
+	-DUSE_BUNDLED_QTKEYCHAIN=OFF
+	-DUSE_BUNDLED_SORTFILTERPROXYMODEL=OFF
+	-DCMAKE_INSTALL_PREFIX=/usr
+)
+
+post_install() {
+	vbin "${wrksrc}/build/client/AmneziaVPN" AmneziaVPN
+	vbin "${wrksrc}/build/service/server/AmneziaVPN-service"
+
+	vinstall "${wrksrc}/deploy/data/linux/client/bin/update-resolv-conf.sh" 755 usr/libexec/AmneziaVPN
+	vinstall "${FILESDIR}/AmneziaVPN.desktop" 644 usr/share/applications
+	vinstall "${wrksrc}/deploy/data/linux/AmneziaVPN.png" 644 usr/share/pixmaps
+	vsv amnezia
+}

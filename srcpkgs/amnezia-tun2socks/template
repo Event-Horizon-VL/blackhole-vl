@@ -1,0 +1,17 @@
+# Template file for 'amnezia-tun2socks'
+pkgname=amnezia-tun2socks
+version=2.5.4
+revision=1
+build_style=go
+go_import_path="github.com/amnezia-vpn/amnezia-tun2socks/v2"
+go_ldflags="-X github.com/amnezia-vpn/amnezia-tun2socks/v2/internal/version.Version=v${version} -X github.com/amnezia-vpn/amnezia-tun2socks/v2/internal/version.GitCommit=9fabebb"
+short_desc="tun2socks - powered by gVisor TCP/IP stack (Amnezia fork)"
+license="MIT"
+homepage="https://github.com/amnezia-vpn/amnezia-tun2socks"
+distfiles="https://github.com/amnezia-vpn/amnezia-tun2socks/archive/v${version}.tar.gz"
+changelog="https://github.com/amnezia-vpn/amnezia-client/releases"
+checksum=370da6e45a5d26d2ec392635a807151ccc6dcc1d5fe4c2805aefd64f18d29f2d
+
+post_install() {
+	vlicense LICENSE
+}
