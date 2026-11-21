@@ -1,0 +1,34 @@
+# Template file for 'mihomo'
+pkgname=mihomo
+version=1.19.30
+revision=1
+_geoip_version=202608200014
+# Only supported on x86_64 and aarch64
+archs="x86_64* aarch64*"
+build_style=go
+go_import_path=github.com/metacubex/mihomo
+go_build_tags="with_gvisor"
+_buildtime="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+go_ldflags="-X github.com/metacubex/mihomo/constant.Version=${version}
+ -X github.com/metacubex/mihomo/constant.BuildTime=${_buildtime}"
+short_desc="Mihomo Kernel by MetaCubeX, formerly known as Clash.Meta"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/MetaCubeX/mihomo"
+distfiles="https://github.com/MetaCubeX/mihomo/archive/refs/tags/v${version}.tar.gz
+ https://github.com/Loyalsoldier/geoip/releases/download/${_geoip_version}/Country.mmdb"
+checksum="ee8a7107707e4bd485460139b1944e7be30016393783f2b4e928c14880c8ca8b
+ e1067e503cde899e2f4f584bc6c5fd7bbd3f49a374ea3eb4e3b17dda5a654f32"
+conf_files="/etc/mihomo/config.yaml"
+skip_extraction=Country.mmdb
+system_accounts="_mihomo"
+make_dirs="/etc/mihomo 755 _mihomo _mihomo
+ /var/log/mihomo 700 _mihomo _mihomo"
+
+post_install() {
+	# Compatibility with applications executing /usr/bin/clash-meta
+	ln -sf /usr/bin/mihomo ${DESTDIR}/usr/bin/clash-meta
+
+	vinstall ${FILESDIR}/config.yaml 644 etc/mihomo
+	vinstall $XBPS_SRCDISTDIR/$pkgname-$version/Country.mmdb 644 etc/mihomo
+}
