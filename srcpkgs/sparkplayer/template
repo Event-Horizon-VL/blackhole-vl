@@ -1,0 +1,21 @@
+# Template file for 'sparkplayer'
+pkgname=sparkplayer
+version=1.3.1
+revision=1
+build_style=cargo
+build_helper=rust
+hostmakedepends="clang pkg-config"
+makedepends="alsa-lib-devel ffmpeg-devel SDL2-devel"
+depends="dejavu-fonts-ttf"
+short_desc="Fun, no-nonsense terminal audio and video player built with ratatui"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-only"
+homepage="https://github.com/dividebysandwich/sparkplayer"
+changelog="https://github.com/dividebysandwich/sparkplayer/releases"
+distfiles="https://github.com/dividebysandwich/${pkgname}/archive/refs/tags/v${version}.tar.gz"
+checksum=d2fc862ca92d9b8540f4918846575d9874eac9626e1165f39dab4dcde8789870
+
+do_install() {
+	vbin target/${RUST_TARGET}/release/sparkplayer
+	vdoc README.md
+}
