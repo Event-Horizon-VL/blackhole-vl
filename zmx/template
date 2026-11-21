@@ -1,0 +1,21 @@
+# Template file for 'zmx'
+pkgname=zmx
+version=0.5.0
+revision=1
+build_style=zig-build
+configure_args="-Doptimize=ReleaseSafe"
+short_desc="Session persistence for terminal processes"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="MIT"
+homepage="https://zmx.sh"
+changelog="https://raw.githubusercontent.com/neurosnap/zmx/refs/heads/main/CHANGELOG.md"
+distfiles="https://github.com/neurosnap/zmx/archive/refs/tags/v${version}.tar.gz"
+checksum=e7f788bca56140b261b2c2376738e5d0ede075ba475595bc5afad456d0a1c3bf
+nopie=yes
+
+post_install() {
+	vinstall <(zig-out/usr/bin/zmx completions bash) 644 usr/share/bash-completion/completions zmx
+	vinstall <(zig-out/usr/bin/zmx completions fish) 644 usr/share/fish/vendor_completions.d zmx.fish
+	vinstall <(zig-out/usr/bin/zmx completions zsh) 644 usr/share/zsh/site-functions _zmx
+	vlicense LICENSE
+}
