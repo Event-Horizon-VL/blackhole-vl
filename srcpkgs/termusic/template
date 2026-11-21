@@ -1,0 +1,61 @@
+# Template file for 'termusic'
+pkgname=termusic
+version=0.13.2
+revision=1
+build_style=cargo
+hostmakedepends="pkgconf"
+makedepends="clang protobuf alsa-lib-devel sqlite-devel"
+depends="dbus opus"
+short_desc="Music Player TUI written in Rust"
+maintainer="Vitali Kaplich <vitalik.kaplich@yandex.by>"
+license="MIT, GPL-3.0-or-later"
+homepage="https://github.com/tramhao/termusic"
+changelog="https://raw.githubusercontent.com/tramhao/termusic/refs/heads/master/CHANGELOG.md"
+distfiles="https://github.com/tramhao/termusic/archive/refs/tags/v${version}.tar.gz"
+checksum=661e1c39135f6eeb01cb6df199b8dcdd902ac456e96bd204ea4fda7ec6ae41ef
+
+build_options="cover mpv gst soundtouch libopus"
+build_options_default="cover mpv soundtouch libopus"
+
+_features=""
+if [ "$build_option_cover" ]; then
+	_features="${_features:+$_features,}cover"
+fi
+if [ "$build_option_mpv" ]; then
+	 _features="${_features:+$_features,}mpv"
+fi
+if [ "$build_option_gst" ]; then
+	_features="${_features:+$_features,}gst"
+fi
+if [ "$build_option_soundtouch" ]; then
+	_features="${_features:+$_features,}rusty-soundtouch"
+fi
+if [ "$build_option_libopus" ]; then
+	_features="${_features:+$_features,}rusty-libopus"
+fi
+
+make_build_args="--features ${_features:-default}"
+
+if [ "$build_option_mpv" ]; then
+	makedepends+=" mpv-devel"
+	depends+=" mpv"
+fi
+if [ "$build_option_gst" ]; then
+	makedepends+=" gstreamer-devel gst-plugins-base-devel"
+	depends+=" gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
+ gst-plugins-ugly gst-libav"
+fi
+if [ "$build_option_libopus" ]; then
+	makedepends+=" opus-devel"
+	depends+=" opus"
+fi
+if [ "$build_option_soundtouch" ]; then
+	depends+=" gcc"
+fi
+
+do_install() {
+	vbin target/${RUST_TARGET}/release/termusic
+	vbin target/${RUST_TARGET}/release/termusic-server
+
+	vlicense LICENSE_MIT
+}
